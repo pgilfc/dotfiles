@@ -1,0 +1,8 @@
+
+common_packages:
+  - aptitude
+  - curl
+  - git
+  - tlp
+  - wget
+  - zsh

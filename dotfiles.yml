@@ -1,0 +1,6 @@
+- name: Set up dotfiles
+  hosts: local
+  roles:
+    - role: common 
+    - role: vscode
+    - role: slimbook
