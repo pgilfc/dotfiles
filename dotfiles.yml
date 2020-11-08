@@ -4,3 +4,4 @@
     - role: common 
     - role: vscode
     - role: slimbook
+    - role: touchegg

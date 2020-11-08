@@ -1,0 +1,4 @@
+- name: Install touchegg
+  become: yes
+  apt:
+    deb: "https://github.com/JoseExposito/touchegg/releases/download/2.0.2/touchegg_2.0.2_amd64.deb"
