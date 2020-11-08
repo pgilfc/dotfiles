@@ -5,3 +5,4 @@
     - role: vscode
     - role: slimbook
     - role: touchegg
+    - role: grub
