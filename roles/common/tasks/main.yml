@@ -25,3 +25,4 @@
   apt:
     name: "gnome-shell-extension-ubuntu-dock"
     state: absent
+  when: ansible_distribution == 'Ubuntu'
