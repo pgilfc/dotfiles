@@ -1,0 +1,5 @@
+- name: Install veracrypt GUI for ubuntu 20.04
+  become: yes
+  apt:
+    deb: "https://launchpad.net/veracrypt/trunk/1.24-update7/+download/veracrypt-1.24-Update7-Ubuntu-20.04-amd64.deb"
+

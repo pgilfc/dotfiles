@@ -1,8 +1,9 @@
 - name: Set up dotfiles
   hosts: local
   roles:
-    - role: common 
-    - role: vscode
+    - role: common
+    - role: grub
     - role: slimbook
     - role: touchegg
-    - role: grub
+    - role: veracrypt 
+    - role: vscode
