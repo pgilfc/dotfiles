@@ -3,6 +3,7 @@ common_packages:
   - aptitude
   - curl
   - git
+  - guake
   - tlp
   - wget
   - zsh
