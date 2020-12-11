@@ -4,6 +4,7 @@ common_packages:
   - curl
   - git
   - guake
+  - syncthing
   - tlp
   - wget
   - zsh
