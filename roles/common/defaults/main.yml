@@ -1,12 +1,29 @@
 
 common_packages:
-  - curl
-  - git
-  - syncthing
-  - wget
-  - zsh
+  - curl # Client URL
+  - fzf # Terminal Fuzzy finder
+  - git # Version control
+  - glances # System monitor
+  - htop # System monitor
+  - mc # Terminal file manager
+  - neovim # NEOVIM
+  - ncdu # Disk usage analyzer
+  - peco # Terminal fuzzy finder
+  - tldr # like man but just examples
+  - tmux # Terminal multiplexer
+  - tree # Directory tree
+  - ranger # Terminal directory manager (vimlike)
+  - syncthing # Sync folders between computers
+  - wget # Web get
+  - zsh # Zsh
+  - zsh-syntax-highlighting # Terminal commands highlighting
+  
 
 debian_packages:
-  - aptitude
-  - guake
-  - tlp
+  - aptitude # apt terminal gui
+  - guake # Hovering terminal
+  - tlp # Energy optimizer
+  - vim # VIM
+
+macos_packages:
+  - macvim # VIM
