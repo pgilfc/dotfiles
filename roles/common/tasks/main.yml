@@ -1,28 +1,3 @@
 
-- name: Run the equivalent of "apt-get update" as a separate step
-  become: yes
-  apt:
-    update_cache: yes
-
-- name: Upgrade the OS (apt-get dist-upgrade)
-  become: yes
-  apt:
-    upgrade: dist
-
-- name: Installs packages apt
-  become: yes
-  loop: "{{ common_packages }}"
-  apt:
-    name: "{{ item }}"
-    state: present
-
-- name: Cleans packages | apt
-  become: yes
-  apt:
-    autoremove: yes
-
-- name: Remove ubuntu dock
-  apt:
-    name: "gnome-shell-extension-ubuntu-dock"
-    state: absent
-  when: ansible_distribution == 'Ubuntu'
+- include: debian.yml
+  when: is_debian|bool

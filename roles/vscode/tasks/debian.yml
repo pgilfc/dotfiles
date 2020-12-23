@@ -1,0 +1,4 @@
+- name: Install vscode 
+  become: yes
+  apt:
+    deb: "https://go.microsoft.com/fwlink/?LinkID=760868"

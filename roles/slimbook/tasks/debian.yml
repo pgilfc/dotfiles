@@ -1,0 +1,15 @@
+
+- name: Add slimbook repository from PPA
+  become: yes
+  apt_repository:
+    repo: 'ppa:slimbook/slimbook'
+
+- name: Run "apt-get update"
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Installs slimbook
+  become: yes
+  apt:
+    name: 'slimbookbattery'
