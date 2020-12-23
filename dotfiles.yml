@@ -5,5 +5,6 @@
     - role: grub
     - role: slimbook
     - role: touchegg
+    - role: ubuntu
     - role: veracrypt 
     - role: vscode

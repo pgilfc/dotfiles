@@ -1,10 +1,12 @@
 
 common_packages:
-  - aptitude
   - curl
   - git
-  - guake
   - syncthing
-  - tlp
   - wget
   - zsh
+
+debian_packages:
+  - aptitude
+  - guake
+  - tlp

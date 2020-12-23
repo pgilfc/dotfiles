@@ -9,9 +9,16 @@
   apt:
     upgrade: dist
 
-- name: Installs packages apt
+- name: Installs common packages apt
   become: yes
   loop: "{{ common_packages }}"
+  apt:
+    name: "{{ item }}"
+    state: present
+
+- name: Installs debian packages apt
+  become: yes
+  loop: "{{ debian_packages }}"
   apt:
     name: "{{ item }}"
     state: present
@@ -20,9 +27,3 @@
   become: yes
   apt:
     autoremove: yes
-
-- name: Remove ubuntu dock
-  apt:
-    name: "gnome-shell-extension-ubuntu-dock"
-    state: absent
-  when: ansible_distribution == 'Ubuntu'
