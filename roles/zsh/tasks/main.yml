@@ -1,0 +1,31 @@
+- include: debian.yml
+  when: is_debian|bool
+
+- include: macos.yml
+  when: is_macos|bool
+
+- name: Installs antigen
+  get_url:
+    url: http://git.io/antigen
+    dest: "{{ user_home }}/.antigen.zsh"
+
+- name: Symlink .p10k.zsh theme file
+  file:
+    src: "{{ role_path }}/files/.p10k.zsh"
+    dest: "{{ user_home }}/.p10k.zsh"
+    state: link
+
+- name: Check if zshrc exists
+  stat: path="{{user_home}}/.zshrc"
+  register: zshrc_stat
+  failed_when: False
+
+- name: Backup zshrc
+  command: mv {{user_home}}/.zshrc {{user_home}}/.zshrc.bak
+  when: zshrc_stat.stat.exists
+
+- name: Symlink .zshrc
+  file:
+    src: "{{ role_path }}/files/.zshrc"
+    dest: "{{ user_home }}/.zshrc"
+    state: link

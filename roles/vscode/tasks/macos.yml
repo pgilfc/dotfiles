@@ -1,0 +1,4 @@
+- name: Installs casks
+  homebrew_cask:
+    name: visual-studio-code
+    state: present

@@ -1,3 +1,5 @@
-
 - include: debian.yml
   when: is_debian|bool
+
+- include: macos.yml
+  when: is_macos|bool

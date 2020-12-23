@@ -1,0 +1,30 @@
+
+- name: Set dock to auto hide to 1000 secconds (to keep it hidden)
+  command: defaults write com.apple.dock autohide-delay -float 1000
+
+- name: Always show scrollbars
+  command: defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+
+- name: Save to disk (not to iCloud) by default
+  command: defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+- name: Disable auto-correct
+  command: defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+- name: "Finder: show hidden files by default"
+  command: defaults write com.apple.finder AppleShowAllFiles -bool true
+
+- name: "Finder: show path bar"
+  command: defaults write com.apple.finder ShowPathbar -bool true
+
+- name: Keep folders on top when sorting by name
+  command: defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+- name: When performing a search, search the current folder by default
+  command: defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+- name: Disable Dashboard
+  command: defaults write com.apple.dashboard mcx-disabled -bool true
+
+- name: Don’t show Dashboard as a Space
+  command: defaults write com.apple.dock dashboard-in-overlay -bool true

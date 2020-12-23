@@ -1,0 +1,21 @@
+casks:
+  - amethyst #window manager
+  - atom #text editor
+  - caffeine #keep screen on
+  - google-chrome #browser
+  - cyberduck #ftp
+  - firefox #browser
+  - dbeaver-community #databases
+  - dropbox #cloud
+  - google-backup-and-sync #cloud
+  - keka #rar zip tar...
+  - libreoffice #office
+  - macs-fan-control #mac fans control
+  - megasync #megaupload
+  - mysqlworkbench #databases
+  - scroll-reverser #wel...
+  - spotify #music player
+  - sublime-text #text editor
+  - transmission #torrents
+  - virtualbox #vmachines
+  - vlc #media player

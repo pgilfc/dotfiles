@@ -1,0 +1,11 @@
+- name: Installs vim
+  become: yes
+  apt:
+    name: vim
+    state: present
+
+- name: Installs neovim
+  become: yes
+  apt:
+    name: neovim
+    state: present
