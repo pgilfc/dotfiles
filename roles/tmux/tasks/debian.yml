@@ -1,4 +1,4 @@
-- name: Installs vim
+- name: Installs tmux
   become: yes
   apt:
     name: tmux
