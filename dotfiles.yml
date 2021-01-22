@@ -1,10 +1,16 @@
 - name: Set up dotfiles
   hosts: local
   roles:
+    - role: casks
     - role: common
     - role: grub
+    - role: iterm2
+    - role: macos
     - role: slimbook
+    - role: tmux
     - role: touchegg
     - role: ubuntu
-    - role: veracrypt 
+    - role: veracrypt
+    - role: vim
     - role: vscode
+    - role: zsh
