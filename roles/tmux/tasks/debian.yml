@@ -1,0 +1,5 @@
+- name: Installs vim
+  become: yes
+  apt:
+    name: tmux
+    state: present
