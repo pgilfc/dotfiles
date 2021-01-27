@@ -1,11 +1,5 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
 
-source .antigen.zsh
+source $HOME/.antigen.zsh
 
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
@@ -19,7 +13,7 @@ antigen bundle history
 antigen bundle python
 antigen bundle pip
 antigen bundle elixir
-antigen bundle go
+antigen bundle golang
 antigen bundle mix
 antigen bundle npm
 antigen bundle tmux
