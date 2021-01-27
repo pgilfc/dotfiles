@@ -1,0 +1,5 @@
+- name: Installs zsh
+  become: yes
+  apt:
+    name: zsh
+    state: present

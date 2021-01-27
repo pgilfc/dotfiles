@@ -1,0 +1,10 @@
+- name: Installs iterm2
+  homebrew_cask:
+    name: iterm2
+    state: present
+
+- name: Specify the preferences directory
+  command: defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "{{ role_path }}/files/"
+
+- name: Use custom preferences in the directory
+  command: defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true

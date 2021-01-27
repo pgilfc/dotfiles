@@ -1,0 +1,4 @@
+- name: Installs macvim
+  homebrew:
+    name: tmux
+    state: present

@@ -1,0 +1,9 @@
+- name: Upgrade all casks
+  homebrew_cask:
+    upgrade_all: true
+
+- name: Installs casks
+  loop: "{{ casks }}"
+  homebrew_cask:
+    name: "{{ item }}"
+    state: present
