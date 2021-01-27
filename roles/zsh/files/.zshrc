@@ -24,6 +24,9 @@ antigen bundle zsh-users/zsh-autosuggestions
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
 
+# aditional completions
+antigen bundle zsh-users/zsh-completions
+
 # Load the theme.
 antigen theme romkatv/powerlevel10k
 
