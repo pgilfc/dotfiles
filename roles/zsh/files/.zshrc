@@ -7,12 +7,10 @@ antigen use oh-my-zsh
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundle git
 antigen bundle brew
-antigen bundle git
 antigen bundle osx
 antigen bundle history
 antigen bundle python
 antigen bundle pip
-antigen bundle elixir
 antigen bundle golang
 antigen bundle mix
 antigen bundle npm
