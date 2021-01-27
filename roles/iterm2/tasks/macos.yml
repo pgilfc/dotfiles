@@ -3,14 +3,8 @@
     name: iterm2
     state: present
 
-- name: Symlink iterm2 config
-  file:
-    src: "{{ role_path }}/files/com.googlecode.iterm2.plist"
-    dest: "{{ user_home }}/iterm2/com.googlecode.iterm2.plist"
-    state: link
-
 - name: Specify the preferences directory
-  command: defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "{{ user_home }}/iterm2/"
+  command: defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "{{ role_path }}/files/"
 
 - name: Use custom preferences in the directory
   command: defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true

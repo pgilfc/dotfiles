@@ -1,8 +1,9 @@
+
 - name: Set dock to auto hide to 1000 secconds (to keep it hidden)
   command: defaults write com.apple.dock autohide-delay -float 1000
 
 - name: Always show scrollbars
-  command: defaults write NSGlobalDomain AppleShowScrollBars -string "Always
+  command: defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 
 - name: Save to disk (not to iCloud) by default
   command: defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false

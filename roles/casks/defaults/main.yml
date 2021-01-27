@@ -8,8 +8,6 @@ casks:
   - dbeaver-community #databases
   - dropbox #cloud
   - google-backup-and-sync #cloud
-  - insomniax #keep working with lid closed
-  - java #java
   - keka #rar zip tar...
   - libreoffice #office
   - macs-fan-control #mac fans control

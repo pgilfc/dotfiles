@@ -6,7 +6,7 @@
 
 - name: Installs antigen
   get_url:
-    url: git.io/antigen
+    url: http://git.io/antigen
     dest: "{{ user_home }}/.antigen.zsh"
 
 - name: Symlink .p10k.zsh theme file
