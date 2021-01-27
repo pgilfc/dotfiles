@@ -19,7 +19,9 @@ antigen bundle npm
 antigen bundle tmux
 antigen bundle tmuxinator
 antigen bundle vscode
-antigen bundle zsh-autosuggestions
+
+# Fish like auto sugestions
+antigen bundle zsh-users/zsh-autosuggestions
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
