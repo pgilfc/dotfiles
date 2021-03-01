@@ -23,3 +23,6 @@
     src: "{{ role_path }}/files/.tmux.conf"
     dest: "{{ user_home }}/.tmux.conf"
     state: link
+
+- name: Install pluggins
+  command: ~/.tmux/plugins/tpm/bin/install_plugins
