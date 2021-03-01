@@ -1,0 +1,5 @@
+- name: Installs conky system monitor for X
+  become: yes
+  apt:
+    name: conky
+    state: present

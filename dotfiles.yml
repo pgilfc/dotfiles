@@ -3,6 +3,7 @@
   roles:
     - role: casks
     - role: common
+    - role: conky
     - role: grub
     - role: iterm2
     - role: macos
