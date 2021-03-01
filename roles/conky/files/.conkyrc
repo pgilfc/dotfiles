@@ -92,6 +92,4 @@ ${top name 7} $alignr ${top pid 7} ${top cpu 7}% ${top mem 7}%
 ${top name 8} $alignr ${top pid 8} ${top cpu 8}% ${top mem 8}%
 ${top name 9} $alignr ${top pid 9} ${top cpu 9}% ${top mem 9}%
 ${top name 10} $alignr ${top pid 10} ${top cpu 10}% ${top mem 10}%
-${top name 11} $alignr ${top pid 11} ${top cpu 11}% ${top mem 11}%
-${top name 12} $alignr ${top pid 12} ${top cpu 12}% ${top mem 12}%
 ]]
