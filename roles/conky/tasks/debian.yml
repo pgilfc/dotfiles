@@ -3,3 +3,24 @@
   apt:
     name: conky
     state: present
+
+- name: Check if .conkyrc exists
+  stat: path="{{user_home}}/.conkyrc"
+  register: conky_stat
+  failed_when: False
+
+- name: Backup .conkyrc
+  command: mv {{user_home}}/.conkyrc {{user_home}}/.conkyrc.bak
+  when: conky_stat.stat.exists
+
+- name: Symlink .conkyrc
+  file:
+    src: "{{ role_path }}/files/.conkyrc"
+    dest: "{{ user_home }}/.conkyrc"
+    state: link
+
+- name: Symlink conky.desktop
+  file:
+    src: "{{ role_path }}/files/conky.desktop"
+    dest: "{{ user_home }}/.config/autostart/conky.desktop"
+    state: link
