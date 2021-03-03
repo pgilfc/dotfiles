@@ -3,3 +3,9 @@
   apt:
     name: tmux
     state: present
+
+- name: Ensure xclip is installed
+  become: yes
+  apt:
+    name: xclip
+    state: present
