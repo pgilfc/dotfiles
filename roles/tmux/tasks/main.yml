@@ -26,3 +26,6 @@
 
 - name: Install pluggins
   command: ~/.tmux/plugins/tpm/bin/install_plugins
+
+- name: Source .tmux.conf
+  shell: tmux source ~/.tmux.conf
