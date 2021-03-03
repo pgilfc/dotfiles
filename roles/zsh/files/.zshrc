@@ -1,6 +1,9 @@
 
 source $HOME/.antigen.zsh
 
+ZSH_TMUX_AUTOSTART=true # Autostart tmux on zsh
+ZSH_TMUX_AUTOQUIT=false # Dont exit zsh on tmux detach/exit
+
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
