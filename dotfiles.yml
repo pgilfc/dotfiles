@@ -5,6 +5,7 @@
     - role: common
     - role: conky
     - role: grub
+    - role: guake
     - role: iterm2
     - role: macos
     - role: slimbook

@@ -15,5 +15,4 @@ common_packages:
 
 debian_packages:
   - aptitude # apt terminal gui
-  - guake # Hovering terminal
   - tlp # Energy optimizer

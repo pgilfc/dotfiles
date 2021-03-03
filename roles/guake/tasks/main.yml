@@ -1,0 +1,2 @@
+- include: debian.yml
+  when: is_debian|bool
