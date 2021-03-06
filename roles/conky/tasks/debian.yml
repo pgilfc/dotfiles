@@ -19,6 +19,11 @@
     dest: "{{ user_home }}/.conkyrc"
     state: link
 
+- name: Make sure .config/autostart exists
+  file:
+    path: "{{ user_home }}/.config/autostart"
+    state: directory
+
 - name: Symlink conky.desktop
   file:
     src: "{{ role_path }}/files/conky.desktop"
