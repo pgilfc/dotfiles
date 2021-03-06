@@ -4,6 +4,9 @@
 - include: macos.yml
   when: is_macos|bool
 
+- name: Start tmux
+  shell: tmux &
+
 - name: Import tmp
   git:
     repo: https://github.com/tmux-plugins/tpm
