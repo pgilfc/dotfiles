@@ -16,3 +16,4 @@ common_packages:
 debian_packages:
   - aptitude # apt terminal gui
   - tlp # Energy optimizer
+  - powertop # Energy optimizer
