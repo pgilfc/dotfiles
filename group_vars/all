@@ -1,6 +1,6 @@
 
 user_home: "{{ playbook_dir }}/.."
 is_macos: "{{ansible_os_family == 'Darwin'}}"
-is_debian: "{{ansible_os_family == 'Debian' or ansible_os_family == 'Pop!_OS'}}"
+is_debian: "{{ ansible_os_family == 'Debian' or ansible_os_family == 'Pop!_OS' }}"
 is_ubuntu: "{{ is_debian|bool and ansible_distribution == 'Ubuntu'}}"
 is_pop_os: "{{ is_debian|bool and ansible_distribution == 'Pop!_OS'}}"
