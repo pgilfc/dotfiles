@@ -1,6 +1,6 @@
 
-
 - name: Remove ubuntu dock
+  become: yes
   apt:
     name: "gnome-shell-extension-ubuntu-dock"
     state: absent
