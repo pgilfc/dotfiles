@@ -6,3 +6,9 @@
 
 - name: Upload Guake preferences # guake --save-preferences guake.conf
   command: guake --restore-preferences {{ role_path }}/files/guake.conf
+
+- name: Symlink guake.desktop
+  file:
+    src: "{{ role_path }}/files/guake.desktop"
+    dest: "{{ user_home }}/.config/autostart/guake.desktop"
+    state: link

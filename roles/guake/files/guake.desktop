@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=guake
+Exec=sh -c "sleep 10; guake;"
