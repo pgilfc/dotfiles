@@ -15,5 +15,5 @@
     - role: ubuntu
     - role: veracrypt
     - role: vim
-    - role: vscode
+    - role: vscodium
     - role: zsh
