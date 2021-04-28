@@ -1,6 +1,7 @@
 - name: Set up dotfiles
   hosts: local
   roles:
+    - role: bin
     - role: casks
     - role: common
     - role: conky
