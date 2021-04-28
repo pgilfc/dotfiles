@@ -1,0 +1,21 @@
+
+
+- name: Create ~/.local/bin/
+  file:
+    state: directory
+    path: "{{ user_home }}/.local/bin"
+    mode: 0755
+
+- name: Find all files to symlink
+  find:
+    paths: "{{ role_path }}/files"
+  register: find_bins
+
+- name: Symlink bins
+  become: True
+  file:
+    src: "{{ item.path }}"
+    dest: "{{ user_home }}/.local/bin/{{ item.path | basename }}"
+    state: link
+    mode: '0755'
+  with_items: "{{ find_bins.files }}"
