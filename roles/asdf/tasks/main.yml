@@ -1,0 +1,6 @@
+
+- name: Import asdf repo
+  git:
+    repo: https://github.com/asdf-vm/asdf.git
+    dest: "{{ user_home }}/.asdf"
+    version: v0.8.1
