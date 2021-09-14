@@ -2,6 +2,7 @@
   hosts: local
   roles:
     - role: asdf
+    - role: albert
     - role: bin
     - role: casks
     - role: common
@@ -11,7 +12,6 @@
     - role: kernel_vars
     - role: macos
     - role: pop_os
-    - role: slimbook
     - role: tmux
     - role: touchegg
     - role: ubuntu
