@@ -1,18 +1,6 @@
 
-- name: Add the GPG key of the repository
-  become: yes
-  apt_key:
-    url: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
-    state: present
-
-- name: Add the repository
-  become: yes
-  apt_repository:
-    repo: deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main 
-    state: present
-
 - name: Install vscodium
   become: yes
   apt:
-    name: codium
-    state: present
+    deb: "https://github.com/VSCodium/vscodium/releases/download/1.60.0/codium_1.60.0-1630974030_amd64.deb"
+
