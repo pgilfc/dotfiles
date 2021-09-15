@@ -3,3 +3,34 @@
   become: yes
   apt:
     deb: "https://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_21.04/amd64/albert_0.17.2-0_amd64.deb"
+
+- name: Make sure .config/autostart exists
+  file:
+    path: "{{ user_home }}/.config/autostart"
+    state: directory
+
+- name: Make sure .config/albert exists
+  file:
+    path: "{{ user_home }}/.config/albert"
+    state: directory
+
+- name: Check if albert.conf exists
+  stat: path="{{ user_home }}/.config/albert/albert.conf"
+  register: albert_conf_stat
+  failed_when: False
+
+- name: Backup albert.conf
+  command: mv {{user_home}}/.config/albert/albert.conf {{user_home}}/.config/albert/albert.conf.bak
+  when: albert_conf_stat.stat.exists
+
+- name: Symlink albert.conf
+  file:
+    src: "{{ role_path }}/files/albert.conf"
+    dest: "{{ user_home }}/.config/albert/albert.conf"
+    state: link
+
+- name: Symlink albert.desktop
+  file:
+    src: "{{ role_path }}/files/albert.desktop"
+    dest: "{{ user_home }}/.config/autostart/albert.desktop"
+    state: link
