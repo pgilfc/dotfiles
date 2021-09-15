@@ -7,6 +7,11 @@
 - name: Upload Guake preferences # guake --save-preferences guake.conf
   command: guake --restore-preferences {{ role_path }}/files/guake.conf
 
+- name: Make sure .config/autostart exists
+  file:
+    path: "{{ user_home }}/.config/autostart"
+    state: directory
+
 - name: Symlink guake.desktop
   file:
     src: "{{ role_path }}/files/guake.desktop"
