@@ -17,3 +17,4 @@ debian_packages:
   - aptitude # apt terminal gui
   - tlp # Energy optimizer
   - powertop # Energy optimizer
+  - solaar # logitech device manager
