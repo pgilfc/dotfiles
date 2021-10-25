@@ -6,6 +6,7 @@ common_packages:
   - htop # System monitor
   - mc # Terminal file manager
   - ncdu # Disk usage analyzer
+  - neofetch # Terminal system info
   - peco # Terminal fuzzy finder
   - tldr # like man but just examples
   - tree # Directory tree
