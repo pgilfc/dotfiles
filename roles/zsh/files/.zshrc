@@ -4,6 +4,9 @@ source $HOME/.antigen.zsh
 ZSH_TMUX_AUTOSTART=true # Autostart tmux on zsh
 ZSH_TMUX_AUTOQUIT=false # Dont exit zsh on tmux detach/exit
 
+# Make sure tmux server is running
+[[ -n $(pgrep tmux) ]] || tmux start \; new-session -d -s kill-me 'sleep 1 && exit' \; new-session -d -s 0
+
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
@@ -36,7 +39,7 @@ antigen theme romkatv/powerlevel10k
 # Tell Antigen that you're done.
 antigen apply
 
-# history config
+# History config
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000000
 SAVEHIST=10000000
@@ -58,16 +61,16 @@ setopt HIST_REDUCE_BLANKS       # Remove superfluous blanks before recording ent
 # Enable history in IEX through Erlang(OTP)
 export ERL_AFLAGS="-kernel shell_history enabled"
 
-# set PATH so it includes private bin if it exists
+# Set PATH so it includes private bin if it exists
 if [ -d "$HOME/.local/bin" ] ; then
   PATH="$PATH:$HOME/.local/bin"
 fi
 
 # asdf initialization
 . $HOME/.asdf/asdf.sh
-# append completions to fpath
+# Append completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)
-# initialise completions with ZSH's compinit
+# Initialise completions with ZSH's compinit
 autoload -Uz compinit && compinit
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
