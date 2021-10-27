@@ -5,7 +5,7 @@ ZSH_TMUX_AUTOSTART=true # Autostart tmux on zsh
 ZSH_TMUX_AUTOQUIT=false # Dont exit zsh on tmux detach/exit
 
 # Make sure tmux server is running
-[[ -n $(pgrep tmux) ]] || tmux start \; new-session -d -s kill-me 'sleep 1 && exit' \; new-session -d -s 0
+[[ -n $(pgrep tmux) ]] || tmux start \; new-session -d -s kill-me 'sleep 4 && exit' \; new-session -d -s 0
 
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
