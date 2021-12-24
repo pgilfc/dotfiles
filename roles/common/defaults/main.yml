@@ -11,6 +11,7 @@ common_packages:
   - tldr # like man but just examples
   - tree # Directory tree
   - ranger # Terminal directory manager (vimlike)
+  - rclone # rsync for cloud storage
   - syncthing # Sync folders between computers
   - wget # Web get
 
