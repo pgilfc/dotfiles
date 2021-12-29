@@ -12,6 +12,7 @@ common_packages:
   - tree # Directory tree
   - ranger # Terminal directory manager (vimlike)
   - rclone # rsync for cloud storage
+  - rpi-imager
   - syncthing # Sync folders between computers
   - wget # Web get
 
