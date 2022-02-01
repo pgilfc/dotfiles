@@ -13,7 +13,7 @@ antigen use oh-my-zsh
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundle git
 antigen bundle brew
-antigen bundle osx
+antigen bundle macos
 antigen bundle history
 antigen bundle python
 antigen bundle pip
@@ -26,12 +26,12 @@ antigen bundle vscode
 
 # Fish like auto sugestions
 antigen bundle zsh-users/zsh-autosuggestions
-
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
-
 # aditional completions
 antigen bundle zsh-users/zsh-completions
+# fish like substring search
+antigen bundle zsh-users/zsh-history-substring-search
 
 # Load the theme.
 antigen theme romkatv/powerlevel10k
@@ -57,6 +57,11 @@ setopt HIST_FIND_NO_DUPS        # Do not display a line previously found.
 setopt HIST_SAVE_NO_DUPS        # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS       # Remove superfluous blanks before recording entry
 
+# Bind up and down key to history-substring-search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[OA' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^[OB' history-substring-search-down
 
 # Enable history in IEX through Erlang(OTP)
 export ERL_AFLAGS="-kernel shell_history enabled"
