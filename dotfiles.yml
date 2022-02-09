@@ -8,6 +8,8 @@
     - role: common
     - role: conky
     - role: guake
+    - role: i3
+    - role: i3status
     - role: iterm2
     - role: kernel_vars
     - role: macos
