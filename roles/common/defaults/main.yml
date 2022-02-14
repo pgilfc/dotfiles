@@ -1,8 +1,8 @@
 common_packages:
   - curl # Client URL
   - fzf # Terminal Fuzzy finder
+  - gimp # like photoshop, but for nix
   - git # Version control
-  - glances # System monitor
   - htop # System monitor
   - mc # Terminal file manager
   - ncdu # Disk usage analyzer
@@ -12,7 +12,6 @@ common_packages:
   - tree # Directory tree
   - ranger # Terminal directory manager (vimlike)
   - rclone # rsync for cloud storage
-  - rpi-imager # raspberry pi imager
   - scrcpy # mirror android screen
   - syncthing # Sync folders between computers
   - wget # Web get
