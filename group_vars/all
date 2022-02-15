@@ -1,4 +1,4 @@
-
+user_name: "{{ ansible_user_id }}"
 user_home: "{{ playbook_dir }}/.."
 is_macos: "{{ansible_os_family == 'Darwin'}}"
 is_debian: "{{ ansible_os_family == 'Debian' or ansible_os_family == 'Pop!_OS' }}"
