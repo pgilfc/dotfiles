@@ -49,9 +49,6 @@
   become: yes
   register: result
 
-- debug:
-    var: result
-
 - name: Symlink .xprofile
   file:
     src: "{{ role_path }}/files/.xprofile"
