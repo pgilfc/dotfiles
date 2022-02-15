@@ -47,7 +47,6 @@
 - name: Add user to input groups
   shell: "gpasswd -a {{ user_name }} input"
   become: yes
-  register: result
 
 - name: Symlink .xprofile
   file:
