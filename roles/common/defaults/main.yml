@@ -4,6 +4,7 @@ common_packages:
   - gimp # like photoshop, but for nix
   - git # Version control
   - htop # System monitor
+  - make # make utility automation
   - mc # Terminal file manager
   - ncdu # Disk usage analyzer
   - neofetch # Terminal system info
