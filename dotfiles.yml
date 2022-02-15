@@ -15,7 +15,7 @@
     - role: macos
     - role: pop_os
     - role: tmux
-    - role: touchegg
+    - role: touchpad
     - role: ubuntu
     - role: veracrypt
     - role: vim
