@@ -4,10 +4,10 @@
   apt:
     update_cache: yes
 
-- name: Upgrade the OS (apt-get dist-upgrade)
+- name: Upgrade existing packages
   become: yes
   apt:
-    upgrade: dist
+    upgrade: yes
 
 - name: Installs common packages apt
   become: yes

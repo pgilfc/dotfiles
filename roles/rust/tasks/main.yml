@@ -1,0 +1,11 @@
+
+- name:  Add rust asdf plugin
+  command: asdf plugin add rust https://github.com/code-lever/asdf-rust.git
+  register: result
+  failed_when: result.rc != 0 and result.stderr != 'Plugin named rust already added'
+
+- name:  Install stable rust version
+  command: asdf install rust stable
+
+- name:  Set rust version
+  command: asdf global rust stable

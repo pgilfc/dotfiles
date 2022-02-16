@@ -6,4 +6,4 @@
 
 - name: Set zsh as default
   become: yes
-  shell: chsh {{ lookup('env','USER') }} -s $(which zsh)
+  shell: chsh {{ ansible_user_id }} -s $(which zsh)
