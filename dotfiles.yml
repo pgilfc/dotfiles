@@ -1,12 +1,14 @@
 - name: Set up dotfiles
   hosts: local
   roles:
+    - role: alacritty
     - role: asdf
     - role: albert
     - role: bin
     - role: casks
     - role: common
     - role: conky
+    - role: fonts
     - role: guake
     - role: i3
     - role: i3status
@@ -14,6 +16,9 @@
     - role: kernel_vars
     - role: macos
     - role: pop_os
+    - role: python
+    - role: rust
+    - role: tdrop
     - role: tmux
     - role: touchpad
     - role: ubuntu

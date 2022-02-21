@@ -39,7 +39,8 @@ bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -191,3 +192,7 @@ default_floating_border pixel 2
 bindsym $mod+Tab workspace next
 # Previous Workspace
 bindsym $mod+Shift+Tab workspace prev
+
+# Open terminal with a hot key (guake like)
+bindsym Mod1+space exec --no-startup-id tdrop -ma -w 100% -h 50% -s dropdown alacritty
+

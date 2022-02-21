@@ -1,5 +1,6 @@
 common_packages:
   - curl # Client URL
+  - feh # Image viewer and desktop wallpaper
   - fzf # Terminal Fuzzy finder
   - gimp # like photoshop, but for nix
   - git # Version control

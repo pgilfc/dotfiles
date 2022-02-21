@@ -8,3 +8,4 @@
  - Macos
  - Ubuntu
  - Pop!_OS
+ - Debian

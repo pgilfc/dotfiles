@@ -1,0 +1,4 @@
+
+current_directory: "{{ user_home }}/.alacritty"
+alacritty_conf_dir: "{{ user_home }}/.config/alacritty"
+alacritty_conf: "{{ alacritty_conf_dir }}/alacritty.yml"

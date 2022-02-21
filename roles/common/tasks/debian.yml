@@ -7,7 +7,7 @@
 - name: Upgrade existing packages
   become: yes
   apt:
-    upgrade: yes
+    upgrade: safe
 
 - name: Installs common packages apt
   become: yes
