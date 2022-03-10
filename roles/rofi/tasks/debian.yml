@@ -1,0 +1,27 @@
+
+- name: Install rofi
+  become: yes
+  apt:
+    name: rofi
+    state: present
+
+- name: Create a rofi config directory if it does not exist
+  file:
+    path: "{{ user_home }}/.config/rofi"
+    state: directory
+    recurse: yes
+
+- name: Check if rofi config file exists
+  stat: path="{{ user_home }}/.config/rofi/config.rasi"
+  register: has_rofi_config
+  failed_when: False
+
+- name: Backup rofi config file
+  command: mv {{ user_home }}/.config/rofi/config.rasi {{ user_home }}/.config/rofi/config.rasi.bak
+  when: has_rofi_config.stat.exists
+
+- name: Symlink rofi config file
+  file:
+    src: "{{ role_path }}/files/config.rasi"
+    dest: "{{ user_home }}/.config/rofi/config.rasi"
+    state: link

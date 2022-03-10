@@ -17,6 +17,7 @@
     - role: macos
     - role: pop_os
     - role: python
+    - role: rofi
     - role: rust
     - role: tdrop
     - role: tmux

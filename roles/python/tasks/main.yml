@@ -2,7 +2,7 @@
 - name:  Add python asdf plugin
   command: asdf plugin add python
   register: result
-  failed_when: result.rc != 0 and result.stderr != 'Plugin named python already added'
+  failed_when: result.rc != 0 and not (result.stderr is search("Plugin named python already added"))
 
 - name: Installs needed apt packages
   become: yes
