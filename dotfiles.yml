@@ -11,6 +11,7 @@
     - role: fonts
     - role: guake
     - role: i3
+    - role: i3blocks
     - role: i3status
     - role: iterm2
     - role: kernel_vars
