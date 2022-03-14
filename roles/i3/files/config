@@ -200,4 +200,4 @@ bindsym $mod+Shift+Tab workspace prev
 bindsym Mod1+space exec --no-startup-id tdrop -m -a -w 100% -h 50% -s 0 alacritty
 
 # Open rofi with a hot key (mac like)
-bindsym $mod+space exec --no-startup-id rofi -show run
+bindsym $mod+space exec --no-startup-id rofi -show combi

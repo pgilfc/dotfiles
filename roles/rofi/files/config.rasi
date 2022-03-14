@@ -1,5 +1,8 @@
 configuration {
-/*	modi: "window,run,ssh";*/
+	modi: "combi,calc";
+	terminal: "alacritty";
+	combi-modi: "window,run";
+	theme: "/usr/share/rofi/themes/Monokai.rasi";
 /*	width: 50;*/
 /*	lines: 15;*/
 /*	columns: 1;*/
@@ -11,7 +14,6 @@ configuration {
 /*	xoffset: 0;*/
 /*	fixed-num-lines: true;*/
 /*	show-icons: false;*/
-	terminal: "alacritty";
 /*	ssh-client: "ssh";*/
 /*	ssh-command: "{terminal} -e {ssh-client} {host} [-p {port}]";*/
 /*	run-command: "{cmd}";*/
@@ -34,7 +36,6 @@ configuration {
 /*	auto-select: false;*/
 /*	parse-hosts: false;*/
 /*	parse-known-hosts: true;*/
-/*	combi-modi: "window,run";*/
 /*	matching: "normal";*/
 /*	tokenize: true;*/
 /*	m: "-5";*/
@@ -53,7 +54,6 @@ configuration {
 /*	window-format: "{w}    {c}   {t}";*/
 /*	click-to-exit: true;*/
 /*	show-match: true;*/
-	theme: "/usr/share/rofi/themes/Monokai.rasi";
 /*	color-normal: ;*/
 /*	color-urgent: ;*/
 /*	color-active: ;*/

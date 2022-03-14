@@ -19,6 +19,7 @@
     - role: pop_os
     - role: python
     - role: rofi
+    - role: rofi-calc
     - role: rust
     - role: tdrop
     - role: tmux
