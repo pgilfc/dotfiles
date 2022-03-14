@@ -10,6 +10,7 @@ common_packages:
   - mc # Terminal file manager
   - ncdu # Disk usage analyzer
   - neofetch # Terminal system info
+  - pavucontrol # Pulseaudio volume controll
   - peco # Terminal fuzzy finder
   - ranger # Terminal directory manager (vimlike)
   - rclone # rsync for cloud storage
