@@ -3,20 +3,14 @@
   roles:
     - role: alacritty
     - role: asdf
-    - role: albert
     - role: bin
-    - role: casks
     - role: common
     - role: conky
     - role: fonts
-    - role: guake
     - role: i3
     - role: i3blocks
     - role: i3status
-    - role: iterm2
     - role: kernel_vars
-    - role: macos
-    - role: pop_os
     - role: python
     - role: rofi
     - role: rofi-calc
@@ -24,7 +18,6 @@
     - role: tdrop
     - role: tmux
     - role: touchpad
-    - role: ubuntu
     - role: veracrypt
     - role: vim
     - role: vscodium
