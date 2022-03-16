@@ -1,4 +1,0 @@
-
-
-- name: Set trackpad with right click
-  command: gsettings set org.gnome.desktop.peripherals.touchpad click-method areas

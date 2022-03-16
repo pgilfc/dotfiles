@@ -1,9 +1,0 @@
-- name: Installs macvim
-  homebrew:
-    name: tmux
-    state: present
-
-- name: Ensure reattach-to-user-namespace is installed
-  homebrew:
-    name: reattach-to-user-namespace
-    state: present

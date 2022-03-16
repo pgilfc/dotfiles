@@ -1,0 +1,85 @@
+
+- name: Import alacritty repo
+  git:
+    repo: https://github.com/alacritty/alacritty.git
+    dest: "{{ current_directory }}"
+
+- name: Installs needed apt packages
+  become: yes
+  loop: "{{ packages }}"
+  apt:
+    name: "{{ item }}"
+    state: present
+
+- name: Build alacritty
+  command: 
+    cmd: cargo build --release
+    chdir: "{{ current_directory }}"
+
+- name: Install terminfo
+  become: yes
+  command: 
+    cmd: tic -xe alacritty,alacritty-direct extra/alacritty.info
+    chdir: "{{ current_directory }}"
+
+- name: Copy bin to /usr/local/bin
+  become: yes
+  copy:
+    src: "{{ current_directory }}/target/release/alacritty"
+    dest: /usr/local/bin/alacritty
+
+- name: Move logo to pixmaps
+  become: yes
+  copy: 
+    src: "{{ current_directory }}/extra/logo/alacritty-term.svg"
+    dest: /usr/share/pixmaps/Alacritty.svg
+
+- name: Install desktop file
+  become: yes
+  command: 
+    cmd: desktop-file-install extra/linux/Alacritty.desktop
+    chdir: "{{ current_directory }}"
+
+- name: Update desktop database
+  become: yes
+  command: 
+    cmd: update-desktop-database
+    chdir: "{{ current_directory }}"
+
+- name: Create man1 directory for manual page
+  become: yes
+  file:
+    path: /usr/local/share/man/man1
+    state: directory
+
+- name: Send alacritty.man to man
+  become: yes
+  shell: 
+    cmd: gzip -c {{ current_directory }}/extra/alacritty.man > /usr/local/share/man/man1/alacritty.1.gz
+    chdir: "{{ current_directory }}"
+
+- name: Send alacritty-msg.man to man
+  become: yes
+  shell: 
+    cmd: gzip -c {{ current_directory }}/extra/alacritty-msg.man > /usr/local/share/man/man1/alacritty-msg.1.gz
+    chdir: "{{ current_directory }}"
+
+- name: Creates alacritty conf directory if not exists
+  file:
+    path: "{{ alacritty_conf_dir }}"
+    state: directory
+
+- name: Check if alacritty.yml exists
+  stat: path="{{ alacritty_conf }}"
+  register: has_alacritty_yml
+  failed_when: False
+
+- name: Backup alacritty.yml
+  command: mv {{ alacritty_conf }} {{ alacritty_conf }}.bak
+  when: has_alacritty_yml.stat.exists
+
+- name: Symlink alacritty.yml
+  file:
+    src: "{{ role_path }}/files/alacritty.yml"
+    dest: "{{ alacritty_conf }}"
+    state: link

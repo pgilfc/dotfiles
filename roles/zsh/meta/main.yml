@@ -2,3 +2,4 @@ dependencies:
   - role: common
   - role: tmux
   - role: asdf
+  - role: fonts

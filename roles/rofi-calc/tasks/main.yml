@@ -1,0 +1,43 @@
+
+- name: Install rofi-calc dependencies
+  become: yes
+  loop: "{{ packages }}"
+  apt:
+    name: "{{ item }}"
+    state: present
+
+- name: Import rofi-calc repo
+  git:
+    repo: https://github.com/svenstaro/rofi-calc
+    dest: "{{ current_directory }}"
+
+- name: Update configuration files
+  command: 
+    cmd: autoreconf -i
+    chdir: "{{ current_directory }}"
+
+- name: Clear configuration
+  file:
+    path: "{{ current_directory }}/build"
+    state: absent
+
+- name: Creates build directory if not exists
+  file:
+    path: "{{ current_directory }}/build"
+    state: directory
+
+- name: Configure
+  command: 
+    cmd: ../configure
+    chdir: "{{ current_directory }}/build"
+
+- name: Make
+  command: 
+    cmd: make
+    chdir: "{{ current_directory }}/build"
+
+- name: Install
+  become: yes
+  command: 
+    cmd: make install
+    chdir: "{{ current_directory }}/build"

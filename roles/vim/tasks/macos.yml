@@ -1,9 +1,0 @@
-- name: Installs macvim
-  homebrew:
-    name: macvim
-    state: present
-
-- name: Installs neovim
-  homebrew:
-    name: neovim
-    state: present

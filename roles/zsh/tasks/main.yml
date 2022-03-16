@@ -1,8 +1,12 @@
-- include: debian.yml
-  when: is_debian|bool
+- name: Installs zsh
+  become: yes
+  apt:
+    name: zsh
+    state: present
 
-- include: macos.yml
-  when: is_macos|bool
+- name: Set zsh as default
+  become: yes
+  shell: chsh {{ ansible_user_id }} -s $(which zsh)
 
 - name: Installs antigen
   get_url:

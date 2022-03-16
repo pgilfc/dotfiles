@@ -1,0 +1,4 @@
+packages:
+  - rofi-dev
+  - qalc
+  - libtool

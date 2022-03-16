@@ -1,8 +1,14 @@
-- include: debian.yml
-  when: is_debian|bool
+- name: Installs tmux
+  become: yes
+  apt:
+    name: tmux
+    state: present
 
-- include: macos.yml
-  when: is_macos|bool
+- name: Ensure xclip is installed
+  become: yes
+  apt:
+    name: xclip
+    state: present
 
 - name: Import tmp
   git:

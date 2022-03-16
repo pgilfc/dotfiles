@@ -1,9 +1,0 @@
-- name: Installs zsh
-  become: yes
-  apt:
-    name: zsh
-    state: present
-
-- name: Set zsh as default
-  become: yes
-  shell: chsh {{ lookup('env','USER') }} -s $(which zsh)

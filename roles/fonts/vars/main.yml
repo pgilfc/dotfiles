@@ -1,0 +1,2 @@
+
+font_directory: "{{ user_home }}/.local/share/fonts/"

@@ -1,4 +1,0 @@
-dependencies:
-  - role: common
-  - role: zsh
-  - role: tmux

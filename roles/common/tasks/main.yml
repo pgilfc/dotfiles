@@ -1,5 +1,21 @@
-- include: debian.yml
-  when: is_debian|bool
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: yes
+  apt:
+    update_cache: yes
 
-- include: macos.yml
-  when: is_macos|bool
+- name: Upgrade existing packages
+  become: yes
+  apt:
+    upgrade: safe
+
+- name: Installs common packages apt
+  become: yes
+  loop: "{{ common_packages }}"
+  apt:
+    name: "{{ item }}"
+    state: present
+
+- name: Cleans packages | apt
+  become: yes
+  apt:
+    autoremove: yes

@@ -1,0 +1,10 @@
+
+- name: Copy fonts
+  copy:
+    src: "{{ item }}"
+    dest: "{{ font_directory }}/"
+  with_fileglob:
+    - "{{ role_path }}/files/*"
+
+- name: Regenerate font cache
+  command: fc-cache -f -v

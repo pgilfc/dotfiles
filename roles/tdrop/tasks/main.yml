@@ -1,0 +1,18 @@
+
+- name: Import tdrop repo
+  git:
+    repo: https://github.com/noctuid/tdrop.git
+    dest: "{{ current_directory }}"
+
+- name: Installs needed apt packages
+  become: yes
+  loop: "{{ packages }}"
+  apt:
+    name: "{{ item }}"
+    state: present
+
+- name: install tdrop
+  make:
+    chdir: "{{ current_directory }}"
+    target: install
+  become: yes

@@ -1,0 +1,1 @@
+vscodium_conf_dir: "{{ user_home }}/.config/VSCodium/User"
