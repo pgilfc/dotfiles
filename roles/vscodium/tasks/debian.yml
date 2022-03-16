@@ -1,6 +1,0 @@
-
-- name: Install vscodium
-  become: yes
-  apt:
-    deb: "https://github.com/VSCodium/vscodium/releases/download/1.60.0/codium_1.60.0-1630974030_amd64.deb"
-

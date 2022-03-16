@@ -5,7 +5,4 @@
  - Run init
 
 ## Configs for
- - Macos
- - Ubuntu
- - Pop!_OS
  - Debian

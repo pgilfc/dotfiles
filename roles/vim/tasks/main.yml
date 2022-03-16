@@ -1,8 +1,14 @@
-- include: debian.yml
-  when: is_debian|bool
+- name: Installs vim
+  become: yes
+  apt:
+    name: vim
+    state: present
 
-- include: macos.yml
-  when: is_macos|bool
+- name: Installs neovim
+  become: yes
+  apt:
+    name: neovim
+    state: present
 
 - name: Import Vundle
   git:

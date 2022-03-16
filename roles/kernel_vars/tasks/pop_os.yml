@@ -1,4 +1,0 @@
-
-- name: Add mem_sleep_default=deep var to kernelstub
-  become: yes
-  command: kernelstub -a mem_sleep_default=deep

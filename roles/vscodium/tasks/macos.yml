@@ -1,4 +1,0 @@
-- name: Installs casks
-  homebrew_cask:
-    name: vscodium
-    state: present

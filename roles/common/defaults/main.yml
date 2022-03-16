@@ -1,4 +1,5 @@
 common_packages:
+  - aptitude # apt terminal gui
   - arandr # Visual frontend for xrandr
   - curl # Client URL
   - feh # Image viewer and desktop wallpaper
@@ -12,17 +13,14 @@ common_packages:
   - neofetch # Terminal system info
   - pavucontrol # Pulseaudio volume controll
   - peco # Terminal fuzzy finder
+  - powertop # Energy optimizer
   - ranger # Terminal directory manager (vimlike)
   - rclone # rsync for cloud storage
+  - solaar # logitech device manager
   - scrcpy # mirror android screen
   - syncthing # Sync folders between computers
   - tldr # like man but just examples
+  - tlp # Energy optimizer
   - tree # Directory tree
   - vlc # Media player
   - wget # Web get
-
-debian_packages:
-  - aptitude # apt terminal gui
-  - tlp # Energy optimizer
-  - powertop # Energy optimizer
-  - solaar # logitech device manager

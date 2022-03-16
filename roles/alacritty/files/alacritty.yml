@@ -1,10 +1,4 @@
 font:
   normal:
     family: "MesloLGS NF"
-  bold:
-    family: "MesloLGS NF Bold"
-  italic:
-    family: "MesloLGS NF Italic"
-  bold_italic:
-    family: "MesloLGS NF Bold Italic"
   size: 7.0
