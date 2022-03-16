@@ -2,5 +2,24 @@
 - name: Install vscodium
   become: yes
   apt:
-    deb: "https://github.com/VSCodium/vscodium/releases/download/1.60.0/codium_1.60.0-1630974030_amd64.deb"
+    deb: "https://github.com/VSCodium/vscodium/releases/download/1.65.2/codium_1.65.2-1646957649_amd64.deb"
 
+- name: Creates vscodium conf directory if not exists
+  file:
+    path: "{{ vscodium_conf_dir }}"
+    state: directory
+
+- name: Check if settings.json exists
+  stat: path="{{ vscodium_conf_dir }}/settings.json"
+  register: vsc_conf_stat
+  failed_when: False
+
+- name: Backup settings.json
+  command: mv {{ vscodium_conf_dir }}/settings.json {{vscodium_conf_dir}}/settings.json.bak
+  when: vsc_conf_stat.stat.exists
+
+- name: Symlink settings.json
+  file:
+    src: "{{ role_path }}/files/settings.json"
+    dest: "{{ vscodium_conf_dir }}/settings.json"
+    state: link

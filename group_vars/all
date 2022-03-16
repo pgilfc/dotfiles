@@ -1,2 +1,2 @@
 user_name: "{{ ansible_user_id }}"
-user_home: "{{ playbook_dir }}/.."
+user_home: "/home/{{ user_name }}"
