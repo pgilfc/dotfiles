@@ -209,7 +209,8 @@ bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
 
 # Open terminal with a hot key (guake like)
-bindsym Mod1+space exec --no-startup-id tdrop -m -a -w 100% -h 50% -s 0 alacritty
+for_window [class="Alacritty" title="floating"] floating enable
+bindsym Mod1+space exec --no-startup-id tdrop -m -a -w 100% -h 50% -s 0 --name floating alacritty
 
 # Open rofi with a hot key (mac like)
 bindsym $mod+space exec --no-startup-id rofi -show combi
