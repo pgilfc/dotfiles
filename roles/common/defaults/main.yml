@@ -1,6 +1,7 @@
 common_packages:
   - aptitude # apt terminal gui
   - arandr # Visual frontend for xrandr
+  - brightnessctl # Command line brightness control
   - curl # Client URL
   - feh # Image viewer and desktop wallpaper
   - fzf # Terminal Fuzzy finder
@@ -11,7 +12,7 @@ common_packages:
   - mc # Terminal file manager
   - ncdu # Disk usage analyzer
   - neofetch # Terminal system info
-  - pavucontrol # Pulseaudio volume controll
+  - pavucontrol # Pulseaudio volume control
   - peco # Terminal fuzzy finder
   - powertop # Energy optimizer
   - ranger # Terminal directory manager (vimlike)
