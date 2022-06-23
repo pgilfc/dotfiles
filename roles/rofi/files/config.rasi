@@ -2,7 +2,6 @@ configuration {
 	modi: "combi,calc";
 	terminal: "alacritty";
 	combi-modi: "window,run";
-	theme: "/usr/share/rofi/themes/Monokai.rasi";
 /*	width: 50;*/
 /*	lines: 15;*/
 /*	columns: 1;*/
@@ -143,3 +142,5 @@ configuration {
 /*	me-accept-entry: "MouseDPrimary";*/
 /*	me-accept-custom: "Control+MouseDPrimary";*/
 }
+
+@theme "/usr/share/rofi/themes/Monokai.rasi"
