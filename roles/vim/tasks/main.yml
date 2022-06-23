@@ -1,8 +1,3 @@
-- name: Installs vim
-  become: yes
-  apt:
-    name: vim
-    state: present
 
 - name: Installs neovim
   become: yes
@@ -10,28 +5,8 @@
     name: neovim
     state: present
 
-- name: Import Vundle
-  git:
-    repo: https://github.com/VundleVim/Vundle.vim.git
-    dest: "{{ user_home }}/.vim/bundle/Vundle.vim"
-
-- name: Check if vimrc exists
-  stat: path="{{user_home}}/.vimrc"
-  register: vimrc_stat
-  failed_when: False
-
-- name: Backup vimrc
-  command: mv {{user_home}}/.vimrc {{user_home}}/.vimrc.bak
-  when: vimrc_stat.stat.exists
-
-- name: Symlink .vimrc
-  file:
-    src: "{{ role_path }}/files/.vimrc"
-    dest: "{{ user_home }}/.vimrc"
-    state: link
-
-- name: Install plugins
-  command: vim +PlugInstall +qall
+- name: Install pynvim
+  command: python -m pip install pynvim
 
 - name: Install spacevim
   shell: curl -sLf https://spacevim.org/install.sh | bash
@@ -57,6 +32,3 @@
     src: "{{ role_path }}/files/init.toml"
     dest: "{{ user_home }}/.SpaceVim.d/init.toml"
     state: link
-
-- name: Install plugins
-  command: vim +qall
