@@ -32,6 +32,9 @@
 
 - name: Install pluggins
   command: ~/.tmux/plugins/tpm/bin/install_plugins
+  
+- name: Start session
+  command: tmux new-session -t 0 -d
 
 - name: Source .tmux.conf
   shell: tmux source ~/.tmux.conf
