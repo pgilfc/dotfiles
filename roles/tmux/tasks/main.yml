@@ -1,40 +1,44 @@
 - name: Installs tmux
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     name: tmux
     state: present
 
 - name: Ensure xclip is installed
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     name: xclip
     state: present
 
 - name: Import tmp
-  git:
+  ansible.builtin.git:
     repo: https://github.com/tmux-plugins/tpm
     dest: "{{ user_home }}/.tmux/plugins/tpm"
+    version: master
 
 - name: Check if .tmux.conf exists
-  stat: path="{{user_home}}/.tmux.conf"
+  ansible.builtin.stat: path="{{ user_home }}/.tmux.conf"
   register: tmux_stat
-  failed_when: False
+  failed_when: false
 
 - name: Backup .tmux.conf
-  command: mv {{user_home}}/.tmux.conf {{user_home}}/.tmux.conf.bak
+  ansible.builtin.command: mv {{ user_home }}/.tmux.conf {{ user_home }}/.tmux.conf.bak
   when: tmux_stat.stat.exists
 
 - name: Symlink .tmux.conf
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/.tmux.conf"
     dest: "{{ user_home }}/.tmux.conf"
     state: link
 
 - name: Install pluggins
-  command: ~/.tmux/plugins/tpm/bin/install_plugins
-  
+  ansible.builtin.command: ~/.tmux/plugins/tpm/bin/install_plugins
+  changed_when: false
+
 - name: Start session
-  command: tmux new-session -t 0 -d
+  ansible.builtin.command: tmux new-session -t 0 -d
+  changed_when: false
 
 - name: Source .tmux.conf
-  shell: tmux source ~/.tmux.conf
+  ansible.builtin.command: tmux source ~/.tmux.conf
+  changed_when: false

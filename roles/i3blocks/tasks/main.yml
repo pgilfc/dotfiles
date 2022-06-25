@@ -1,32 +1,32 @@
-
 - name: Install i3blocks
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     name: i3blocks
     state: present
 
 - name: Create a i3blocks config directory if it does not exist
-  file:
+  ansible.builtin.file:
     path: "{{ config_directory }}"
     state: directory
-    recurse: yes
+    recurse: true
 
 - name: Check if i3blocks config file exists
-  stat: path="{{ config_directory }}/config"
+  ansible.builtin.stat: path="{{ config_directory }}/config"
   register: has_i3blocks_config
-  failed_when: False
+  failed_when: false
 
 - name: Backup i3blocks config file
-  command: mv {{ config_directory }}/config {{ config_directory }}/config.bak
+  ansible.builtin.command: mv {{ config_directory }}/config {{ config_directory }}/config.bak
   when: has_i3blocks_config.stat.exists
 
 - name: Symlink i3blocks config file
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/config"
     dest: "{{ config_directory }}/config"
     state: link
 
 - name: Import i3blocks-contrib repo
-  git:
+  ansible.builtin.git:
     repo: https://github.com/vivien/i3blocks-contrib
     dest: "{{ config_directory }}/i3blocks-contrib"
+    version: master

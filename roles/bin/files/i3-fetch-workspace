@@ -3,7 +3,7 @@
 # Gets specified workspace $1 and sends it either to the primary output or to the output indicated in $2 (left|right|down|up|current|primary|next|<output>)
 # List of monitors to use on $2 can be obtained through 'xrandr --listactivemonitors'
 if [ -z $1 ];
-then 
+then
     echo "Missing workspace id."
 else
     if [ -z $2 ];

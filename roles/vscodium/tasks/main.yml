@@ -1,25 +1,25 @@
-
 - name: Install vscodium
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     deb: "https://github.com/VSCodium/vscodium/releases/download/1.65.2/codium_1.65.2-1646957649_amd64.deb"
 
 - name: Creates vscodium conf directory if not exists
-  file:
+  ansible.builtin.file:
     path: "{{ vscodium_conf_dir }}"
     state: directory
+    mode: u=rwx,g=r,o=r
 
 - name: Check if settings.json exists
-  stat: path="{{ vscodium_conf_dir }}/settings.json"
+  ansible.builtin.stat: path="{{ vscodium_conf_dir }}/settings.json"
   register: vsc_conf_stat
-  failed_when: False
+  failed_when: false
 
 - name: Backup settings.json
-  command: mv {{ vscodium_conf_dir }}/settings.json {{vscodium_conf_dir}}/settings.json.bak
+  ansible.builtin.command: mv {{ vscodium_conf_dir }}/settings.json {{ vscodium_conf_dir }}/settings.json.bak
   when: vsc_conf_stat.stat.exists
 
 - name: Symlink settings.json
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/settings.json"
     dest: "{{ vscodium_conf_dir }}/settings.json"
     state: link

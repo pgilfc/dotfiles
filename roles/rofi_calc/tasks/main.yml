@@ -1,43 +1,48 @@
-
 - name: Install rofi-calc dependencies
-  become: yes
+  become: true
   loop: "{{ packages }}"
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
 
 - name: Import rofi-calc repo
-  git:
+  ansible.builtin.git:
     repo: https://github.com/svenstaro/rofi-calc
     dest: "{{ current_directory }}"
+    version: master
 
 - name: Update configuration files
-  command: 
+  ansible.builtin.command:
     cmd: autoreconf -i
     chdir: "{{ current_directory }}"
+  changed_when: false
 
 - name: Clear configuration
-  file:
+  ansible.builtin.file:
     path: "{{ current_directory }}/build"
     state: absent
 
 - name: Creates build directory if not exists
-  file:
+  ansible.builtin.file:
     path: "{{ current_directory }}/build"
     state: directory
+    mode: u=rwx,g=r,o=r
 
 - name: Configure
-  command: 
+  ansible.builtin.command:
     cmd: ../configure
     chdir: "{{ current_directory }}/build"
+  changed_when: false
 
 - name: Make
-  command: 
+  ansible.builtin.command:
     cmd: make
     chdir: "{{ current_directory }}/build"
+  changed_when: false
 
 - name: Install
-  become: yes
-  command: 
+  become: true
+  ansible.builtin.command:
     cmd: make install
     chdir: "{{ current_directory }}/build"
+  changed_when: false

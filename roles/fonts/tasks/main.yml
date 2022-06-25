@@ -1,10 +1,11 @@
-
 - name: Copy fonts
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ font_directory }}/"
+    mode: u=rw,g=r,o=r
   with_fileglob:
     - "{{ role_path }}/files/*"
 
 - name: Regenerate font cache
-  command: fc-cache -f -v
+  ansible.builtin.command: fc-cache -f -v
+  changed_when: false

@@ -1,21 +1,21 @@
 - name: Run the equivalent of "apt-get update" as a separate step
-  become: yes
-  apt:
-    update_cache: yes
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
 
 - name: Upgrade existing packages
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     upgrade: safe
 
 - name: Installs common packages apt
-  become: yes
+  become: true
   loop: "{{ common_packages }}"
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
 
 - name: Cleans packages | apt
-  become: yes
-  apt:
-    autoremove: yes
+  become: true
+  ansible.builtin.apt:
+    autoremove: true

@@ -1,24 +1,23 @@
-
 - name: Install xinput
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     name: xinput
     state: present
 
 - name: Install xdotool
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     name: xdotool
     state: present
 
 - name: Install libinput-tools
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     name: libinput-tools
     state: present
 
 - name: Import libinput-gestures repo
-  git:
+  ansible.builtin.git:
     repo: https://github.com/bulletmark/libinput-gestures.git
     dest: "{{ user_home }}/.libinput-gestures"
     version: "2.72"
@@ -27,29 +26,30 @@
   make:
     chdir: "{{ user_home }}/.libinput-gestures"
     target: install
-  become: yes
+  become: true
 
 - name: Check if libinput-gestures.conf exists
-  stat: path="{{ user_home }}/.config/libinput-gestures.conf"
+  ansible.builtin.stat: path="{{ user_home }}/.config/libinput-gestures.conf"
   register: has_libinput_gestures_conf
-  failed_when: False
+  failed_when: false
 
 - name: Backup libinput-gestures.conf
-  command: mv {{ user_home }}/.config/libinput-gestures.conf {{ user_home }}/.config/libinput-gestures.conf.bak
+  ansible.builtin.command: mv {{ user_home }}/.config/libinput-gestures.conf {{ user_home }}/.config/libinput-gestures.conf.bak
   when: has_libinput_gestures_conf.stat.exists
 
 - name: Symlink libinput-gestures.conf
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/libinput-gestures.conf"
     dest: "{{ user_home }}/.config/libinput-gestures.conf"
     state: link
 
 - name: Add user to input groups
-  shell: "gpasswd -a {{ user_name }} input"
-  become: yes
+  become: true
+  ansible.builtin.command: "gpasswd -a {{ user_name }} input"
+  changed_when: false
 
 - name: Symlink .xprofile
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/.xprofile"
     dest: "{{ user_home }}/.xprofile"
     state: link

@@ -1,31 +1,32 @@
 - name: Installs conky system monitor for X
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     name: conky
     state: present
 
 - name: Check if .conkyrc exists
-  stat: path="{{user_home}}/.conkyrc"
+  ansible.builtin.stat: path="{{ user_home }}/.conkyrc"
   register: conky_stat
-  failed_when: False
+  failed_when: false
 
 - name: Backup .conkyrc
-  command: mv {{user_home}}/.conkyrc {{user_home}}/.conkyrc.bak
+  ansible.builtin.command: mv {{ user_home }}/.conkyrc {{ user_home }}/.conkyrc.bak
   when: conky_stat.stat.exists
 
 - name: Symlink .conkyrc
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/.conkyrc"
     dest: "{{ user_home }}/.conkyrc"
     state: link
 
 - name: Make sure .config/autostart exists
-  file:
+  ansible.builtin.file:
     path: "{{ user_home }}/.config/autostart"
     state: directory
+    mode: u=rwx,g=r,o=r
 
 - name: Symlink conky.desktop
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/conky.desktop"
     dest: "{{ user_home }}/.config/autostart/conky.desktop"
     state: link

@@ -1,3 +1,4 @@
 {
-    "editor.fontFamily": "'MesloLGS NF', 'monospace', monospace"
+    "editor.fontFamily": "'MesloLGS NF', 'monospace', monospace",
+    "redhat.telemetry.enabled": false
 }

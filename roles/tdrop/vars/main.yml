@@ -1,2 +1,1 @@
-
 current_directory: "{{ user_home }}/.tdrop"

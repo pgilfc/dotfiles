@@ -1,13 +1,13 @@
-
 - name: Import tdrop repo
-  git:
+  ansible.builtin.git:
     repo: https://github.com/noctuid/tdrop.git
     dest: "{{ current_directory }}"
+    version: master
 
 - name: Installs needed apt packages
-  become: yes
+  become: true
   loop: "{{ packages }}"
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
 
@@ -15,4 +15,4 @@
   make:
     chdir: "{{ current_directory }}"
     target: install
-  become: yes
+  become: true

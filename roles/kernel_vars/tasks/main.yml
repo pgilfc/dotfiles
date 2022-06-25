@@ -1,12 +1,13 @@
 - name: Add mem_sleep_default=deep var to the GRUB_CMDLINE_LINUX_DEFAULT variables
-  become: yes
-  lineinfile: 
+  become: true
+  ansible.builtin.lineinfile:
     path: /etc/default/grub
     regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT=(?!.* mem_sleep_default)\"[^\"]+)(\".*)'
     line: '\1 mem_sleep_default=deep\2'
-    backrefs: yes
+    backrefs: true
     state: present
 
 - name: update-grub
-  become: yes
-  shell: update-grub
+  become: true
+  ansible.builtin.command: update-grub
+  changed_when: false

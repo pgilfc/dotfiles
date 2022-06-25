@@ -1,35 +1,37 @@
 - name: Installs zsh
-  become: yes
-  apt:
+  become: true
+  ansible.builtin.apt:
     name: zsh
     state: present
 
 - name: Set zsh as default
-  become: yes
-  shell: chsh {{ ansible_user_id }} -s $(which zsh)
+  become: true
+  ansible.builtin.shell: chsh {{ ansible_user_id }} -s $(which zsh)
+  changed_when: false
 
 - name: Installs antigen
-  get_url:
+  ansible.builtin.get_url:
     url: http://git.io/antigen
     dest: "{{ user_home }}/.antigen.zsh"
+    mode: u=rwx,g=r,o=r
 
 - name: Symlink .p10k.zsh theme file
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/.p10k.zsh"
     dest: "{{ user_home }}/.p10k.zsh"
     state: link
 
 - name: Check if zshrc exists
-  stat: path="{{user_home}}/.zshrc"
+  ansible.builtin.stat: path="{{ user_home }}/.zshrc"
   register: zshrc_stat
-  failed_when: False
+  failed_when: false
 
 - name: Backup zshrc
-  command: mv {{user_home}}/.zshrc {{user_home}}/.zshrc.bak
+  ansible.builtin.command: mv {{ user_home }}/.zshrc {{ user_home }}/.zshrc.bak
   when: zshrc_stat.stat.exists
 
 - name: Symlink .zshrc
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/.zshrc"
     dest: "{{ user_home }}/.zshrc"
     state: link
