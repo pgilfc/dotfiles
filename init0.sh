@@ -6,3 +6,5 @@ then
 	sudo apt install software-properties-common
 	sudo apt install ansible
 fi
+
+ansible-galaxy collection install community.general

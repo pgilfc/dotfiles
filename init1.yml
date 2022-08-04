@@ -1,24 +1,14 @@
 - name: Set up dotfiles
   hosts: local
   roles:
-    - role: alacritty
     - role: asdf
     - role: bin
     - role: common
-    - role: conky
     - role: fonts
-    - role: i3
-    - role: i3blocks
-    - role: i3status
-    - role: kernel_vars
     - role: python
-    - role: rofi
-    - role: rofi-calc
+    - role: kernel_vars
     - role: rust
-    - role: tdrop
     - role: tmux
     - role: touchpad
-    - role: veracrypt
     - role: vim
-    - role: vscodium
     - role: zsh

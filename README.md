@@ -1,8 +1,10 @@
 # Dotfiles
 
 ## Installing
- - Run appropriate install
- - Run init
+ - Run init* ordered
 
 ## Configs for
  - Debian
+
+## Extras
+ - Do use ansible-lint after editing anything

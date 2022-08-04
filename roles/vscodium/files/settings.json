@@ -1,4 +1,7 @@
 {
     "editor.fontFamily": "'MesloLGS NF', 'monospace', monospace",
-    "redhat.telemetry.enabled": false
+    "redhat.telemetry.enabled": false,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }

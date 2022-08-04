@@ -23,7 +23,7 @@
     version: "2.72"
 
 - name: Install libinput-gestures
-  make:
+  community.general.make:
     chdir: "{{ user_home }}/.libinput-gestures"
     target: install
   become: true
