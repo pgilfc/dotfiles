@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd $(mktemp -d)
+# $SHELL opens child shell on current dir
+$SHELL # use crl+d to get back to old dir

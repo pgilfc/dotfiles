@@ -12,7 +12,7 @@ ZSH_TMUX_AUTOQUIT=false # Dont exit zsh on tmux detach/exit
 antigen use oh-my-zsh
 
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle asdf
+antigen bundle direnv
 antigen bundle git
 antigen bundle brew
 antigen bundle macos
@@ -22,6 +22,7 @@ antigen bundle pip
 antigen bundle golang
 antigen bundle mix
 antigen bundle npm
+antigen bundle ssh-agent
 antigen bundle tmux
 antigen bundle tmuxinator
 antigen bundle vscode
@@ -73,8 +74,17 @@ if [ -d "$HOME/.local/bin" ] ; then
   PATH="$PATH:$HOME/.local/bin"
 fi
 
+# asdf injection
+. $HOME/.asdf/asdf.sh
+# append completions to fpath
+fpath=(${ASDF_DIR}/completions $fpath)
+# initialise completions with ZSH's compinit
+autoload -Uz compinit && compinit
+
 # Alacritty completions
 fpath+="$HOME/.alacritty/extra/completions/"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+source ~/.zprofile

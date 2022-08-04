@@ -46,6 +46,8 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'airblade/vim-gitgutter'
 " Mix formater
 Plugin 'mhinz/vim-mix-format'
+" treesitter
+Plugin 'nvim-treesitter/nvim-treesitter'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
