@@ -35,3 +35,8 @@
     src: "{{ role_path }}/files/.zshrc"
     dest: "{{ user_home }}/.zshrc"
     state: link
+
+- name: Touch .zprofile file
+  ansible.builtin.file:
+    path: "{{ user_home }}/.zprofile"
+    state: touch
