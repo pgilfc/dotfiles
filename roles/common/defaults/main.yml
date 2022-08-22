@@ -1,12 +1,15 @@
 common_packages:
   - aptitude # apt terminal gui
   - arandr # Visual frontend for xrandr
+  - autorandr # Automatically select a display configuration based on connected devices
   - brightnessctl # Command line brightness control
   - curl # Client URL
+  - direnv # Auto load env (if .envrc or .env exist)
   - feh # Image viewer and desktop wallpaper
   - fzf # Terminal Fuzzy finder
   - gimp # like photoshop, but for nix
   - git # Version control
+  - gitk # git tree visualizer
   - htop # System monitor
   - make # make utility automation
   - mc # Terminal file manager
@@ -14,6 +17,7 @@ common_packages:
   - neofetch # Terminal system info
   - pavucontrol # Pulseaudio volume control
   - peco # Terminal fuzzy finder
+  - playerctl # Terminal media controler
   - powertop # Energy optimizer
   - ranger # Terminal directory manager (vimlike)
   - rclone # rsync for cloud storage
