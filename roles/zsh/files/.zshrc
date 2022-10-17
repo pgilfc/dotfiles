@@ -25,7 +25,10 @@ antigen bundle npm
 antigen bundle ssh-agent
 antigen bundle tmux
 antigen bundle tmuxinator
+antigen bundle vi-mode
 antigen bundle vscode
+antigen bundle zoxide
+antigen bundle zsh-interactive-cd
 
 # Fish like auto sugestions
 antigen bundle zsh-users/zsh-autosuggestions
@@ -65,6 +68,10 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[OA' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 bindkey '^[OB' history-substring-search-down
+# bind k and j for VI mode
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+
 
 # Enable history in IEX through Erlang(OTP)
 export ERL_AFLAGS="-kernel shell_history enabled"
@@ -88,3 +95,6 @@ fpath+="$HOME/.alacritty/extra/completions/"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 source ~/.zprofile
+zstyle ':completion:*' menu select
+fpath+=~/.zfunc
+
