@@ -11,6 +11,7 @@ common_packages:
   - git # Version control
   - gitk # git tree visualizer
   - htop # System monitor
+  - jq # Command-line JSON processor
   - make # make utility automation
   - mc # Terminal file manager
   - ncdu # Disk usage analyzer
@@ -29,3 +30,4 @@ common_packages:
   - tree # Directory tree
   - vlc # Media player
   - wget # Web get
+  - zoxide # Smart cd command
