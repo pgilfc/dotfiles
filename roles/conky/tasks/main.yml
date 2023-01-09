@@ -5,7 +5,8 @@
     state: present
 
 - name: Check if .conkyrc exists
-  ansible.builtin.stat: path="{{ user_home }}/.conkyrc"
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.conkyrc"
   register: conky_stat
   failed_when: false
 

@@ -81,7 +81,8 @@
     mode: u=rwx,g=r,o=r
 
 - name: Check if alacritty.yml exists
-  ansible.builtin.stat: path="{{ alacritty_conf }}"
+  ansible.builtin.stat:
+    path: "{{ alacritty_conf }}"
   register: has_alacritty_yml
   failed_when: false
 

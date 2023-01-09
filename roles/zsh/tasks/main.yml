@@ -22,7 +22,8 @@
     state: link
 
 - name: Check if zshrc exists
-  ansible.builtin.stat: path="{{ user_home }}/.zshrc"
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.zshrc"
   register: zshrc_stat
   failed_when: false
 
@@ -35,8 +36,10 @@
     src: "{{ role_path }}/files/.zshrc"
     dest: "{{ user_home }}/.zshrc"
     state: link
+    mode: 0755
 
 - name: Touch .zprofile file
   ansible.builtin.file:
     path: "{{ user_home }}/.zprofile"
     state: touch
+    mode: 0755

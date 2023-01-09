@@ -7,7 +7,7 @@
     backrefs: true
     state: present
 
-- name: update-grub
+- name: Update grub
   become: true
   ansible.builtin.command: update-grub
   changed_when: false

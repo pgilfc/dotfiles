@@ -5,7 +5,8 @@
     recurse: true
 
 - name: Check if i3status config file exists
-  ansible.builtin.stat: path="{{ user_home }}/.config/i3status/config"
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.config/i3status/config"
   register: has_i3status_config
   failed_when: false
 

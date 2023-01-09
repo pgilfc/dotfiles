@@ -11,7 +11,8 @@
     recurse: true
 
 - name: Check if i3blocks config file exists
-  ansible.builtin.stat: path="{{ config_directory }}/config"
+  ansible.builtin.stat:
+    path: "{{ config_directory }}/config"
   register: has_i3blocks_config
   failed_when: false
 

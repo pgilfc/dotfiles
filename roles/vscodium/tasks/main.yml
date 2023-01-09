@@ -10,7 +10,8 @@
     mode: u=rwx,g=r,o=r
 
 - name: Check if settings.json exists
-  ansible.builtin.stat: path="{{ vscodium_conf_dir }}/settings.json"
+  ansible.builtin.stat:
+    path: "{{ vscodium_conf_dir }}/settings.json"
   register: vsc_conf_stat
   failed_when: false
 

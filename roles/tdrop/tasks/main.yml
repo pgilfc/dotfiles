@@ -11,8 +11,8 @@
     name: "{{ item }}"
     state: present
 
-- name: install tdrop
-  make:
+- name: Install tdrop
+  community.general.system.make:
     chdir: "{{ current_directory }}"
     target: install
   become: true
