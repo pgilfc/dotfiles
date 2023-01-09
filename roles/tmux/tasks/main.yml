@@ -17,7 +17,8 @@
     version: master
 
 - name: Check if .tmux.conf exists
-  ansible.builtin.stat: path="{{ user_home }}/.tmux.conf"
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.tmux.conf"
   register: tmux_stat
   failed_when: false
 
