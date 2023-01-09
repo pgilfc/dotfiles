@@ -1,0 +1,11 @@
+[Unit]
+Description="Stream Deck Device Path"
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Path]
+PathExists=/dev/streamdeck
+Unit=streamdeck.service
+
+[Install]
+WantedBy=graphical-session.target

@@ -8,6 +8,7 @@
     - role: i3status
     - role: rofi
     - role: rofi_calc
+    - role: streamdeck
     - role: tdrop
     - role: veracrypt
     - role: vscodium
