@@ -1,0 +1,4 @@
+ lines (9 sloc) 212 Bytes
+[Unit]
+Description=i3 session
+BindsTo=graphical-session.target

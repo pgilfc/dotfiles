@@ -17,7 +17,8 @@
     recurse: true
 
 - name: Check if i3 config file exists
-  ansible.builtin.stat: path="{{ user_home }}/.config/i3/config"
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.config/i3/config"
   register: has_i3_config
   failed_when: false
 
@@ -29,4 +30,10 @@
   ansible.builtin.file:
     src: "{{ role_path }}/files/config"
     dest: "{{ user_home }}/.config/i3/config"
+    state: link
+
+- name: Symlink i3-session.target
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/i3-session.target"
+    dest: "{{ user_home }}/.config/systemd/user/i3-session.target"
     state: link
