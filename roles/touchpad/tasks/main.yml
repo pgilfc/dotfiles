@@ -4,12 +4,6 @@
     name: xinput
     state: present
 
-- name: Install xdotool
-  become: true
-  ansible.builtin.apt:
-    name: xdotool
-    state: present
-
 - name: Install libinput-tools
   become: true
   ansible.builtin.apt:
@@ -29,7 +23,8 @@
   become: true
 
 - name: Check if libinput-gestures.conf exists
-  ansible.builtin.stat: path="{{ user_home }}/.config/libinput-gestures.conf"
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.config/libinput-gestures.conf"
   register: has_libinput_gestures_conf
   failed_when: false
 
