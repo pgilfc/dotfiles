@@ -105,3 +105,8 @@ set relativenumber
 
 set tabstop=2 shiftwidth=2 expandtab
 
+" Copy to clipboard
+vnoremap  <leader>y "+y
+
+" Paste from clipboard
+nnoremap <leader>p "+p

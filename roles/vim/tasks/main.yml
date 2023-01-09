@@ -1,37 +1,40 @@
-- name: Installs neovim
+- name: Install neovim
   become: true
   ansible.builtin.apt:
-    name: neovim
-    state: present
+    deb: "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb"
 
-- name: Install pynvim
-  ansible.builtin.command: python -m pip install pynvim
-  changed_when: false
-
-- name: Install spacevim
-  ansible.builtin.shell: set -o pipefail && curl -sLf https://spacevim.org/install.sh | bash
-  changed_when: false
-  args:
-    warn: false
-    executable: /usr/bin/bash
-
-- name: Make sure .SpaceVim.d exists
-  ansible.builtin.file:
-    path: "{{ user_home }}/.SpaceVim.d"
-    state: directory
-    mode: u=rwx,g=r,o=r
-
-- name: Check if init.toml exists
-  ansible.builtin.stat: path="{{ user_home }}/.SpaceVim.d/init.toml"
-  register: spacevim_init_stat
+- name: Check if .vimrc exists
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.vimrc"
+  register: vimrc_stat
   failed_when: false
 
-- name: Backup init.toml
-  ansible.builtin.command: mv {{ user_home }}/.SpaceVim.d/init.toml {{ user_home }}/.SpaceVim.d/init.toml.bak
-  when: spacevim_init_stat.stat.exists
+- name: Backup .vimrc
+  ansible.builtin.command: mv {{ user_home }}/.vimrc {{ user_home }}/.vimrc.bak
+  when: vimrc_stat.stat.exists
 
-- name: Symlink init.toml
+- name: Symlink .vimrc
   ansible.builtin.file:
-    src: "{{ role_path }}/files/init.toml"
-    dest: "{{ user_home }}/.SpaceVim.d/init.toml"
+    src: "{{ role_path }}/files/.vimrc"
+    dest: "{{ user_home }}/.vimrc"
     state: link
+
+- name: Check if nvim exists
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.config/nvim"
+  register: nvim_stat
+  failed_when: false
+
+- name: Backup nvim
+  ansible.builtin.command: mv {{ user_home }}/.config/nvim {{ user_home }}/.config/nvim.bak
+  when: nvim_stat.stat.exists
+
+- name: Symlink nvim
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/nvim"
+    dest: "{{ user_home }}/.config/nvim"
+    state: link
+
+- name: Tree-sitter CLI Install
+  ansible.builtin.command: cargo install tree-sitter-cli
+  changed_when: false
