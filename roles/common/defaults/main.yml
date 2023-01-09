@@ -3,9 +3,11 @@ common_packages:
   - arandr # Visual frontend for xrandr
   - autorandr # Automatically select a display configuration based on connected devices
   - brightnessctl # Command line brightness control
+  - copyq # Clipboard manager
   - curl # Client URL
   - direnv # Auto load env (if .envrc or .env exist)
   - feh # Image viewer and desktop wallpaper
+  - fd-find # find alternative
   - fzf # Terminal Fuzzy finder
   - gimp # like photoshop, but for nix
   - git # Version control
@@ -21,6 +23,7 @@ common_packages:
   - playerctl # Terminal media controler
   - powertop # Energy optimizer
   - ranger # Terminal directory manager (vimlike)
+  - ripgrep # Regex dir finder
   - rclone # rsync for cloud storage
   - solaar # logitech device manager
   - scrcpy # mirror android screen
@@ -29,5 +32,7 @@ common_packages:
   - tlp # Energy optimizer
   - tree # Directory tree
   - vlc # Media player
+  - xdg-utils # Desktop integration utilities
+  - xdotool # x do tool
   - wget # Web get
   - zoxide # Smart cd command
