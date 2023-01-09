@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Go to $1 app window or, if not exists, open a new one
+if [ -z $1 ];
+then
+    echo "Missing app name."
+    exit
+fi
+
+pid=$(xdotool search --class $1 2>/dev/null | head -n 1) # get first pid for $1
+if [ ! -z $pid ];
+then
+    i3-msg "[class=$1] focus"
+    exit 0
+fi
+
+
+
+if [ -x "$(command -v $1 &> /dev/null)" ];
+then
+    i3-msg "exec $1"
+    exit 0
+fi
+
+echo "Can't find application..."

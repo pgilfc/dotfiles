@@ -10,10 +10,9 @@
   register: find_bins
 
 - name: Symlink bins
-  become: true
   ansible.builtin.file:
     src: "{{ item.path }}"
     dest: "{{ user_home }}/.local/bin/{{ item.path | basename }}"
     state: link
-    mode: '0755'
+    mode: 0755
   with_items: "{{ find_bins.files }}"
