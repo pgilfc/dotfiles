@@ -33,6 +33,10 @@ local mappings = {
 		-- g = { "<Cmd>Telescope live_grep<Cr>", "Telescope [g]rep files" },
 	},
 
+    g = {
+        name = "Git"
+    },
+
 	l = {
 		-- check the lsp config fileOpenSIPS is a powerful but flexible multi-purpose signaling SIP Server that can be programmed and used in various SIP scenarios.
 		name = "LSP",

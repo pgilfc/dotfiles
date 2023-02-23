@@ -47,6 +47,15 @@ return require('packer').startup(function(use)
     -- vim fugitive
     use 'tpope/vim-fugitive'
 
+    -- gitsigns for blame and other things
+    use 'lewis6991/gitsigns.nvim'
+
+    -- Codeium Autocompletion
+    use 'Exafunction/codeium.vim'
+
+
+
+
     -- treesitter
     use {
         'nvim-treesitter/nvim-treesitter',
@@ -71,6 +80,7 @@ return require('packer').startup(function(use)
     }
     -- DAP (debugger)
     -- use 'mfussenegger/nvim-dap'
+    -- use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
     -- lsp_signature
     use 'ray-x/lsp_signature.nvim'
     -- trouble
