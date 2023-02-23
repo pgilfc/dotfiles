@@ -1,4 +1,4 @@
-local servers = { "pyright", "sumneko_lua", "gopls", "yamlls", "tsserver", "jsonls", "bashls" }
+local servers = { "pyright", "lua_ls", "gopls", "yamlls", "tsserver", "jsonls", "bashls" }
 
 require("mason").setup()
 require("mason-lspconfig").setup({
@@ -61,7 +61,7 @@ for _, lsp in ipairs(servers) do
 end
 
 
-require 'lspconfig'.sumneko_lua.setup {
+require('lspconfig').lua_ls.setup {
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {

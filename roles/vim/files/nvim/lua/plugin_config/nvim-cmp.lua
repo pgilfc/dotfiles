@@ -1,5 +1,7 @@
 local cmp = require("cmp")
 
+local select_opts = { behavior = cmp.SelectBehavior.Select }
+
 cmp.setup({
     snippet = {
         expand = function(args)
@@ -9,9 +11,8 @@ cmp.setup({
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
         { name = 'vsnip' },
-    }, {
+        { name = 'codeium' },
         { name = 'buffer' },
-    }, {
         { name = 'path' },
     }),
     mapping = {
