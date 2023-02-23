@@ -8,6 +8,7 @@
     - role: git
     - role: python
     - role: kernel_vars
+    - role: node
     - role: rust
     - role: tmux
     - role: touchpad

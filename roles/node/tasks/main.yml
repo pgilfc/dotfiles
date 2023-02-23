@@ -1,0 +1,20 @@
+- name: Add node asdf plugin
+  ansible.builtin.command: asdf plugin add nodejs
+  register: result
+  failed_when: result.rc != 0 and not (result.stderr is search("Plugin named nodejs already added"))
+  changed_when: false
+
+- name: Installs needed apt packages
+  become: true
+  loop: "{{ packages }}"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+
+- name: Install latest node version
+  ansible.builtin.command: asdf install nodejs latest
+  changed_when: false
+
+- name: Set python version
+  ansible.builtin.command: asdf global nodejs latest
+  changed_when: false
