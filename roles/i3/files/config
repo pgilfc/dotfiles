@@ -66,8 +66,10 @@ bindsym $mod+d exec --no-startup-id dmenu_run
 # .desktop file. It is a wrapper around dmenu, so you need that installed.
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 
-# Shortcut for locking the screen
+# Lock screen shortcut
 bindsym $mod+BackSpace exec --no-startup-id i3-lock
+# Pint screen shortcuts
+bindsym Print exec gnome-screenshot -i 
 
 # change focus
 bindsym $mod+h focus left
