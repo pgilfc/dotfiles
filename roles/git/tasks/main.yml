@@ -1,0 +1,55 @@
+- name: Ensure git is installed
+  become: true
+  ansible.builtin.apt:
+    name: git
+    state: present
+
+- name: Check git username
+  community.general.git_config:
+    name: user.name
+    scope: global
+  register: git_username
+
+- name: Prompt git username
+  ansible.builtin.pause:
+    prompt: Insert git user name
+  register: git_username
+  when: git_username.config_value == ""
+
+- name: Set git username
+  community.general.git_config:
+    name: user.name
+    scope: global
+    value: "{{ git_username.user_input }}"
+  when: git_username is not skipped
+
+- name: Check git email
+  community.general.git_config:
+    name: user.email
+    scope: global
+  register: git_email
+
+- name: Prompt git email
+  ansible.builtin.pause:
+    prompt: Insert git email
+  register: git_email
+  when: git_email.config_value == ""
+
+- name: Set git email
+  community.general.git_config:
+    name: user.email
+    scope: global
+    value: "{{ git_email.user_input }}"
+  when: git_email is not skipped
+
+- name: Set vim as the default editor
+  community.general.git_config:
+    name: core.editor
+    scope: global
+    value: vim
+
+- name: Include aliases
+  ansible.builtin.import_tasks: aliases.yml
+
+- name: Include global hooks
+  ansible.builtin.import_tasks: hooks.yml
