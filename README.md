@@ -1,7 +1,7 @@
 # Dotfiles
 
 ## Installing
- - Run init* ordered
+ - Run cmd/init*.sh ordered
 
 ## Configs for
  - Debian

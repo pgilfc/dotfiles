@@ -1,4 +1,4 @@
-- name: Set up dotfiles
+- name: Set up dependencies
   hosts: local
   roles:
     - role: asdf
