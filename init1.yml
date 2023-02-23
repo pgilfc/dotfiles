@@ -5,6 +5,7 @@
     - role: bin
     - role: common
     - role: fonts
+    - role: git
     - role: python
     - role: kernel_vars
     - role: rust

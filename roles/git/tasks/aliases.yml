@@ -1,0 +1,5 @@
+- name: Add alias logtree for pretty log tree
+  community.general.git_config:
+    name: alias.logtree
+    scope: global
+    value: log --graph --abbrev-commit --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
