@@ -5,6 +5,7 @@ local function config(plugin)
 end
 
 config('gruvbox')
+config('gitsigns')
 config('which-key')
 config('nvim-tree')
 config('bufferline')
