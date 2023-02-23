@@ -56,7 +56,10 @@
                     "21": {},
                     "22": {},
                     "23": {},
-                    "24": {},
+                    "24": {
+                        "command": "gnome-screenshot -i",
+                        "icon": "/usr/share/icons/streamdeck/screenshot.svg"
+                    },
                     "25": {},
                     "26": {},
                     "27": {},
