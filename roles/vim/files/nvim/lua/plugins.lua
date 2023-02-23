@@ -1,113 +1,106 @@
-local ensure_packer = function()
-    local fn = vim.fn
-    local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-    if fn.empty(fn.glob(install_path)) > 0 then
-        fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
-        vim.cmd([[packadd packer.nvim]])
-        return true
-    end
-    return false
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
+vim.opt.rtp:prepend(lazypath)
 
-local packer_bootstrap = ensure_packer()
-
-return require('packer').startup(function(use)
-    use 'wbthomason/packer.nvim' -- Package manage self
+require("lazy").setup({
+    'wbthomason/packer.nvim', -- Package manage self
 
     -- plenary (lua functions)
-    use 'nvim-lua/plenary.nvim'
+    'nvim-lua/plenary.nvim',
 
     -- icons
-    use 'nvim-tree/nvim-web-devicons'
+    'nvim-tree/nvim-web-devicons',
 
     -- theme
-    use 'ellisonleao/gruvbox.nvim'
+    'ellisonleao/gruvbox.nvim',
 
     -- which-key
-    use 'folke/which-key.nvim'
+    'folke/which-key.nvim',
 
     -- file tree
-    use 'nvim-tree/nvim-tree.lua'
+    'nvim-tree/nvim-tree.lua',
 
     -- buffer line
-    use { 'akinsho/bufferline.nvim', tag = 'v3.*' }
+    { 'akinsho/bufferline.nvim', tag = 'v3.3.0' },
 
     -- lua line
-    use 'nvim-lualine/lualine.nvim'
+    'nvim-lualine/lualine.nvim',
 
     -- telescope
-    use { 'nvim-telescope/telescope-fzf-native.nvim',
-        run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
-    }
-    use 'nvim-telescope/telescope.nvim'
+    { 'nvim-telescope/telescope-fzf-native.nvim',
+        build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+    },
+    'nvim-telescope/telescope.nvim',
 
     -- undo tree
-    use 'mbbill/undotree'
+    'mbbill/undotree',
 
     -- vim fugitive
-    use 'tpope/vim-fugitive'
+    'tpope/vim-fugitive',
 
     -- gitsigns for blame and other things
-    use 'lewis6991/gitsigns.nvim'
+    'lewis6991/gitsigns.nvim',
 
     -- Codeium Autocompletion
-    use 'Exafunction/codeium.vim'
+    'Exafunction/codeium.vim',
 
 
 
 
     -- treesitter
-    use {
+    {
         'nvim-treesitter/nvim-treesitter',
-        run = function()
+        build = function()
             local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
             ts_update()
         end,
-    }
-    use {
+    },
+    {
         'nvim-treesitter/nvim-treesitter-textobjects',
-        after = 'nvim-treesitter',
-    }
-    use 'nvim-treesitter/playground'
+        dependencies = { { 'nvim-treesitter' }, },
+    },
+    'nvim-treesitter/playground',
 
 
 
     -- LSP
-    use {
+    {
         'williamboman/mason.nvim',
         'williamboman/mason-lspconfig.nvim',
         'neovim/nvim-lspconfig',
-    }
+    },
     -- DAP (debugger)
-    -- use 'mfussenegger/nvim-dap'
-    -- use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+    -- 'mfussenegger/nvim-dap',
+    -- "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
     -- lsp_signature
-    use 'ray-x/lsp_signature.nvim'
+    'ray-x/lsp_signature.nvim',
     -- trouble
-    use 'folke/trouble.nvim'
+    'folke/trouble.nvim',
     -- null-ls
-    use 'jose-elias-alvarez/null-ls.nvim'
+    'jose-elias-alvarez/null-ls.nvim',
     -- status updates for LSP
-    use 'j-hui/fidget.nvim'
+    'j-hui/fidget.nvim',
     -- Outline
-    use 'simrat39/symbols-outline.nvim'
+    'simrat39/symbols-outline.nvim',
 
     -- Autocompletion
-    use 'hrsh7th/cmp-nvim-lsp'
-    use 'hrsh7th/cmp-buffer'
-    use 'hrsh7th/cmp-path'
-    use 'hrsh7th/cmp-cmdline'
-    use 'hrsh7th/cmp-vsnip'
-    use 'hrsh7th/vim-vsnip'
-    use 'hrsh7th/nvim-cmp'
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-path',
+    'hrsh7th/cmp-cmdline',
+    'hrsh7th/cmp-vsnip',
+    'hrsh7th/vim-vsnip',
+    'hrsh7th/nvim-cmp',
     -- Autocompletion snippets
-    use({ "L3MON4D3/LuaSnip", tag = "v1.*" })
-    use "rafamadriz/friendly-snippets"
-
-
-    -- Automatically set up your configuration after cloning packer.nvim
-    -- Put this at the end after all plugins
-    if packer_bootstrap then
-        require('packer').sync()
-    end
-end)
+    { "L3MON4D3/LuaSnip",        tag = "v1.2.1" },
+    "rafamadriz/friendly-snippets",
+})

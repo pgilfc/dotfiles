@@ -19,45 +19,29 @@ local opts = {
 local mappings = {
 	-- ["w"] = { "<cmd>update!<CR>", "Save" },
 	["q"] = { "<cmd>qa<CR>", "Quit" },
-
 	b = {
 		name = "Buffer",
 		c = { "<Cmd>bd!<Cr>", "Close current buffer" },
 		D = { "<Cmd>%bd|e#|bd#<Cr>", "Delete all buffers" },
 	},
-
 	f = {
 		-- these were sent to the telescope config file
 		name = "Find (Telescope)",
 		-- f = { "<Cmd>Telescope find_files<Cr>", "Telescope find [f]iles" },
 		-- g = { "<Cmd>Telescope live_grep<Cr>", "Telescope [g]rep files" },
 	},
-
-    g = {
-        name = "Git"
-    },
-
+	g = { name = "Git", },
 	l = {
 		-- check the lsp config fileOpenSIPS is a powerful but flexible multi-purpose signaling SIP Server that can be programmed and used in various SIP scenarios.
 		name = "LSP",
 		w = { name = "Workspace" }
 	},
-
 	o = {
 		name = "Symbols [O]utline",
 		o = { "<cmd>SymbolsOutlineOpen<cr>", "Open symbols outline" },
 		c = { "<cmd>SymbolsOutlineClose<cr>", "Close symbols outline" },
 	},
-
-	P = {
-		name = "Packer",
-		c = { "<cmd>PackerCompile<cr>", "Compile" },
-		i = { "<cmd>PackerInstall<cr>", "Install" },
-		s = { "<cmd>PackerSync<cr>", "Sync" },
-		S = { "<cmd>PackerStatus<cr>", "Status" },
-		u = { "<cmd>PackerUpdate<cr>", "Update" },
-	},
-
+	P = { "<cmd>Lazy<CR>", "Lazy [P]lugin UI" },
 	t = {
 		name = "File tree",
 		t = { "<Cmd>NvimTreeFocus<Cr>", "File tree focus" },
@@ -65,13 +49,11 @@ local mappings = {
 		c = { "<Cmd>NvimTreeClose<Cr>", "File tree Close" },
 		C = { "<Cmd>NvimTreeCollapse<Cr>", "File tree Close" },
 	},
-
 	u = {
 		name = "Undo Tree",
 		u = { "<Cmd>UndotreeShow<Cr><Cmd>UndotreeFocus<Cr>", "Undo tree open and focus" },
 		c = { "<Cmd>UndotreeHide<Cr>", "Undo tree Close" }
 	},
-
 	x = { [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Replace current word" },
 }
 
