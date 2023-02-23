@@ -3,6 +3,8 @@ common_packages:
   - arandr # Visual frontend for xrandr
   - autorandr # Automatically select a display configuration based on connected devices
   - brightnessctl # Command line brightness control
+  - clamav # closest thing to an antivirus on linux
+  - clamav-daemon # daemon for ^
   - copyq # Clipboard manager
   - curl # Client URL
   - direnv # Auto load env (if .envrc or .env exist)
