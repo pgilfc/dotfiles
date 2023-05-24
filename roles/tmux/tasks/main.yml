@@ -10,7 +10,7 @@
     name: xclip
     state: present
 
-- name: Import tmp
+- name: Import tpm
   ansible.builtin.git:
     repo: https://github.com/tmux-plugins/tpm
     dest: "{{ user_home }}/.tmux/plugins/tpm"

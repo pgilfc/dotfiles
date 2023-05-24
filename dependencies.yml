@@ -5,12 +5,15 @@
     - role: bin
     - role: common
     - role: fonts
+    - role: kernel_vars
+    - role: tmux
+    - role: vim
+
+- name: Set up dependencies 2
+  hosts: local
+  roles:
     - role: git
     - role: python
-    - role: kernel_vars
     - role: node
     - role: rust
-    - role: tmux
-    - role: touchpad
-    - role: vim
     - role: zsh

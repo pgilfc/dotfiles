@@ -105,6 +105,12 @@ set relativenumber
 
 set tabstop=2 shiftwidth=2 expandtab
 
+" Stops gitcommit from auto wrapping
+au Filetype gitcommit call SetGitCommit()
+func SetGitCommit()
+    setlocal formatoptions-=tl
+endfunc
+
 " Copy to clipboard
 vnoremap  <leader>y "+y
 
