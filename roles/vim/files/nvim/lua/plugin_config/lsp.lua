@@ -1,13 +1,10 @@
-local servers = { "pyright", "lua_ls", "gopls", "yamlls", "tsserver", "jsonls", "bashls" }
+local EXPRT = {}
+EXPRT.servers = { "pyright", "lua_ls", "gopls", "yamlls", "tsserver", "jsonls", "bashls" }
 
-require("mason").setup()
-require("mason-lspconfig").setup({
-    ensure_installed = servers,
-})
 
 -- Taken from https://github.com/nvim-lua/kickstart.nvim
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+EXPRT.on_attach = function(_, bufnr)
     local format = function(_)
         if vim.lsp.buf.format then
             vim.lsp.buf.format()
@@ -51,24 +48,6 @@ local on_attach = function(_, bufnr)
 end
 
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+EXPRT.capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-for _, lsp in ipairs(servers) do
-    require('lspconfig')[lsp].setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-    }
-end
-
-
-require('lspconfig').lua_ls.setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-        Lua = {
-            diagnostics = {
-                globals = { 'vim' } -- adding vim as a global var for lsp not to complain
-            }
-        }
-    }
-}
+return EXPRT

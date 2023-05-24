@@ -2,7 +2,7 @@ local parser_install_dir = os.getenv("HOME") .. "/.vim/treesitter-parser"
 
 vim.opt.runtimepath:append(parser_install_dir)
 
-require("nvim-treesitter.configs").setup({
+return {
     -- A list of parser names, or "all"
     ensure_installed = { "python", "lua", "go", "javascript", "typescript", "sql", "yaml", "json", "bash", "help" },
     sync_install = false,
@@ -10,4 +10,4 @@ require("nvim-treesitter.configs").setup({
     parser_install_dir = parser_install_dir,
     highlight = { enable = true, additional_vim_regex_highlighting = false },
     indent = { enable = true },
-})
+}

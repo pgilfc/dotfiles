@@ -9,6 +9,6 @@
     - role: rofi
     - role: rofi_calc
     - role: streamdeck
-    - role: tdrop
+    - role: touchpad
     - role: veracrypt
     - role: vscodium
