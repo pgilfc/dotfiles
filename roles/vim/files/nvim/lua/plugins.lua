@@ -16,7 +16,6 @@ local function config(plugin)
 end
 
 require('lazy').setup({
-    'wbthomason/packer.nvim', -- Package manage self
 
     -- plenary (lua functions)
     'nvim-lua/plenary.nvim',
@@ -64,7 +63,7 @@ require('lazy').setup({
     {
         'nvim-lualine/lualine.nvim',
         config = function()
-            require('lualine').setup()
+            require('lualine').setup(config('lualine'))
         end,
     },
 
@@ -148,15 +147,13 @@ require('lazy').setup({
                 dependencies = {
                     {
                         'williamboman/mason-lspconfig.nvim',
-                        config = function()
-                            require('mason-lspconfig').setup({
-                                ensure_installed = config('lsp').servers,
-                            })
-                        end,
                     },
                 },
                 config = function()
                     require('mason').setup()
+                    require('mason-lspconfig').setup({
+                        ensure_installed = config('lsp').servers,
+                    })
                 end,
             },
         },

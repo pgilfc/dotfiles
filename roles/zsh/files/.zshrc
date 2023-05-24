@@ -81,6 +81,11 @@ if [ -d "$HOME/.local/bin" ] ; then
   PATH="$PATH:$HOME/.local/bin"
 fi
 
+# Set PATH so it includes Applications folder if exists
+if [ -d "$HOME/Applications" ] ; then
+  PATH="$PATH:$HOME/Applications"
+fi
+
 # asdf injection
 . $HOME/.asdf/asdf.sh
 # append completions to fpath
