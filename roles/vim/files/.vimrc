@@ -12,42 +12,42 @@ call vundle#begin()
 " to isntall vundle
 Plugin 'VundleVim/Vundle.vim'
 
-" Autocomplete with tabs
-Plugin 'ervandew/supertab'
-" Snippets
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
-Plugin 'honza/vim-snippets'
-" Open close pairs (brackets etc)
-Plugin 'raimondi/delimitmate'
-" elixir autocomplete!
-Plugin 'slashmili/alchemist.vim'
-" Airline
-Plugin 'bling/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-" Colors
-Plugin 'flazz/vim-colorschemes'
-" NERDTree
-Plugin 'scrooloose/nerdtree'
-" Nerdtree git
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-" Vue sintax
-Plugin 'posva/vim-vue'
-" Languages
-Plugin 'sheerun/vim-polyglot'
-" Vim-elixir
-Plugin 'elixir-editors/vim-elixir'
-" ctrlp.vim
-Plugin 'ctrlpvim/ctrlp.vim'
-" Editorconfig
-Plugin 'editorconfig/editorconfig-vim'
-" git Gutter
-Plugin 'airblade/vim-gitgutter'
-" Mix formater
-Plugin 'mhinz/vim-mix-format'
-" treesitter
-Plugin 'nvim-treesitter/nvim-treesitter'
+" " Autocomplete with tabs
+" Plugin 'ervandew/supertab'
+" " Snippets
+" Plugin 'MarcWeber/vim-addon-mw-utils'
+" Plugin 'tomtom/tlib_vim'
+" Plugin 'garbas/vim-snipmate'
+" Plugin 'honza/vim-snippets'
+" " Open close pairs (brackets etc)
+" Plugin 'raimondi/delimitmate'
+" " elixir autocomplete!
+" Plugin 'slashmili/alchemist.vim'
+" " Airline
+" Plugin 'bling/vim-airline'
+" Plugin 'vim-airline/vim-airline-themes'
+" " Colors
+" Plugin 'flazz/vim-colorschemes'
+" " NERDTree
+" Plugin 'scrooloose/nerdtree'
+" " Nerdtree git
+" Plugin 'Xuyuanp/nerdtree-git-plugin'
+" " Vue sintax
+" Plugin 'posva/vim-vue'
+" " Languages
+" Plugin 'sheerun/vim-polyglot'
+" " Vim-elixir
+" Plugin 'elixir-editors/vim-elixir'
+" " ctrlp.vim
+" Plugin 'ctrlpvim/ctrlp.vim'
+" " Editorconfig
+" Plugin 'editorconfig/editorconfig-vim'
+" " git Gutter
+" Plugin 'airblade/vim-gitgutter'
+" " Mix formater
+" Plugin 'mhinz/vim-mix-format'
+" " treesitter
+" Plugin 'nvim-treesitter/nvim-treesitter'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

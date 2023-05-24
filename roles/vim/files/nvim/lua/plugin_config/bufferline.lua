@@ -1,4 +1,4 @@
-require("bufferline").setup({
+return {
     options = {
         offsets = {
             {
@@ -9,4 +9,4 @@ require("bufferline").setup({
             }
         }
     }
-})
+}

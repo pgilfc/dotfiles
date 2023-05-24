@@ -1,14 +1,14 @@
-local which_key = require("which-key")
+local EXPRT = {}
 
-local conf = {
+EXPRT.conf = {
 	window = {
 		border = "single", -- none, single, double, shadow
 		position = "bottom",
 	},
 }
 
-local opts = {
-	mode = "n", -- Normal mode
+EXPRT.opts = {
+	mode = "n",  -- Normal mode
 	prefix = "<leader>",
 	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
 	silent = true, -- use `silent` when creating keymaps
@@ -16,7 +16,7 @@ local opts = {
 	nowait = false, -- use `nowait` when creating keymaps
 }
 
-local mappings = {
+EXPRT.mappings = {
 	-- ["w"] = { "<cmd>update!<CR>", "Save" },
 	["q"] = { "<cmd>qa<CR>", "Quit" },
 	b = {
@@ -57,5 +57,4 @@ local mappings = {
 	x = { [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Replace current word" },
 }
 
-which_key.setup(conf)
-which_key.register(mappings, opts)
+return EXPRT
