@@ -1,9 +1,114 @@
-- name: Add mem_sleep_default=deep var to the GRUB_CMDLINE_LINUX_DEFAULT variables
+
+- name: Get root filesystem
+  become: true
+  ansible.builtin.shell: |
+    blkid `# get block ids` \
+    | grep $(df | grep '/$' | awk '{print $1}') `# find root filesystem`
+  register: root_filesystem
+  changed_when: false
+
+- name: Get root filesystem path
+  ansible.builtin.shell: |
+    echo {{ root_filesystem.stdout }} \
+    | awk '{print $1}'                    `# get the first column which contains the path` \
+    | grep '^\/.*\:$'                     `# validate previous command` \
+    | sed 's/^\(\/.*\)\:$/\1/'            `# get the path without :` \
+    | grep '^\/.*[^\:]$'                  `# validate previous command`
+  register: root_filesystem_path
+  changed_when: false
+
+- name: Get root partition name
+  ansible.builtin.shell: |
+    echo {{ root_filesystem_path.stdout }} \
+    | grep '^\/\(.*\/\)*\([^\/]\+\)$'         `# validate root_filesystem_path` \
+    | sed 's/^\/\(.*\/\)*\([^\/]\+\)$/\2/'    `# get just the name` \
+    | grep '^[^\/]*$'                         `# validate previous command`
+  register: root_partition_name
+  changed_when: false
+
+
+- name: Get root partition UUID
+  ansible.builtin.shell: |
+    echo '{{ root_filesystem.stdout }}' \
+    | awk '{print $2}' `# get the second column which contains the uuid` \
+    | sed 's/^UUID=\"\([0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}\)\"$/\1/' `# get just the uuid` \
+    | grep '^[0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}$' `# validate previous command` 
+  register: root_partition_uuid
+  changed_when: false
+
+# - name: debug
+#   ansible.builtin.debug:
+#     msg: "{{ root_partition_uuid.stdout }}"
+
+- name: Turn off Swap devices
+  become: true
+  ansible.builtin.command:
+    cmd: swapoff -a
+  changed_when: false
+
+- name: Create a swap file
+  become: true
+  community.general.filesize:
+    path: "{{ swap_file }}"
+    size: 32G
+    mode: 600
+    owner: root
+    group: root
+
+- name: Set up a linux swap area
+  become: true
+  ansible.builtin.command:
+    cmd: "mkswap {{ swap_file }}"
+  changed_when: false
+
+- name: Turn on swap
+  become: true
+  ansible.builtin.command:
+    cmd: "swapon {{ swap_file }}"
+  changed_when: false
+
+- name: Mount swap
+  become: true
+  ansible.posix.mount:
+    src: "{{ swap_file }}"
+    path: none
+    fstype: swap
+    opts: sw
+    dump: 0
+    passno: 0
+    boot: true
+    backup: true
+    state: present
+
+- name: Turn on Swap devices
+  become: true
+  ansible.builtin.command:
+    cmd: mount -a
+  changed_when: false
+
+- name: Get swap device physical offset
+  become: true
+  ansible.builtin.shell: filefrag -v {{ swap_file }} | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'  
+  register: sw_physical_offset
+  changed_when: false
+
+- name: Check if grub.bak exists
+  ansible.builtin.stat:
+    path: /etc/default/grub.bak
+  register: grub_backup
+  failed_when: false
+
+- name: Backup grub
+  become: true
+  ansible.builtin.command: cp /etc/default/grub /etc/default/grub.bak
+  when: not grub_backup.stat.exists
+
+- name: Add to the GRUB_CMDLINE_LINUX_DEFAULT variables
   become: true
   ansible.builtin.lineinfile:
     path: /etc/default/grub
-    regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT=(?!.* mem_sleep_default)\"[^\"]+)(\".*)'
-    line: '\1 mem_sleep_default=deep\2'
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*"$'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash mem_sleep_default=disk cryptdevice=UUID={{ root_partition_uuid.stdout }}:{{ root_partition_name.stdout }} root={{ root_filesystem_path.stdout }} resume={{ root_filesystem_path.stdout }} resume_offset={{ sw_physical_offset.stdout }}"'
     backrefs: true
     state: present
 
@@ -11,3 +116,10 @@
   become: true
   ansible.builtin.command: update-grub
   changed_when: false
+
+- name: Add 
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/logind.conf
+    regexp: ''
+    line: 
