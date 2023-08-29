@@ -117,9 +117,45 @@
   ansible.builtin.command: update-grub
   changed_when: false
 
-- name: Add 
+# -----------------------------------------------------------------------
+#  Custom suspend then hibernate!
+#  This is here beacuse there is currently a bug with systemd
+#  (https://github.com/systemd/systemd/issues/25269)
+#  Should be fixed after 253
+# -----------------------------------------------------------------------
+
+- name: Copy hybrid-sleep script
+  become: true
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/hybrid-sleep"
+    dest: /usr/local/bin/hybrid-sleep
+    mode: u=rwx,g=rx,o=rx
+
+- name: Ensures /etc/systemd/system/systemd-suspend.service.d dir exists
+  become: true
+  ansible.builtin.file: 
+    path: /etc/systemd/system/systemd-suspend.service.d
+    state: directory
+
+- name: Systemd suspend override (systemctl edit systemd-suspend)
+  become: true
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/suspend.service"
+    dest: /etc/systemd/system/systemd-suspend.service.d/override.conf
+    mode: u=rw,g=r,o=r
+
+- name: Add suspend config
   become: true
   ansible.builtin.lineinfile:
     path: /etc/systemd/logind.conf
-    regexp: ''
-    line: 
+    line: "{{ item }}"
+  loop:
+     - HandlePowerKey=suspend
+     - HandleLidSwitch=suspend
+     - HandleLidSwitchExternalPower=suspend
+     - HandleLidSwitchDocked=suspend
+
+- name: Reload systemd daemons
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
