@@ -1,4 +1,4 @@
 - name: Install veracrypt GUI for ubuntu 20.10
   become: true
   ansible.builtin.apt:
-    deb: "https://launchpad.net/veracrypt/trunk/1.24-update7/+download/veracrypt-1.24-Update7-Ubuntu-20.10-amd64.deb"
+    deb: "https://launchpad.net/veracrypt/trunk/1.25.9/+download/veracrypt-1.25.9-Ubuntu-23.04-amd64.deb"
