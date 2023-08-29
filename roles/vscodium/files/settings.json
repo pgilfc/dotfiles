@@ -8,6 +8,5 @@
     "python.formatting.provider": "black",
     "editor.formatOnSave": true,
     "redhat.telemetry.enabled": false,
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "window.menuBarVisibility": "toggle",
 }

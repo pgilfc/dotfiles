@@ -63,14 +63,14 @@
 - name: Send alacritty.man to man
   become: true
   ansible.builtin.shell:
-    cmd: gzip -c {{ current_directory }}/extra/alacritty.man > /usr/local/share/man/man1/alacritty.1.gz
+    cmd: gzip -c {{ current_directory }}/extra/man/alacritty.1.scd > /usr/local/share/man/man1/alacritty.1.gz
     chdir: "{{ current_directory }}"
   changed_when: false
 
 - name: Send alacritty-msg.man to man
   become: true
   ansible.builtin.shell:
-    cmd: gzip -c {{ current_directory }}/extra/alacritty-msg.man > /usr/local/share/man/man1/alacritty-msg.1.gz
+    cmd: gzip -c {{ current_directory }}/extra/man/alacritty-msg.1.scd > /usr/local/share/man/man1/alacritty-msg.1.gz
     chdir: "{{ current_directory }}"
   changed_when: false
 

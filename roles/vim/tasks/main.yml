@@ -1,7 +1,8 @@
 - name: Install neovim
   become: true
   ansible.builtin.apt:
-    deb: "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb"
+    name: neovim
+    state: present
 
 - name: Check if .vimrc exists
   ansible.builtin.stat:

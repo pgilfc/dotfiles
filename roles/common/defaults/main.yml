@@ -3,6 +3,7 @@ common_packages:
   - arandr # Visual frontend for xrandr
   - autorandr # Automatically select a display configuration based on connected devices
   - brightnessctl # Command line brightness control
+  - btop # htop alternative
   - clamav # closest thing to an antivirus on linux
   - clamav-daemon # daemon for ^
   - copyq # Clipboard manager
@@ -27,8 +28,9 @@ common_packages:
   - ranger # Terminal directory manager (vimlike)
   - ripgrep # Regex dir finder
   - rclone # rsync for cloud storage
-  - solaar # logitech device manager
   - scrcpy # mirror android screen
+  - solaar # logitech device manager
+  - shellcheck # shell script static analysis tool
   - syncthing # Sync folders between computers
   - tldr # like man but just examples
   - tlp # Energy optimizer

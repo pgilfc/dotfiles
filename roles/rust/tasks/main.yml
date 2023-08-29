@@ -1,13 +1,13 @@
 - name: Add rust asdf plugin
-  ansible.builtin.command: asdf plugin add rust https://github.com/code-lever/asdf-rust.git
+  ansible.builtin.command: "{{ user_home }}/.asdf/bin/asdf plugin add rust https://github.com/code-lever/asdf-rust.git"
   register: result
   failed_when: result.rc != 0 and result.stderr != 'Plugin named rust already added'
   changed_when: false
 
 - name: Install stable rust version
-  ansible.builtin.command: asdf install rust stable
+  ansible.builtin.command: "{{ user_home }}/.asdf/bin/asdf install rust stable"
   changed_when: false
 
 - name: Set rust version
-  ansible.builtin.command: asdf global rust stable
+  ansible.builtin.command: "{{ user_home }}/.asdf/bin/asdf global rust stable"
   changed_when: false
