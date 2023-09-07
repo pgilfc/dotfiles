@@ -1,4 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=conky
-Exec=sh -c "sleep 2; conky;"
