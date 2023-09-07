@@ -1,7 +1,7 @@
 - name: Import alacritty repo
   ansible.builtin.git:
     repo: https://github.com/alacritty/alacritty.git
-    dest: "{{ current_directory }}"
+    dest: "{{ build_directory }}"
     version: master
 
 - name: Installs needed apt packages
@@ -15,27 +15,27 @@
 - name: Build alacritty
   ansible.builtin.command:
     cmd: cargo build --release
-    chdir: "{{ current_directory }}"
+    chdir: "{{ build_directory }}"
   changed_when: false
 
 - name: Install terminfo
   become: true
   ansible.builtin.command:
     cmd: tic -xe alacritty,alacritty-direct extra/alacritty.info
-    chdir: "{{ current_directory }}"
+    chdir: "{{ build_directory }}"
   changed_when: false
 
 - name: Copy bin to /usr/local/bin
   become: true
   ansible.builtin.copy:
-    src: "{{ current_directory }}/target/release/alacritty"
+    src: "{{ build_directory }}/target/release/alacritty"
     dest: /usr/local/bin/alacritty
     mode: u=rwx,g=rx,o=rx
 
 - name: Move logo to pixmaps
   become: true
   ansible.builtin.copy:
-    src: "{{ current_directory }}/extra/logo/alacritty-term.svg"
+    src: "{{ build_directory }}/extra/logo/alacritty-term.svg"
     dest: /usr/share/pixmaps/Alacritty.svg
     mode: u=rw,g=r,o=r
 
@@ -43,14 +43,14 @@
   become: true
   ansible.builtin.command:
     cmd: desktop-file-install extra/linux/Alacritty.desktop
-    chdir: "{{ current_directory }}"
+    chdir: "{{ build_directory }}"
   changed_when: false
 
 - name: Update desktop database
   become: true
   ansible.builtin.command:
     cmd: update-desktop-database
-    chdir: "{{ current_directory }}"
+    chdir: "{{ build_directory }}"
   changed_when: false
 
 - name: Create man1 directory for manual page
@@ -63,15 +63,15 @@
 - name: Send alacritty.man to man
   become: true
   ansible.builtin.shell:
-    cmd: gzip -c {{ current_directory }}/extra/man/alacritty.1.scd > /usr/local/share/man/man1/alacritty.1.gz
-    chdir: "{{ current_directory }}"
+    cmd: gzip -c {{ build_directory }}/extra/man/alacritty.1.scd > /usr/local/share/man/man1/alacritty.1.gz
+    chdir: "{{ build_directory }}"
   changed_when: false
 
 - name: Send alacritty-msg.man to man
   become: true
   ansible.builtin.shell:
-    cmd: gzip -c {{ current_directory }}/extra/man/alacritty-msg.1.scd > /usr/local/share/man/man1/alacritty-msg.1.gz
-    chdir: "{{ current_directory }}"
+    cmd: gzip -c {{ build_directory }}/extra/man/alacritty-msg.1.scd > /usr/local/share/man/man1/alacritty-msg.1.gz
+    chdir: "{{ build_directory }}"
   changed_when: false
 
 - name: Creates alacritty conf directory if not exists
@@ -80,18 +80,18 @@
     state: directory
     mode: u=rwx,g=r,o=r
 
-- name: Check if alacritty.yml exists
+- name: Check if alacritty config exists
   ansible.builtin.stat:
     path: "{{ alacritty_conf }}"
   register: has_alacritty_yml
   failed_when: false
 
-- name: Backup alacritty.yml
+- name: Backup alacritty config
   ansible.builtin.command: mv {{ alacritty_conf }} {{ alacritty_conf }}.bak
   when: has_alacritty_yml.stat.exists
 
-- name: Symlink alacritty.yml
+- name: Symlink alacritty config
   ansible.builtin.file:
-    src: "{{ role_path }}/files/alacritty.yml"
+    src: "{{ role_path }}/files/alacritty.toml"
     dest: "{{ alacritty_conf }}"
     state: link
