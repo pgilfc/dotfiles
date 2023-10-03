@@ -1,0 +1,13 @@
+#!/bin/sh
+
+export GTK_USE_PORTAL=0
+export MOZ_ENABLE_WAYLAND=1
+
+export XDG_CURRENT_DESKTOP=sway
+export XDG_SESSION_DESKTOP=sway
+export XDG_SESSION_TYPE=wayland
+
+PATH=$PATH:~/.local/bin
+PATH=$PATH:~/.asdf/shims
+
+exec sway

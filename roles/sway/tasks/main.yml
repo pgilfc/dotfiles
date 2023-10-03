@@ -1,0 +1,79 @@
+
+- name: Include brightnessctl
+  ansible.builtin.import_tasks: brightnessctl.yml
+
+- name: Include waybar
+  ansible.builtin.import_tasks: waybar.yml
+
+- name: Include anyrun
+  ansible.builtin.import_tasks: anyrun.yml
+
+- name: Install sway
+  become: true
+  ansible.builtin.apt:
+    name: sway
+    state: present
+
+- name: Install swaylock to lock on lid close
+  become: true
+  ansible.builtin.apt:
+    name: swaylock
+    state: present
+
+- name: Install swayidle to command idle actions
+  become: true
+  ansible.builtin.apt:
+    name: swayidle
+    state: present
+
+- name: Create a sway config directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/sway"
+    state: directory
+    recurse: true
+
+- name: Create a sway config.d directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/sway/config.d"
+    state: directory
+    recurse: true
+
+- name: Symlink sway config file
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/config"
+    dest: "{{ user_home }}/.config/sway/config"
+    state: link
+
+- name: Symlink sway config.d files
+  ansible.builtin.file:
+    src: '{{ item }}'
+    dest: "{{ user_home }}/.config/sway/config.d/{{ item | basename }}"
+    state: link
+  with_fileglob:
+    - "{{ role_path }}/files/config.d/*"
+
+- name: Symlink sway-session.target
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/sway-session.target"
+    dest: "{{ user_home }}/.config/systemd/user/sway-session.target"
+    state: link
+
+- name: Symlink sway-init file
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/sway-init"
+    dest: "{{ user_home }}/.local/bin/sway-init"
+    state: link
+    mode: 0755
+
+- name: Copy custom-sway.desktop to /usr/share/wayland-sessions
+  become: true
+  ansible.builtin.copy:
+    dest: /usr/share/wayland-sessions/custom-sway.desktop
+    content: |
+      [Desktop Entry]
+      Name=Custom Sway
+      Comment=A custom sway wm init
+      Exec={{ user_home }}/.local/bin/sway-init
+      Type=Application
+    mode: u=rwx,g=rx,o=rx
+

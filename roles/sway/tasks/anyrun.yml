@@ -1,0 +1,54 @@
+
+- name: Installs requirements
+  become: true
+  loop:
+    - libgtk-3-dev
+    - libgtk-layer-shell0
+    - libgtk-layer-shell-dev
+    - libcairo-dev 
+    - libpango1.0-dev
+    - libxkbcommon-dev
+    - libwayland-dev
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+
+
+- name: Clone anyrun
+  ansible.builtin.git:
+    repo: https://github.com/Kirottu/anyrun.git 
+    dest: "{{ anyrun_dir }}"
+    version: master
+
+- name: Build anyrun
+  ansible.builtin.command:
+    cmd: cargo build --release
+    chdir: "{{ anyrun_dir }}"
+  changed_when: false
+
+- name: Install anyrun
+  ansible.builtin.command:
+    cmd: cargo install --path anyrun/
+    chdir: "{{ anyrun_dir }}"
+  changed_when: false
+
+- name: Create an anyrun config directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/anyrun/plugins"
+    state: directory
+    recurse: true
+
+- name: Copy all of the built pluggins
+  become: true
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ user_home }}/.config/anyrun/plugins"
+    mode: u=rwx,g=rx,o=rx
+  with_fileglob: "{{ anyrun_dir }}/target/release/*.so"
+
+- name: Copy all of the built pluggins
+  become: true
+  ansible.builtin.copy:
+    src: "{{ anyrun_dir }}/examples/config.ron"
+    dest: "{{ user_home }}/.config/anyrun/config.ron"
+    mode: u=rwx,g=rx,o=rx

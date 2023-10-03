@@ -1,0 +1,19 @@
+- name: Ensure waybar is installed
+  become: true
+  ansible.builtin.apt:
+    name: waybar
+    state: present
+
+- name: Create a waybar config directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/waybar"
+    state: directory
+    recurse: true
+
+- name: Symlink waybar files
+  ansible.builtin.file:
+    src: '{{ item }}'
+    dest: "{{ user_home }}/.config/waybar/{{ item | basename }}"
+    state: link
+  with_fileglob:
+    - "{{ role_path }}/files/waybar/*"
