@@ -5,4 +5,10 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-tmux attach-session -t "$1" || tmux new-session -s "$1"
+if tmux ls; then
+    tmux new-session -A -t "$1"
+else
+    tmux start
+    tmux new-session -d -s kill-me 'sleep 4 && exit'
+    tmux new-session -s "$1"
+fi
