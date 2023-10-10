@@ -5,18 +5,14 @@ source $HOME/.antigen.zsh
 #ZSH_TMUX_AUTOSTART=true # Autostart tmux on zsh
 ZSH_TMUX_AUTOQUIT=false # Dont exit zsh on tmux detach/exit
 
-# Make sure tmux server is running
-[[ -n $(pgrep tmux) ]] || tmux start \; new-session -d -s kill-me 'sleep 4 && exit' \; new-session -d -s 0
-
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundle direnv
+antigen bundle docker
 antigen bundle git
 antigen bundle brew
-antigen bundle macos
-antigen bundle history
 antigen bundle python
 antigen bundle pip
 antigen bundle golang
@@ -25,10 +21,15 @@ antigen bundle npm
 antigen bundle ssh-agent
 antigen bundle tmux
 antigen bundle tmuxinator
-antigen bundle vi-mode
 antigen bundle vscode
 antigen bundle zoxide
 antigen bundle zsh-interactive-cd
+
+# # VI mode for zsh
+# antigen bundle jeffreytse/zsh-vi-mode
+# # bind k and j for VI mode
+# bindkey -M vicmd 'k' history-substring-search-up
+# bindkey -M vicmd 'j' history-substring-search-down
 
 # Fish like auto sugestions
 antigen bundle zsh-users/zsh-autosuggestions
@@ -50,12 +51,9 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000000
 SAVEHIST=10000000
 HISTDUP=erase                   #Erase duplicates in the history file
-setopt appendhistory            #Append history to the history file (no overwriting)
-setopt sharehistory             #Share history across terminals
-setopt incappendhistory         #Immediately append to the history file, not just when a term is killed
 setopt EXTENDED_HISTORY         # Write the history file in the ":start:elapsed;command" format.
 setopt INC_APPEND_HISTORY       # Write to the history file immediately, not when the shell exits.
-setopt SHARE_HISTORY            # Share history between all sessions.
+unsetopt SHARE_HISTORY          # Unset Share history between all sessions.
 setopt HIST_EXPIRE_DUPS_FIRST   # Expire duplicate entries first when trimming history.
 setopt HIST_IGNORE_DUPS         # Don't record an entry that was just recorded again.
 setopt HIST_IGNORE_ALL_DUPS     # Delete old recorded entry if new entry is a duplicate.
@@ -68,10 +66,14 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[OA' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 bindkey '^[OB' history-substring-search-down
-# bind k and j for VI mode
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
+# Bind ctrl+p and ctrl+n to history-substring-search
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
 
+# set default editor
+# (this is also required by tmux to handle vim like behavior)
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 # Enable history in IEX through Erlang(OTP)
 export ERL_AFLAGS="-kernel shell_history enabled"
