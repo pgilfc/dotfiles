@@ -1,0 +1,15 @@
+
+#network manager applet
+exec --no-startup-id nm-applet
+
+# lock script
+# lock before sleep
+exec swayidle -w \
+    before-sleep $swaylock \
+    after-resume $swaylock \
+    lock $swaylock \
+    timeout 300 $swaylock \
+    timeout 600 'systemctl suspend'
+
+# start sway-session.target to ensure graphical-session.target starts
+exec_always --no-startup-id exec systemctl --user start --no-block sway-session.target

@@ -1,0 +1,12 @@
+- name: Ensure brightnessctl is installed
+  become: true
+  ansible.builtin.apt:
+    name: brightnessctl
+    state: present
+
+- name: Add user to input and video groups (udev rules were added to these groups)
+  become: true
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    groups: input,video
+    append: yes

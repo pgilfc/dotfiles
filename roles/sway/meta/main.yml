@@ -1,3 +1,4 @@
 dependencies:
+  - role: bin
   - role: common
-  - role: i3
+  - role: rust

@@ -1,0 +1,19 @@
+# Default config for sway
+#
+# Read `man 5 sway` for a complete reference.
+
+# variable configuration
+include config.d/vars
+
+# env configuration
+include config.d/env
+
+# key bindings
+include config.d/keys
+
+# status bar
+include config.d/layout
+
+# execute init scripts
+include config.d/exec
+

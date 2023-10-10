@@ -2,13 +2,13 @@
   hosts: local
   roles:
     - role: alacritty
-    # - role: conky
     - role: i3
     - role: i3blocks
     - role: i3status
     - role: rofi
     - role: rofi_calc
     - role: streamdeck
+    - role: sway
     - role: touchpad
     - role: veracrypt
     - role: vscodium

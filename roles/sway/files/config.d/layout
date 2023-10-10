@@ -1,0 +1,12 @@
+
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+# bar {
+#     swaybar_command waybar
+# }
+
+# Remove top borders
+default_border pixel 4
+default_floating_border pixel 4
