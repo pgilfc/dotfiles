@@ -152,8 +152,6 @@
   loop:
      - HandlePowerKey=suspend
      - HandleLidSwitch=suspend
-     - HandleLidSwitchExternalPower=suspend
-     - HandleLidSwitchDocked=suspend
 
 - name: Reload systemd daemons
   become: true
