@@ -1,0 +1,5 @@
+anyrun_dir: /tmp/anyrun
+packages:
+  - kanshi
+  - wdisplays
+  - wl-clipboard

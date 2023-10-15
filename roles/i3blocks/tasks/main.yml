@@ -19,6 +19,7 @@
 - name: Backup i3blocks config file
   ansible.builtin.command: mv {{ config_directory }}/config {{ config_directory }}/config.bak
   when: has_i3blocks_config.stat.exists
+  changed_when: false
 
 - name: Symlink i3blocks config file
   ansible.builtin.file:

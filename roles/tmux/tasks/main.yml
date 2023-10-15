@@ -25,6 +25,7 @@
 - name: Backup .tmux.conf
   ansible.builtin.command: mv {{ user_home }}/.tmux.conf {{ user_home }}/.tmux.conf.bak
   when: tmux_stat.stat.exists
+  changed_when: false
 
 - name: Symlink .tmux.conf
   ansible.builtin.file:

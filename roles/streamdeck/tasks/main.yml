@@ -46,7 +46,7 @@
 
       [Install]
       WantedBy=default.target
-    mode: 0755
+    mode: "0755"
 
 - name: Make sure streamdeck.path is running
   ansible.builtin.systemd:

@@ -1,5 +1,5 @@
-- name: Set up dependencies
-  hosts: local
+- name: Set up dependencies part 1
+  hosts: all
   roles:
     - role: asdf
     - role: bin
@@ -9,8 +9,8 @@
     - role: tmux
     - role: zsh
 
-- name: Set up dependencies 2
-  hosts: local
+- name: Set up dependencies part 2
+  hosts: all
   roles:
     - role: git
     - role: python

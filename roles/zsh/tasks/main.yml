@@ -30,16 +30,17 @@
 - name: Backup zshrc
   ansible.builtin.command: mv {{ user_home }}/.zshrc {{ user_home }}/.zshrc.bak
   when: zshrc_stat.stat.exists
+  changed_when: false
 
 - name: Symlink .zshrc
   ansible.builtin.file:
     src: "{{ role_path }}/files/.zshrc"
     dest: "{{ user_home }}/.zshrc"
     state: link
-    mode: 0755
+    mode: "0755"
 
 - name: Touch .zprofile file
   ansible.builtin.file:
     path: "{{ user_home }}/.zprofile"
     state: touch
-    mode: 0755
+    mode: "0755"

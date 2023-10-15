@@ -12,7 +12,7 @@
 
 - name: Symlink waybar files
   ansible.builtin.file:
-    src: '{{ item }}'
+    src: "{{ item }}"
     dest: "{{ user_home }}/.config/waybar/{{ item | basename }}"
     state: link
   with_fileglob:

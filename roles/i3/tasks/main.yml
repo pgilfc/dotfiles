@@ -25,6 +25,7 @@
 - name: Backup i3 config file
   ansible.builtin.command: mv {{ user_home }}/.config/i3/config {{ user_home }}/.config/i3/config.bak
   when: has_i3_config.stat.exists
+  changed_when: false
 
 - name: Symlink i3 config file
   ansible.builtin.file:

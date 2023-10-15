@@ -1,4 +1,3 @@
-
 - name: Include brightnessctl
   ansible.builtin.import_tasks: brightnessctl.yml
 
@@ -46,7 +45,7 @@
 
 - name: Symlink sway config.d files
   ansible.builtin.file:
-    src: '{{ item }}'
+    src: "{{ item }}"
     dest: "{{ user_home }}/.config/sway/config.d/{{ item | basename }}"
     state: link
   with_fileglob:
@@ -63,7 +62,7 @@
     src: "{{ role_path }}/files/sway-init"
     dest: "{{ user_home }}/.local/bin/sway-init"
     state: link
-    mode: 0755
+    mode: "0755"
 
 - name: Copy custom-sway.desktop to /usr/share/wayland-sessions
   become: true
@@ -77,3 +76,5 @@
       Type=Application
     mode: u=rwx,g=rx,o=rx
 
+- name: Include apps
+  ansible.builtin.import_tasks: apps.yml

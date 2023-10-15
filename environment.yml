@@ -1,5 +1,5 @@
 - name: Set up environment
-  hosts: local
+  hosts: all
   roles:
     - role: alacritty
     - role: i3

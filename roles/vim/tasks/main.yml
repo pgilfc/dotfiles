@@ -13,6 +13,7 @@
 - name: Backup .vimrc
   ansible.builtin.command: mv {{ user_home }}/.vimrc {{ user_home }}/.vimrc.bak
   when: vimrc_stat.stat.exists
+  changed_when: false
 
 - name: Symlink .vimrc
   ansible.builtin.file:
@@ -29,6 +30,7 @@
 - name: Backup nvim
   ansible.builtin.command: mv {{ user_home }}/.config/nvim {{ user_home }}/.config/nvim.bak
   when: nvim_stat.stat.exists
+  changed_when: false
 
 - name: Symlink nvim
   ansible.builtin.file:

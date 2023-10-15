@@ -18,6 +18,7 @@
 - name: Backup settings.json
   ansible.builtin.command: mv {{ vscodium_conf_dir }}/settings.json {{ vscodium_conf_dir }}/settings.json.bak
   when: vsc_conf_stat.stat.exists
+  changed_when: false
 
 - name: Symlink settings.json
   ansible.builtin.file:

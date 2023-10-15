@@ -13,12 +13,12 @@
 - name: Import libinput-gestures repo
   ansible.builtin.git:
     repo: https://github.com/bulletmark/libinput-gestures.git
-    dest: "{{ user_home }}/.libinput-gestures"
+    dest: "{{ libinput_build_directory }}"
     version: "2.72"
 
 - name: Install libinput-gestures
   community.general.make:
-    chdir: "{{ user_home }}/.libinput-gestures"
+    chdir: "{{ libinput_build_directory }}"
     target: install
   become: true
 
@@ -31,6 +31,7 @@
 - name: Backup libinput-gestures.conf
   ansible.builtin.command: mv {{ user_home }}/.config/libinput-gestures.conf {{ user_home }}/.config/libinput-gestures.conf.bak
   when: has_libinput_gestures_conf.stat.exists
+  changed_when: false
 
 - name: Symlink libinput-gestures.conf
   ansible.builtin.file:

@@ -24,7 +24,7 @@
           echo "See https://www.conventionalcommits.org/en/v1.0.0"
           exit 1
       fi
-    mode: 0755
+    mode: "0755"
 
 - name: Set global git hook location
   community.general.git_config:
