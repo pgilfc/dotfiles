@@ -1,3 +1,4 @@
+build_directory: "/tmp/rofi-calc"
 packages:
   - rofi-dev
   - qalc

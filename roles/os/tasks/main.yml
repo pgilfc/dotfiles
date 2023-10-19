@@ -1,38 +1,44 @@
-
 - name: Get root filesystem
   become: true
-  ansible.builtin.shell: |
-    blkid `# get block ids` \
-    | grep $(df | grep '/$' | awk '{print $1}') `# find root filesystem`
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      blkid `# get block ids` \
+      | grep $(df | grep '/$' | awk '{print $1}') `# find root filesystem`
   register: root_filesystem
   changed_when: false
 
 - name: Get root filesystem path
-  ansible.builtin.shell: |
-    echo {{ root_filesystem.stdout }} \
-    | awk '{print $1}'                    `# get the first column which contains the path` \
-    | grep '^\/.*\:$'                     `# validate previous command` \
-    | sed 's/^\(\/.*\)\:$/\1/'            `# get the path without :` \
-    | grep '^\/.*[^\:]$'                  `# validate previous command`
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      echo {{ root_filesystem.stdout }} \
+      | awk '{print $1}'                    `# get the first column which contains the path` \
+      | grep '^\/.*\:$'                     `# validate previous command` \
+      | sed 's/^\(\/.*\)\:$/\1/'            `# get the path without :` \
+      | grep '^\/.*[^\:]$'                  `# validate previous command`
   register: root_filesystem_path
   changed_when: false
 
 - name: Get root partition name
-  ansible.builtin.shell: |
-    echo {{ root_filesystem_path.stdout }} \
-    | grep '^\/\(.*\/\)*\([^\/]\+\)$'         `# validate root_filesystem_path` \
-    | sed 's/^\/\(.*\/\)*\([^\/]\+\)$/\2/'    `# get just the name` \
-    | grep '^[^\/]*$'                         `# validate previous command`
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      echo {{ root_filesystem_path.stdout }} \
+      | grep '^\/\(.*\/\)*\([^\/]\+\)$'         `# validate root_filesystem_path` \
+      | sed 's/^\/\(.*\/\)*\([^\/]\+\)$/\2/'    `# get just the name` \
+      | grep '^[^\/]*$'                         `# validate previous command`
   register: root_partition_name
   changed_when: false
 
-
 - name: Get root partition UUID
-  ansible.builtin.shell: |
-    echo '{{ root_filesystem.stdout }}' \
-    | awk '{print $2}' `# get the second column which contains the uuid` \
-    | sed 's/^UUID=\"\([0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}\)\"$/\1/' `# get just the uuid` \
-    | grep '^[0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}$' `# validate previous command` 
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      echo '{{ root_filesystem.stdout }}' \
+      | awk '{print $2}' `# get the second column which contains the uuid` \
+      | sed 's/^UUID=\"\([0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}\)\"$/\1/' `# get just the uuid` \
+      | grep '^[0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}$' `# validate previous command`
   register: root_partition_uuid
   changed_when: false
 
@@ -82,13 +88,16 @@
 
 - name: Turn on Swap devices
   become: true
-  ansible.builtin.command:
+  ansible.builtin.command: # noqa: command-instead-of-module
+    executable: /bin/bash
     cmd: mount -a
   changed_when: false
 
 - name: Get swap device physical offset
   become: true
-  ansible.builtin.shell: filefrag -v {{ swap_file }} | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'  
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: filefrag -v {{ swap_file }} | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
   register: sw_physical_offset
   changed_when: false
 
@@ -102,13 +111,14 @@
   become: true
   ansible.builtin.command: cp /etc/default/grub /etc/default/grub.bak
   when: not grub_backup.stat.exists
+  changed_when: false
 
 - name: Add to the GRUB_CMDLINE_LINUX_DEFAULT variables
   become: true
   ansible.builtin.lineinfile:
     path: /etc/default/grub
     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*"$'
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash mem_sleep_default=disk cryptdevice=UUID={{ root_partition_uuid.stdout }}:{{ root_partition_name.stdout }} root={{ root_filesystem_path.stdout }} resume={{ root_filesystem_path.stdout }} resume_offset={{ sw_physical_offset.stdout }}"'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash mem_sleep_default=disk cryptdevice=UUID={{ root_partition_uuid.stdout }}:{{ root_partition_name.stdout }} root={{ root_filesystem_path.stdout }} resume={{ root_filesystem_path.stdout }} resume_offset={{ sw_physical_offset.stdout }}"' # yamllint disable-line rule:line-length
     backrefs: true
     state: present
 
@@ -133,9 +143,10 @@
 
 - name: Ensures /etc/systemd/system/systemd-suspend.service.d dir exists
   become: true
-  ansible.builtin.file: 
+  ansible.builtin.file:
     path: /etc/systemd/system/systemd-suspend.service.d
     state: directory
+    mode: u=rw,g=r,o=r
 
 - name: Systemd suspend override (systemctl edit systemd-suspend)
   become: true
@@ -150,8 +161,8 @@
     path: /etc/systemd/logind.conf
     line: "{{ item }}"
   loop:
-     - HandlePowerKey=suspend
-     - HandleLidSwitch=suspend
+    - HandlePowerKey=suspend
+    - HandleLidSwitch=suspend
 
 - name: Reload systemd daemons
   become: true

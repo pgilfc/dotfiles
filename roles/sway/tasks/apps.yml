@@ -1,0 +1,13 @@
+- name: Install apps
+  become: true
+  loop: "{{ packages }}"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  changed_when: false
+
+- name: Create a kanshi config file if it does not exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/kanshi/config"
+    state: file
+    recurse: true

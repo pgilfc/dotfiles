@@ -89,6 +89,7 @@
 - name: Backup alacritty config
   ansible.builtin.command: mv {{ alacritty_conf }} {{ alacritty_conf }}.bak
   when: has_alacritty_yml.stat.exists
+  changed_when: false
 
 - name: Symlink alacritty config
   ansible.builtin.file:

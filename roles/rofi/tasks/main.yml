@@ -19,6 +19,7 @@
 - name: Backup rofi config file
   ansible.builtin.command: mv {{ user_home }}/.config/rofi/config.rasi {{ user_home }}/.config/rofi/config.rasi.bak
   when: has_rofi_config.stat.exists
+  changed_when: false
 
 - name: Symlink rofi config file
   ansible.builtin.file:

@@ -1,4 +1,0 @@
-dependencies:
-  - role: bin
-  - role: common
-  - role: rust

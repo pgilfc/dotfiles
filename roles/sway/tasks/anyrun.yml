@@ -1,11 +1,10 @@
-
 - name: Installs requirements
   become: true
   loop:
     - libgtk-3-dev
     - libgtk-layer-shell0
     - libgtk-layer-shell-dev
-    - libcairo-dev 
+    - libcairo-dev
     - libpango1.0-dev
     - libxkbcommon-dev
     - libwayland-dev
@@ -16,7 +15,7 @@
 
 - name: Clone anyrun
   ansible.builtin.git:
-    repo: https://github.com/Kirottu/anyrun.git 
+    repo: https://github.com/Kirottu/anyrun.git
     dest: "{{ anyrun_dir }}"
     version: master
 

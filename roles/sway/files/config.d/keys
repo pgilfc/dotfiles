@@ -181,7 +181,7 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # Lock screen shortcut
-bindsym $mod+BackSpace exec --no-startup-id $swaylock
+bindsym $mod+BackSpace exec  $swaylock
 
 # Pint screen shortcuts
 bindsym Print exec gnome-screenshot -i
@@ -193,6 +193,6 @@ bindsym $alt+space exec toggle-alacritty floating-alacritty-half 0
 bindsym $mod+$alt+Return exec toggle-alacritty floating-alacritty-full full
 
 # Open rofi with a hot key (mac like)
-bindsym $mod+space exec --no-startup-id rofi -show combi
+bindsym $mod+space exec  rofi -show combi
 # Use anyrun if you like
 # bindsym $mod+space exec anyrun

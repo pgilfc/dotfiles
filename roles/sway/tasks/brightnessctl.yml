@@ -9,4 +9,4 @@
   ansible.builtin.user:
     name: "{{ user_name }}"
     groups: input,video
-    append: yes
+    append: true
