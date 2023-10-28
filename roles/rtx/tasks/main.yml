@@ -1,0 +1,31 @@
+- name: Install rtx
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: nix-env -iA nixpkgs.rtx
+  changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
+
+- name: Install node
+  ansible.builtin.import_role:
+    name: node
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.nix-profile/bin"
+
+- name: Install python
+  ansible.builtin.import_role:
+    name: python
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.nix-profile/bin"
+
+- name: Install rust
+  ansible.builtin.import_role:
+    name: rust
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.nix-profile/bin"
+
+- name: Install golang
+  ansible.builtin.import_role:
+    name: golang
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.nix-profile/bin"

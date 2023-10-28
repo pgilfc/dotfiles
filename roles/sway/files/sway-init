@@ -8,6 +8,6 @@ export XDG_SESSION_DESKTOP=sway
 export XDG_SESSION_TYPE=wayland
 
 PATH=$PATH:~/.local/bin
-PATH=$PATH:~/.asdf/shims
+PATH=$PATH:~/.nix-profile/bin
 
-exec sway
+exec nixGL sway

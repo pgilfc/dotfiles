@@ -1,0 +1,12 @@
+- name: Check if nix is installed
+  ansible.builtin.command: nix-env --version
+  register: nix_installed
+  failed_when: false
+  changed_when: false
+
+- name: Install nix
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: /bin/sh <(curl -L https://nixos.org/nix/install) --daemon
+  when: nix_installed.rc != 0
+  changed_when: false

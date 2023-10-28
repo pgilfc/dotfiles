@@ -1,4 +1,5 @@
-- name: Install veracrypt GUI for ubuntu 20.10
-  become: true
-  ansible.builtin.apt:
-    deb: "https://launchpad.net/veracrypt/trunk/1.25.9/+download/veracrypt-1.25.9-Ubuntu-23.04-amd64.deb"
+- name: Install veracrypt GUI
+  ansible.builtin.command: nix-env -iA nixpkgs.veracrypt
+  environment:
+    NIXPKGS_ALLOW_UNFREE: "1"
+  changed_when: false

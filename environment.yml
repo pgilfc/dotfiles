@@ -1,13 +1,33 @@
 - name: Set up environment
   hosts: all
+  gather_facts: false
+  pre_tasks:
+    - name: Temp ansible_user_id fetch
+      ansible.builtin.command: whoami
+      register: temp_user
+      changed_when: true
+      check_mode: false
+    - name: Set ansible_user_id
+      ansible.builtin.set_fact:
+        ansible_user_id: "{{ temp_user.stdout }}"
+    - name: Setting host PATH
+      ansible.builtin.gather_facts:
+      environment:
+        PATH: "{{ nix_path }}:{{ golang_path }}:{{ python_path }}:{{ rust_path }}:{{ node_path }}:{{ ansible_env.PATH }}"
+        CARGO_HOME: "{{ cargo_home }}"
+        RUSTUP_HOME: "{{ rustup_home }}"
+        GOPATH: "{{ gopath }}"
+        GOROOT: "{{ goroot }}"
+  environment:
+    PATH: "{{ ansible_env.PATH }}"
   roles:
     - role: alacritty
     - role: i3
     - role: i3blocks
     - role: i3status
     - role: rofi
-    - role: rofi_calc
     - role: streamdeck
     - role: sway
     - role: veracrypt
     - role: vscodium
+    - role: warpd

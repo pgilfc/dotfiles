@@ -1,0 +1,3 @@
+- name: Install warpd
+  ansible.builtin.command: nix-env -iA nixpkgs.warpd
+  changed_when: false

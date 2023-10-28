@@ -2,7 +2,7 @@
   ansible.builtin.file:
     state: directory
     path: "{{ user_home }}/.local/bin"
-    mode: "0755"
+    mode: u=rwx
 
 - name: Find all files to symlink
   ansible.builtin.find:
@@ -14,5 +14,5 @@
     src: "{{ item.path }}"
     dest: "{{ user_home }}/.local/bin/{{ item.path | basename }}"
     state: link
-    mode: "0755"
+    mode: u=rwx
   with_items: "{{ find_bins.files }}"

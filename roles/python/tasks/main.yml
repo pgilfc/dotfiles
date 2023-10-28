@@ -1,20 +1,19 @@
-- name: Add python asdf plugin
-  ansible.builtin.command: asdf plugin add python
+- name: Installs needed apt packages
+  become: true
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+
+- name: Add python rtx plugin
+  ansible.builtin.command: "rtx plugin install python https://github.com/asdf-community/asdf-python.git"
   register: result
   failed_when: result.rc != 0 and not (result.stderr is search("Plugin named python already added"))
   changed_when: false
 
-- name: Installs needed apt packages
-  become: true
-  loop: "{{ packages }}"
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: present
-
 - name: Install latest python version
-  ansible.builtin.command: asdf install python latest
+  ansible.builtin.command: "rtx install python@{{ python_version }}"
   changed_when: false
 
 - name: Set python version
-  ansible.builtin.command: asdf global python latest
+  ansible.builtin.command: "rtx global python@{{ python_version }}"
   changed_when: false

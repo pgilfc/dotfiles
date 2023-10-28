@@ -1,5 +1,5 @@
 configuration {
-	modi: "combi,calc";
+	modi: "combi";
 	terminal: "alacritty";
 	combi-modi: "window,run";
 /*	width: 50;*/

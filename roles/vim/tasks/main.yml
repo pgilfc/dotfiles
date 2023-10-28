@@ -1,8 +1,8 @@
 - name: Install neovim
-  become: true
-  ansible.builtin.apt:
-    name: neovim
-    state: present
+  ansible.builtin.command: nix-env -iA nixpkgs.neovim
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
+  changed_when: false
 
 - name: Check if .vimrc exists
   ansible.builtin.stat:
@@ -39,5 +39,9 @@
     state: link
 
 - name: Tree-sitter CLI Install
-  ansible.builtin.command: cargo install tree-sitter-cli
+  ansible.builtin.command: "{{ rust_path }}/cargo install tree-sitter-cli"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ rust_path }}"
+    CARGO_HOME: "{{ cargo_home }}"
+    RUSTUP_HOME: "{{ rustup_home }}"
   changed_when: false

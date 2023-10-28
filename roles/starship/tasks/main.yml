@@ -1,0 +1,19 @@
+- name: Install starship
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: nix-env -iA nixpkgs.starship
+  changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
+
+- name: Create a .config directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config"
+    state: directory
+    mode: u=rwx
+
+- name: Symlink starship.toml
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/starship.toml"
+    dest: "{{ user_home }}/.config/starship.toml"
+    state: link

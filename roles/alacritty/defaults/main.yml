@@ -1,11 +1,2 @@
-build_directory: "/tmp/alacritty"
 alacritty_conf_dir: "{{ user_home }}/.config/alacritty"
 alacritty_conf: "{{ alacritty_conf_dir }}/alacritty.toml"
-packages:
-  - cmake
-  - pkg-config
-  - libfreetype6-dev
-  - libfontconfig1-dev
-  - libxcb-xfixes0-dev
-  - libxkbcommon-dev
-  - gzip

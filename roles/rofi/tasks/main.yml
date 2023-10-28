@@ -1,8 +1,6 @@
 - name: Install rofi
-  become: true
-  ansible.builtin.apt:
-    name: rofi
-    state: present
+  ansible.builtin.command: nix-env -iA nixpkgs.rofi-wayland
+  changed_when: false
 
 - name: Create a rofi config directory if it does not exist
   ansible.builtin.file:

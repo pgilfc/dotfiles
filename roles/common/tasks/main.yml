@@ -10,12 +10,38 @@
 
 - name: Installs common packages apt
   become: true
-  loop: "{{ common_packages }}"
   ansible.builtin.apt:
-    name: "{{ item }}"
+    name: "{{ common_packages }}"
     state: present
 
 - name: Cleans packages | apt
   become: true
   ansible.builtin.apt:
     autoremove: true
+
+- name: Set the default LANG
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/default/locale
+    regexp: "^LANG="
+    line: "LANG=C.UTF-8"
+    state: present
+
+- name: Set the default LANGUAGE
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/default/locale
+    regexp: "^LANGUAGE="
+    line: "LANGUAGE=C.UTF-8"
+    state: present
+
+- name: Set the default LC_ALL
+  become: true
+  ansible.builtin.lineinfile:
+    dest: /etc/default/locale
+    regexp: "^LC_ALL="
+    line: "LC_ALL=C.UTF-8"
+    state: present
+
+- name: Include nix
+  ansible.builtin.import_tasks: nix.yml

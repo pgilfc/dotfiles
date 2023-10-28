@@ -1,19 +1,13 @@
-- name: Set up dependencies part 1
+- name: Set up dependencies
   hosts: all
   roles:
-    - role: asdf
     - role: bin
     - role: common
     - role: fonts
-    - role: os
-    - role: tmux
-    - role: zsh
-
-- name: Set up dependencies part 2
-  hosts: all
-  roles:
     - role: git
-    - role: python
-    - role: node
-    - role: rust
+    - role: os
+    - role: rtx
+    - role: starship
+    - role: tmux
     - role: vim
+    - role: zsh

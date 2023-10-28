@@ -1,84 +1,12 @@
-- name: Import alacritty repo
-  ansible.builtin.git:
-    repo: https://github.com/alacritty/alacritty.git
-    dest: "{{ build_directory }}"
-    version: master
-
-- name: Installs needed apt packages
-  become: true
-  loop: "{{ packages }}"
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: present
-  changed_when: false
-
-- name: Build alacritty
-  ansible.builtin.command:
-    cmd: cargo build --release
-    chdir: "{{ build_directory }}"
-  changed_when: false
-
-- name: Install terminfo
-  become: true
-  ansible.builtin.command:
-    cmd: tic -xe alacritty,alacritty-direct extra/alacritty.info
-    chdir: "{{ build_directory }}"
-  changed_when: false
-
-- name: Copy bin to /usr/local/bin
-  become: true
-  ansible.builtin.copy:
-    src: "{{ build_directory }}/target/release/alacritty"
-    dest: /usr/local/bin/alacritty
-    mode: u=rwx,g=rx,o=rx
-
-- name: Move logo to pixmaps
-  become: true
-  ansible.builtin.copy:
-    src: "{{ build_directory }}/extra/logo/alacritty-term.svg"
-    dest: /usr/share/pixmaps/Alacritty.svg
-    mode: u=rw,g=r,o=r
-
-- name: Install desktop file
-  become: true
-  ansible.builtin.command:
-    cmd: desktop-file-install extra/linux/Alacritty.desktop
-    chdir: "{{ build_directory }}"
-  changed_when: false
-
-- name: Update desktop database
-  become: true
-  ansible.builtin.command:
-    cmd: update-desktop-database
-    chdir: "{{ build_directory }}"
-  changed_when: false
-
-- name: Create man1 directory for manual page
-  become: true
-  ansible.builtin.file:
-    path: /usr/local/share/man/man1
-    state: directory
-    mode: u=rwx,g=r,o=r
-
-- name: Send alacritty.man to man
-  become: true
-  ansible.builtin.shell:
-    cmd: gzip -c {{ build_directory }}/extra/man/alacritty.1.scd > /usr/local/share/man/man1/alacritty.1.gz
-    chdir: "{{ build_directory }}"
-  changed_when: false
-
-- name: Send alacritty-msg.man to man
-  become: true
-  ansible.builtin.shell:
-    cmd: gzip -c {{ build_directory }}/extra/man/alacritty-msg.1.scd > /usr/local/share/man/man1/alacritty-msg.1.gz
-    chdir: "{{ build_directory }}"
+- name: Install alacritty
+  ansible.builtin.command: nix-env -iA nixpkgs.alacritty
   changed_when: false
 
 - name: Creates alacritty conf directory if not exists
   ansible.builtin.file:
     path: "{{ alacritty_conf_dir }}"
     state: directory
-    mode: u=rwx,g=r,o=r
+    mode: u=rwx
 
 - name: Check if alacritty config exists
   ansible.builtin.stat:

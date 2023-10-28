@@ -1,13 +1,12 @@
 - name: Install vscodium
-  become: true
-  ansible.builtin.apt:
-    deb: "https://github.com/VSCodium/vscodium/releases/download/1.65.2/codium_1.65.2-1646957649_amd64.deb"
+  ansible.builtin.command: nix-env -iA nixpkgs.vscodium
+  changed_when: false
 
 - name: Creates vscodium conf directory if not exists
   ansible.builtin.file:
     path: "{{ vscodium_conf_dir }}"
     state: directory
-    mode: u=rwx,g=r,o=r
+    mode: u=rwx
 
 - name: Check if settings.json exists
   ansible.builtin.stat:

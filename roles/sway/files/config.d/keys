@@ -196,3 +196,8 @@ bindsym $mod+$alt+Return exec toggle-alacritty floating-alacritty-full full
 bindsym $mod+space exec  rofi -show combi
 # Use anyrun if you like
 # bindsym $mod+space exec anyrun
+
+# warpd hotkeys
+bindsym $mod+$alt+x exec warpd --hint
+bindsym $mod+$alt+c exec warpd --normal
+bindsym $mod+$alt+g exec warpd --grid

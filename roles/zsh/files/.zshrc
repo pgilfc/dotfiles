@@ -40,9 +40,6 @@ antigen bundle zsh-users/zsh-completions
 # fish like substring search
 antigen bundle zsh-users/zsh-history-substring-search
 
-# Load the theme.
-antigen theme romkatv/powerlevel10k
-
 # Tell Antigen that you're done.
 antigen apply
 
@@ -88,18 +85,14 @@ if [ -d "$HOME/Applications" ] ; then
   PATH="$PATH:$HOME/Applications"
 fi
 
-# asdf injection
-. $HOME/.asdf/asdf.sh
-# append completions to fpath
-fpath=(${ASDF_DIR}/completions $fpath)
-# initialise completions with ZSH's compinit
-autoload -Uz compinit && compinit
+# activate rtx environment
+eval "$(~/.nix-profile/bin/rtx activate zsh)"
+
+# starship prompt
+eval "$(starship init zsh)"
 
 # Alacritty completions
 fpath+="$HOME/.alacritty/extra/completions/"
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 source ~/.zprofile
 zstyle ':completion:*' menu select
