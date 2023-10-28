@@ -1,2 +1,20 @@
+# globals
 user_name: "{{ ansible_user_id }}"
 user_home: "/home/{{ user_name }}"
+
+# language versions
+node_version: "latest"
+golang_version: "1.21"
+rust_version: "stable"
+python_version: "latest"
+
+# paths
+node_path: "{{ user_home }}/.local/share/rtx/installs/node/{{ node_version }}/bin"
+cargo_home: "{{ user_home }}/.local/share/rtx/installs/rust/{{ rust_version }}"
+rustup_home: "{{ cargo_home }}"
+rust_path: "{{ rustup_home }}/bin"
+python_path: "{{ user_home }}/.local/share/rtx/installs/python/{{ python_version }}/bin"
+gopath: "{{ user_home }}/.local/share/rtx/installs/go/{{ golang_version }}/packages"
+goroot: "{{ user_home }}/.local/share/rtx/installs/go/{{ golang_version }}/go"
+golang_path: "{{ goroot }}/bin:{{ gopath }}/bin"
+nix_path: "{{ user_home }}/.local/bin:/home/vagrant/.nix-profile/bin:{{ user_home }}/.nix-profile/bin:/nix/var/nix/profiles/default/bin"

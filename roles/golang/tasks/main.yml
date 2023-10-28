@@ -1,0 +1,13 @@
+- name: Add golang rtx plugin
+  ansible.builtin.command: "rtx plugin install golang https://github.com/asdf-community/asdf-golang.git"
+  register: result
+  failed_when: result.rc != 0 and result.stderr != 'Plugin named golang already added'
+  changed_when: false
+
+- name: Install stable golang version
+  ansible.builtin.command: "rtx install golang@{{ golang_version }}"
+  changed_when: false
+
+- name: Set golang version
+  ansible.builtin.command: "rtx global golang@{{ golang_version }}"
+  changed_when: false

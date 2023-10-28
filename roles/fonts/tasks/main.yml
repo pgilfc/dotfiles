@@ -2,7 +2,7 @@
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ font_directory }}/"
-    mode: u=rw,g=r,o=r
+    mode: u=rwx
   with_fileglob:
     - "{{ role_path }}/files/*"
 

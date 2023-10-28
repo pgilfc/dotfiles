@@ -2,29 +2,19 @@
   ansible.builtin.file:
     path: "{{ git_hooks }}"
     state: directory
-    mode: u=rwx,g=r,o=r
+    mode: u=rwx
 
 - name: Install cocogitto
-  ansible.builtin.command: cargo install --locked cocogitto
+  ansible.builtin.command: "nix-env -iA nixpkgs.cocogitto"
   changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
 
 - name: Add conventional commit hook
-  ansible.builtin.copy:
+  ansible.builtin.file:
     dest: "{{ git_hooks }}/commit-msg"
-    content: |
-      #!/bin/sh
-
-      COMMIT_MSG_FILE=$1
-
-      MESSAGE=$(cat $COMMIT_MSG_FILE)
-
-      if {{ user_home }}/.asdf/installs/rust/stable/bin/cog verify "$MESSAGE"; then
-          echo "Commit parse succeeded"
-      else
-          echo "See https://www.conventionalcommits.org/en/v1.0.0"
-          exit 1
-      fi
-    mode: "0755"
+    src: "{{ role_path }}/files/commit-msg"
+    state: link
 
 - name: Set global git hook location
   community.general.git_config:

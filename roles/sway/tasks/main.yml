@@ -4,38 +4,43 @@
 - name: Include waybar
   ansible.builtin.import_tasks: waybar.yml
 
-- name: Include anyrun
-  ansible.builtin.import_tasks: anyrun.yml
-
 - name: Install sway
-  become: true
-  ansible.builtin.apt:
-    name: sway
-    state: present
+  ansible.builtin.command: nix-env -iA nixpkgs.sway
+  changed_when: false
+
+- name: Add nixGL channel
+  ansible.builtin.command: nix-channel --add https://github.com/guibou/nixGL/archive/main.tar.gz nixgl
+  changed_when: false
+
+- name: Update nixGL channel
+  ansible.builtin.command: nix-channel --update
+  changed_when: false
+
+- name: Install nixGL wrapper
+  ansible.builtin.command: nix-env -iA nixgl.auto.nixGLDefault
+  changed_when: false
 
 - name: Install swaylock to lock on lid close
   become: true
-  ansible.builtin.apt:
-    name: swaylock
-    state: present
+  ansible.builtin.command: nix-env -iA nixpkgs.swaylock
+  changed_when: false
 
 - name: Install swayidle to command idle actions
   become: true
-  ansible.builtin.apt:
-    name: swayidle
-    state: present
+  ansible.builtin.command: nix-env -iA nixpkgs.swayidle
+  changed_when: false
 
 - name: Create a sway config directory if it does not exist
   ansible.builtin.file:
     path: "{{ user_home }}/.config/sway"
     state: directory
-    recurse: true
+    mode: u=rwx
 
 - name: Create a sway config.d directory if it does not exist
   ansible.builtin.file:
     path: "{{ user_home }}/.config/sway/config.d"
     state: directory
-    recurse: true
+    mode: u=rwx
 
 - name: Symlink sway config file
   ansible.builtin.file:
@@ -48,8 +53,15 @@
     src: "{{ item }}"
     dest: "{{ user_home }}/.config/sway/config.d/{{ item | basename }}"
     state: link
+    mode: u=rwx
   with_fileglob:
     - "{{ role_path }}/files/config.d/*"
+
+- name: Ensure .config/systemd/user exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/systemd/user"
+    state: directory
+    mode: u=rwx
 
 - name: Symlink sway-session.target
   ansible.builtin.file:
@@ -62,7 +74,14 @@
     src: "{{ role_path }}/files/sway-init"
     dest: "{{ user_home }}/.local/bin/sway-init"
     state: link
-    mode: "0755"
+    mode: u=rwx
+
+- name: Ensure /usr/share/wayland-sessions exists
+  become: true
+  ansible.builtin.file:
+    path: /usr/share/wayland-sessions
+    state: directory
+    mode: u=rwx,g=r,o=r
 
 - name: Copy custom-sway.desktop to /usr/share/wayland-sessions
   become: true

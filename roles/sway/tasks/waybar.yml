@@ -1,8 +1,7 @@
 - name: Ensure waybar is installed
   become: true
-  ansible.builtin.apt:
-    name: waybar
-    state: present
+  ansible.builtin.command: nix-env -iA nixpkgs.waybar
+  changed_when: false
 
 - name: Create a waybar config directory if it does not exist
   ansible.builtin.file:

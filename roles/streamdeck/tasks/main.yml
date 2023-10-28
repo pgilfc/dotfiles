@@ -1,21 +1,10 @@
-- name: Installs requirements from apt
-  become: true
-  loop: "{{ packages }}"
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: present
-
-- name: Install python 3.10 (current max version for the tool)
-  ansible.builtin.command: asdf install python 3.10.9
-  changed_when: false
-
 - name: Add udev rules
   become: true
   ansible.builtin.command: "sh {{ role_path }}/files/udev.sh"
   changed_when: false
 
 - name: Install streamdeck_ui
-  ansible.builtin.command: "{{ user_home }}/.asdf/installs/python/3.10.9/bin/python3 -m pip install --user streamdeck_ui"
+  ansible.builtin.command: "nix-env -iA nixpkgs.streamdeck-ui"
   changed_when: false
 
 - name: Symlink icons
@@ -25,6 +14,12 @@
     dest: /usr/share/icons/streamdeck
     state: link
     force: true
+
+- name: Ensure .config/systemd/user exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/systemd/user"
+    state: directory
+    recurse: true
 
 - name: Symlink streamdeck.path
   ansible.builtin.file:
@@ -46,7 +41,7 @@
 
       [Install]
       WantedBy=default.target
-    mode: "0755"
+    mode: u=rwx
 
 - name: Make sure streamdeck.path is running
   ansible.builtin.systemd:

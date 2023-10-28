@@ -1,5 +1,0 @@
-- name: Import asdf repo
-  ansible.builtin.git:
-    repo: https://github.com/asdf-vm/asdf.git
-    dest: "{{ user_home }}/.asdf"
-    version: v0.9.0

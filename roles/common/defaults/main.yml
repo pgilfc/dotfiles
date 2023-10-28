@@ -36,6 +36,7 @@ common_packages:
   - syncthing # Sync folders between computers
   - tldr # like man but just examples
   - tlp # Energy optimizer
+  - trash-cli # Command line trash utility
   - tree # Directory tree
   - vlc # Media player
   - xdg-utils # Desktop integration utilities

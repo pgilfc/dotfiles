@@ -5,7 +5,7 @@ packages:
   - libbz2-dev
   - libreadline-dev
   - libsqlite3-dev
-  - llvm
+  - curl
   - libncursesw5-dev
   - xz-utils
   - tk-dev
@@ -13,3 +13,4 @@ packages:
   - libxmlsec1-dev
   - libffi-dev
   - liblzma-dev
+  - gcc
