@@ -3,6 +3,7 @@
   roles:
     - role: bin
     - role: common
+    - role: fish
     - role: fonts
     - role: git
     - role: os

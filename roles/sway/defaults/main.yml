@@ -2,3 +2,4 @@ packages:
   - kanshi
   - wdisplays
   - wl-clipboard
+  - wlrctl

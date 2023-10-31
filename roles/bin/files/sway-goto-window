@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Go to $1 app window or, if not exists, open a new one
+if [ -z $1 ];
+then
+    echo "Missing app name."
+    exit
+fi
+
+wlrctl window focus "$1" || swaymsg exec "$1"

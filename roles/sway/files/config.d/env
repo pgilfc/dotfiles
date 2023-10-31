@@ -45,6 +45,6 @@ output * bg #3F3F3F solid_color
 # auto focus on app on activation
 focus_on_window_activation focus
 
-
+# trackpad gestures
 bindgesture swipe:3:right workspace prev
 bindgesture swipe:3:left workspace next
