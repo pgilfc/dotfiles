@@ -1,8 +1,8 @@
 #! /bin/sh
 
 if [ $# -ne 2 ]; then
-    echo "Usage: $0 <title> <tmux-session>"
+    echo "Usage: $0 <title> <command>"
     exit 1
 fi
 
-pkill -f "alacritty --title $1" || alacritty --title "$1" -e tmux-attach "$2"
+pkill -f "alacritty --title $1" || alacritty --title "$1" -e "$2"

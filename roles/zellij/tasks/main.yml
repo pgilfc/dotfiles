@@ -1,0 +1,18 @@
+- name: Install zellij
+  ansible.builtin.command: nix-env -iA nixpkgs.zellij
+  changed_when: false
+
+- name: Ensure .config/zellij exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/zellij"
+    state: directory
+    mode: u=rwx
+
+- name: Symlink zellij config files
+  ansible.builtin.file:
+    src: "{{ item }}"
+    dest: "{{ user_home }}/.config/zellij/{{ item | basename }}"
+    state: link
+    mode: u=rwx
+  with_fileglob:
+    - "{{ role_path }}/files/*"

@@ -1,0 +1,7 @@
+#! /bin/sh
+
+if zellij list-sessions | grep -Eq "^(full)$"; then
+    zellij attach full
+else
+    zellij --session full --layout ~/.config/zellij/layout-full.kdl
+fi
