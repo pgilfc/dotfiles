@@ -189,8 +189,8 @@ bindsym Print exec gnome-screenshot -i
 # Open terminal with a hot key (guake like)
 for_window [title="floating-alacritty-half"] floating enable, resize set 100 ppt 50 ppt, move position 0 ppt 0 ppt
 for_window [title="floating-alacritty-full"] floating enable, resize set 100 ppt 100 ppt, move position 0 ppt 0 ppt
-bindsym $alt+space exec toggle-alacritty floating-alacritty-half 0
-bindsym $mod+$alt+Return exec toggle-alacritty floating-alacritty-full full
+bindsym $alt+space exec toggle-alacritty floating-alacritty-half zellij-half
+bindsym $mod+$alt+Return exec toggle-alacritty floating-alacritty-full zellij-full
 
 # Open rofi with a hot key (mac like)
 bindsym $mod+space exec  rofi -show combi

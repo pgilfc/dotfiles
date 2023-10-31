@@ -10,4 +10,5 @@
     - role: starship
     - role: tmux
     - role: vim
+    - role: zellij
     - role: zsh
