@@ -5,13 +5,13 @@
             "buttons": {
                 "0": {
                     "0": {
-                        "command": "i3-goto-window firefox",
+                        "command": "sway-goto-window firefox",
                         "text": "",
                         "icon": "/usr/share/icons/streamdeck/Firefox.svg"
                     },
                     "1": {
                         "icon": "/usr/share/icons/streamdeck/google-chrome.svg",
-                        "command": "google-chrome"
+                        "command": "sway-goto-window google-chrome"
                     },
                     "2": {
                         "icon": "/usr/share/icons/streamdeck/Slack.svg",
@@ -34,7 +34,7 @@
                     },
                     "6": {},
                     "7": {
-                        "command": "i3-lock",
+                        "command": "sway-lock",
                         "icon": "/usr/share/icons/streamdeck/fingerprint.svg"
                     },
                     "8": {},
@@ -65,15 +65,15 @@
                     "27": {},
                     "28": {},
                     "29": {
-                        "icon": "/usr/share/icons/streamdeck/tv.svg",
-                        "command": "autorandr home"
+                        "icon": "",
+                        "command": ""
                     },
                     "30": {
-                        "icon": "/usr/share/icons/streamdeck/laptop.svg",
-                        "command": "autorandr laptop"
+                        "icon": "",
+                        "command": ""
                     },
                     "31": {
-                        "command": "i3-goto-window arandr",
+                        "command": "sway-goto-window wdisplays",
                         "icon": "/usr/share/icons/streamdeck/gsd-xrandr.svg"
                     }
                 },

@@ -4,11 +4,6 @@
     name: zsh
     state: present
 
-- name: Set zsh as default
-  become: true
-  ansible.builtin.shell: chsh {{ ansible_user_id }} -s $(which zsh)
-  changed_when: false
-
 - name: Installs antigen
   ansible.builtin.get_url:
     url: http://git.io/antigen
