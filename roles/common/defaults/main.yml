@@ -19,7 +19,7 @@ common_packages:
   - gitk # git tree visualizer
   - htop # System monitor
   - jq # Command-line JSON processor
-  - keychain # keychain manager
+  - keychain # Keychain manager
   - make # make utility automation
   - mc # Terminal file manager
   - mosh # Mobile shell (like ssh)

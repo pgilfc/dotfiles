@@ -10,7 +10,7 @@ export XDG_SESSION_TYPE=wayland
 PATH=$PATH:~/.local/bin
 PATH=$PATH:~/.nix-profile/bin
 
-# start keychain
-keychain
+# startup keychain
+eval "keychain --eval --quiet"
 
 exec nixGL sway
