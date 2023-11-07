@@ -1,5 +1,7 @@
 - name: Install zellij
   ansible.builtin.command: nix-env -iA nixpkgs.zellij
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
   changed_when: false
 
 - name: Ensure .config/zellij exists
