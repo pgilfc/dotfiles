@@ -20,6 +20,12 @@
   when: fish_stat.stat.exists
   changed_when: false
 
+- name: Create a .config/fish directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/fish"
+    state: directory
+    mode: u=rwx
+
 - name: Symlink config.fish
   ansible.builtin.file:
     src: "{{ role_path }}/files/config.fish"

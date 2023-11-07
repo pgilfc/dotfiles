@@ -3,6 +3,8 @@
   register: nix_installed
   failed_when: false
   changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
 
 - name: Install nix
   ansible.builtin.shell:
