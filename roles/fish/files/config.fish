@@ -15,5 +15,8 @@ end
 # activate rtx environment
 ~/.nix-profile/bin/rtx activate fish | source
 
+# activate keychain environment
+eval (keychain --eval --quiet)
+
 # starship prompt
 starship init fish | source
