@@ -199,4 +199,4 @@ bindsym $mod+space exec rofi -show combi
 # warpd hotkeys
 bindsym $mod+$alt+x exec warpd --hint
 bindsym $mod+$alt+c exec warpd --normal
-bindsym $mod+$alt+g exec warpd --grid
+bindsym $mod+$alt+v exec warpd --grid

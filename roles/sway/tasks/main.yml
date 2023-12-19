@@ -1,3 +1,9 @@
+- name: Installs system packages with apt
+  become: true
+  ansible.builtin.apt:
+    name: "{{ system_packages }}"
+    state: present
+
 - name: Include brightnessctl
   ansible.builtin.import_tasks: brightnessctl.yml
 
