@@ -97,10 +97,7 @@ require('lazy').setup({
     -- treesitter
     {
         'nvim-treesitter/nvim-treesitter',
-        build = function()
-            local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-            ts_update()
-        end,
+        build = ":TSUpdate",
         config = function()
             require('nvim-treesitter.configs').setup(config('nvim-treesitter'))
         end,
@@ -204,5 +201,42 @@ require('lazy').setup({
         config = function()
             require('cmp').setup(config('nvim-cmp').cmp)
         end,
+    },
+
+    -- Debugger
+    {
+        "mfussenegger/nvim-dap",
+        dependencies = {
+            {
+                "williamboman/mason.nvim",
+                config = function()
+                    require("mason").setup()
+                end,
+            },
+            {
+                "jay-babu/mason-nvim-dap.nvim",
+                dependencies = {
+                    "williamboman/mason.nvim"
+                },
+                config = function()
+                    require("mason").setup()
+                    require("mason-nvim-dap").setup({
+                        ensure_installed = { "python", "delve" }
+                    })
+                end,
+            },
+        },
+        {
+            "rcarriga/nvim-dap-ui",
+            config = function()
+                require("dapui").setup()
+            end,
+        },
+        {
+            "theHamsta/nvim-dap-virtual-text",
+            config = function()
+                require("nvim-dap-virtual-text").setup()
+            end,
+        }
     },
 })
