@@ -19,6 +19,7 @@ common_packages:
   - gitk # git tree visualizer
   - htop # System monitor
   - jq # Command-line JSON processor
+  - jqp # jq playground
   - keychain # Keychain manager
   - make # make utility automation
   - mc # Terminal file manager
@@ -43,4 +44,5 @@ common_packages:
   - xdg-utils # Desktop integration utilities
   - xdotool # x do tool
   - wget # Web get
+  - yq # like jq, but for yaml
   - zoxide # Smart cd command
