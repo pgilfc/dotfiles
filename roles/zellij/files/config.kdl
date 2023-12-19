@@ -1,4 +1,3 @@
-// If you'd like to override the default keybindings completely, be sure to change "keybinds" to "keybinds clear-defaults=true"
 keybinds clear-defaults=true {
     normal {}
     locked {
@@ -144,3 +143,7 @@ plugins {
     compact-bar { path "compact-bar"; }
     session-manager { path "session-manager"; }
 }
+
+scrollback_editor "nvim"
+
+copy_command "wl-copy"
