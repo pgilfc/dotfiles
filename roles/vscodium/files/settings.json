@@ -9,4 +9,5 @@
     "editor.formatOnSave": true,
     "redhat.telemetry.enabled": false,
     "window.menuBarVisibility": "toggle",
+    "svelte.enable-ts-plugin": true
 }
