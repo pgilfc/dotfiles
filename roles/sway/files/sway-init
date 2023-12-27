@@ -10,6 +10,14 @@ export XDG_SESSION_TYPE=wayland
 PATH=$PATH:~/.local/bin
 PATH=$PATH:~/.nix-profile/bin
 
+# start xdg-desktop-portal-wlr
+eval "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+eval "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+
+# define default editor
+export EDITOR=nvim
+export VISUAL=nvim
+
 # startup keychain
 eval "keychain --eval --quiet"
 

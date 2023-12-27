@@ -3,17 +3,17 @@ local opt = vim.opt
 
 opt.termguicolors = true
 
-opt.timeoutlen = 300 -- time milli to wait to show wich-key
+opt.timeoutlen = 300      -- time milli to wait to show wich-key
 
-opt.scrolloff = 10 -- number of screen lines above and below cursor
+opt.scrolloff = 10        -- number of screen lines above and below cursor
 
-opt.number = true -- line number on cursor line
+opt.number = true         -- line number on cursor line
 opt.relativenumber = true -- relative line numbers
 
-opt.cursorline = true -- highlight current cursor line
+opt.cursorline = true     -- highlight current cursor line
 
-opt.ignorecase = true -- ignore case when searching
-opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
+opt.ignorecase = true     -- ignore case when searching
+opt.smartcase = true      -- if you include mixed case in your search, assumes you want case-sensitive
 
 -- disable netrw (vim default tree)
 vim.g.loaded_netrw = 1

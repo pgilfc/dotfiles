@@ -24,6 +24,12 @@ EXPRT.mappings = {
 		c = { "<Cmd>bd!<Cr>", "Close current buffer" },
 		D = { "<Cmd>%bd|e#|bd#<Cr>", "Delete all buffers" },
 	},
+	D = {
+		name = "Debugger",
+		o = { function() require("dapui").open() end, "Open debugger" },
+		c = { function() require("dapui").close() end, "Close debugger" },
+		D = { function() require("dapui").toggle() end, "Toggle debugger" },
+	},
 	f = {
 		-- these were sent to the telescope config file
 		name = "Find (Telescope)",
