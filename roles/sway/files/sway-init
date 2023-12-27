@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export GTK_USE_PORTAL=0
 export MOZ_ENABLE_WAYLAND=1
@@ -13,4 +13,10 @@ PATH=$PATH:~/.nix-profile/bin
 # startup keychain
 eval "keychain --eval --quiet"
 
-exec nixGL sway
+if ! which nvidia-smi ; then
+    echo "nouveau drivers"
+    exec nixGL -- sway
+else
+    echo "nvidia drivers"
+    exec nixGL -- sway --unsupported-gpu
+fi
