@@ -1,5 +1,5 @@
 #!/bin/sh
 
 # need to be su to run
-swapoff -a
-swapon -a
+sudo swapoff -a
+sudo swapon -a

@@ -3,6 +3,7 @@
   ansible.builtin.shell:
     executable: /bin/bash
     cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
       blkid `# get block ids` \
       | grep $(df | grep '/$' | awk '{print $1}') `# find root filesystem`
   register: root_filesystem
@@ -12,6 +13,7 @@
   ansible.builtin.shell:
     executable: /bin/bash
     cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
       echo {{ root_filesystem.stdout }} \
       | awk '{print $1}'                    `# get the first column which contains the path` \
       | grep '^\/.*\:$'                     `# validate previous command` \
@@ -24,6 +26,7 @@
   ansible.builtin.shell:
     executable: /bin/bash
     cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
       echo {{ root_filesystem_path.stdout }} \
       | grep '^\/\(.*\/\)*\([^\/]\+\)$'         `# validate root_filesystem_path` \
       | sed 's/^\/\(.*\/\)*\([^\/]\+\)$/\2/'    `# get just the name` \
@@ -35,6 +38,7 @@
   ansible.builtin.shell:
     executable: /bin/bash
     cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
       echo '{{ root_filesystem.stdout }}' \
       | awk '{print $2}' `# get the second column which contains the uuid` \
       | sed 's/^UUID=\"\([0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}\)\"$/\1/' `# get just the uuid` \
@@ -57,7 +61,7 @@
   community.general.filesize:
     path: "{{ swap_file }}"
     size: 32G
-    mode: 600
+    mode: "0600"
     owner: root
     group: root
 
@@ -88,7 +92,7 @@
 
 - name: Turn on Swap devices
   become: true
-  ansible.builtin.command: # noqa: command-instead-of-module
+  ansible.builtin.shell: # noqa: command-instead-of-module
     executable: /bin/bash
     cmd: mount -a
   changed_when: false
@@ -97,7 +101,9 @@
   become: true
   ansible.builtin.shell:
     executable: /bin/bash
-    cmd: filefrag -v {{ swap_file }} | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      filefrag -v {{ swap_file }} | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
   register: sw_physical_offset
   changed_when: false
 
@@ -127,42 +133,70 @@
   ansible.builtin.command: update-grub
   changed_when: false
 
-# -----------------------------------------------------------------------
-#  Custom suspend then hibernate!
-#  This is here beacuse there is currently a bug with systemd
-#  (https://github.com/systemd/systemd/issues/25269)
-#  Should be fixed after 253
-# -----------------------------------------------------------------------
+# # -----------------------------------------------------------------------
+# #  Custom suspend then hibernate!
+# #  This is here beacuse there is currently a bug with systemd
+# #  (https://github.com/systemd/systemd/issues/25269)
+# #  Should be fixed after 253
+# # -----------------------------------------------------------------------
 
-- name: Copy hybrid-sleep script
-  become: true
-  ansible.builtin.copy:
-    src: "{{ role_path }}/files/hybrid-sleep"
-    dest: /usr/local/bin/hybrid-sleep
-    mode: u=rwx,g=rx,o=rx
+# - name: Copy hybrid-sleep script
+#   become: true
+#   ansible.builtin.copy:
+#     src: "{{ role_path }}/files/hybrid-sleep"
+#     dest: /usr/local/bin/hybrid-sleep
+#     mode: u=rwx,g=rx,o=rx
 
-- name: Ensures /etc/systemd/system/systemd-suspend.service.d dir exists
+# - name: Ensures /etc/systemd/system/systemd-suspend.service.d dir exists
+#   become: true
+#   ansible.builtin.file:
+#     path: /etc/systemd/system/systemd-suspend.service.d
+#     state: directory
+#     mode: u=rw,g=r,o=r
+
+# - name: Systemd suspend override (systemctl edit systemd-suspend)
+#   become: true
+#   ansible.builtin.copy:
+#     src: "{{ role_path }}/files/suspend.service"
+#     dest: /etc/systemd/system/systemd-suspend.service.d/override.conf
+#     mode: u=rw,g=r,o=r
+
+# - name: Add suspend config
+#   become: true
+#   ansible.builtin.lineinfile:
+#     path: /etc/systemd/logind.conf
+#     line: "{{ item }}"
+#   loop:
+#     - HandlePowerKey=suspend
+#     - HandleLidSwitch=suspend
+
+- name: Ensures /etc/systemd/logind.conf.d dir exists
   become: true
   ansible.builtin.file:
-    path: /etc/systemd/system/systemd-suspend.service.d
+    path: /etc/systemd/logind.conf.d
     state: directory
     mode: u=rw,g=r,o=r
 
-- name: Systemd suspend override (systemctl edit systemd-suspend)
+- name: Systemd logind.conf.d override
   become: true
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/suspend.service"
-    dest: /etc/systemd/system/systemd-suspend.service.d/override.conf
+    src: "{{ role_path }}/files/logind.conf"
+    dest: /etc/systemd/logind.conf.d/override.conf
     mode: u=rw,g=r,o=r
 
-- name: Add suspend config
+- name: Ensures /etc/systemd/sleep.conf.d dir exists
   become: true
-  ansible.builtin.lineinfile:
-    path: /etc/systemd/logind.conf
-    line: "{{ item }}"
-  loop:
-    - HandlePowerKey=suspend
-    - HandleLidSwitch=suspend
+  ansible.builtin.file:
+    path: /etc/systemd/sleep.conf.d
+    state: directory
+    mode: u=rw,g=r,o=r
+
+- name: Systemd sleep.conf.d override
+  become: true
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/sleep.conf"
+    dest: /etc/systemd/logind.conf.d/override.conf
+    mode: u=rw,g=r,o=r
 
 - name: Reload systemd daemons
   become: true
