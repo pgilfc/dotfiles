@@ -195,7 +195,7 @@
   become: true
   ansible.builtin.copy:
     src: "{{ role_path }}/files/sleep.conf"
-    dest: /etc/systemd/logind.conf.d/override.conf
+    dest: /etc/systemd/sleep.conf.d/override.conf
     mode: u=rw,g=r,o=r
 
 - name: Reload systemd daemons
