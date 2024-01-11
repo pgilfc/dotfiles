@@ -1,31 +1,31 @@
-- name: Install rtx
+- name: Install mise
   ansible.builtin.shell:
     executable: /bin/bash
-    cmd: nix-env -iA nixpkgs.rtx
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      curl https://mise.jdx.dev/install.sh | sh
   changed_when: false
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
 
 - name: Install node
   ansible.builtin.import_role:
     name: node
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.nix-profile/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.local/bin"
 
 - name: Install python
   ansible.builtin.import_role:
     name: python
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.nix-profile/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.local/bin"
 
 - name: Install rust
   ansible.builtin.import_role:
     name: rust
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.nix-profile/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.local/bin"
 
 - name: Install golang
   ansible.builtin.import_role:
     name: golang
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.nix-profile/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.local/bin"

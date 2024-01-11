@@ -6,8 +6,8 @@
     - role: fish
     - role: fonts
     - role: git
+    - role: mise
     - role: os
-    - role: rtx
     - role: starship
     - role: tmux
     - role: vim

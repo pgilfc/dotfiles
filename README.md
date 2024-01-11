@@ -3,7 +3,7 @@
 ## Installing
  - Run cmd/init0.sh
  - Run cmd/init1.sh
- - Reload/Restart your terminal (to one with updated PATH and rtx env activated) if needed
+ - Reload/Restart your terminal (to one with updated PATH and mise env activated) if needed
  - Run cmd/init2.sh
 
 ## Configs for

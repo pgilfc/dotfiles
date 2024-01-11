@@ -9,6 +9,8 @@
 - name: Install nix
   ansible.builtin.shell:
     executable: /bin/bash
-    cmd: /bin/sh <(curl -L https://nixos.org/nix/install) --daemon
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      curl -L https://nixos.org/nix/install | sh -s -- --daemon
   when: nix_installed.rc != 0
   changed_when: false

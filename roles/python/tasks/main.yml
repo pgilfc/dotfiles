@@ -4,16 +4,6 @@
     name: "{{ packages }}"
     state: present
 
-- name: Add python rtx plugin
-  ansible.builtin.command: "rtx plugin install python https://github.com/asdf-community/asdf-python.git"
-  register: result
-  failed_when: result.rc != 0 and not (result.stderr is search("Plugin named python already added"))
-  changed_when: false
-
-- name: Install latest python version
-  ansible.builtin.command: "rtx install python@{{ python_version }}"
-  changed_when: false
-
-- name: Set python version
-  ansible.builtin.command: "rtx global python@{{ python_version }}"
+- name: Install python version
+  ansible.builtin.command: "mise use -g python@{{ python_version }}"
   changed_when: false

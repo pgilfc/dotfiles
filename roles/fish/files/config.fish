@@ -12,8 +12,8 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-# activate rtx environment
-~/.nix-profile/bin/rtx activate fish | source
+# activate mise environment
+~/.local/bin/mise activate fish | source
 
 # activate keychain environment
 eval (keychain --eval --quiet)

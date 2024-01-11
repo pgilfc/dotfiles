@@ -1,13 +1,13 @@
-- name: Add rust rtx plugin
-  ansible.builtin.command: "rtx plugin install rust https://github.com/code-lever/asdf-rust.git"
+- name: Add rust mise plugin
+  ansible.builtin.command: "mise plugin install rust https://github.com/code-lever/asdf-rust.git"
   register: result
   failed_when: result.rc != 0 and result.stderr != 'Plugin named rust already added'
   changed_when: false
 
-- name: Install stable rust version
-  ansible.builtin.command: "rtx install rust@{{ rust_version }}"
+- name: Install rust version
+  ansible.builtin.command: "mise install rust@{{ rust_version }}"
   changed_when: false
 
 - name: Set rust version
-  ansible.builtin.command: "rtx global rust@{{ rust_version }}"
+  ansible.builtin.command: "mise global rust@{{ rust_version }}"
   changed_when: false

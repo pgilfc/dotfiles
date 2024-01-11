@@ -4,16 +4,6 @@
     name: "{{ packages }}"
     state: present
 
-- name: Add node rtx plugin
-  ansible.builtin.command: "rtx plugin install node https://github.com/asdf-vm/asdf-nodejs.git"
-  register: result
-  failed_when: result.rc != 0 and not (result.stderr is search("Plugin named nodejs already added"))
-  changed_when: false
-
-- name: Install latest node version
-  ansible.builtin.command: "rtx install node@{{ node_version }}"
-  changed_when: false
-
-- name: Set python version
-  ansible.builtin.command: "rtx global node@{{ node_version }}"
+- name: Install node version
+  ansible.builtin.command: "mise use -g node@{{ node_version }}"
   changed_when: false

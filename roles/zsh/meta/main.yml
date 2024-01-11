@@ -1,6 +1,6 @@
 dependencies:
   - role: common
   - role: tmux
-  - role: rtx
+  - role: mise
   - role: fonts
   - role: starship

@@ -85,8 +85,8 @@ if [ -d "$HOME/Applications" ] ; then
   PATH="$PATH:$HOME/Applications"
 fi
 
-# activate rtx environment
-eval "$(~/.nix-profile/bin/rtx activate zsh)"
+# activate mise environment
+eval "$(~/.local/bin/mise activate zsh)"
 
 # starship prompt
 eval "$(starship init zsh)"
