@@ -1,5 +1,5 @@
 dependencies:
   - role: common
   - role: fonts
-  - role: rtx
+  - role: mise
   - role: starship

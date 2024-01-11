@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "dependencies.yml"
     end
     # config.vm.provision "shell",
-    #   inline: 'echo "$(runuser -u vagrant -- /home/vagrant/.nix-profile/bin/rtx env)" > /etc/profile.d/rtx.sh',
+    #   inline: 'echo "$(runuser -u vagrant -- /home/vagrant/.local/bin/mise env)" > /etc/profile.d/mise.sh',
     #   run: "always"
     config.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "environment.yml"
