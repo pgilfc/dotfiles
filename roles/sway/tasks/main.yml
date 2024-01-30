@@ -11,20 +11,10 @@
   ansible.builtin.import_tasks: waybar.yml
 
 - name: Install sway
-  ansible.builtin.command: nix-env -iA nixpkgs.sway
-  changed_when: false
-
-- name: Add nixGL channel
-  ansible.builtin.command: nix-channel --add https://github.com/guibou/nixGL/archive/main.tar.gz nixgl
-  changed_when: false
-
-- name: Update nixGL channel
-  ansible.builtin.command: nix-channel --update
-  changed_when: false
-
-- name: Install nixGL wrapper
-  ansible.builtin.command: nix-env -iA nixgl.auto.nixGLDefault
-  changed_when: false
+  become: true
+  ansible.builtin.apt:
+    name: sway
+    state: present
 
 - name: Install swaylock to lock on lid close
   become: true

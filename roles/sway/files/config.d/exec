@@ -12,7 +12,7 @@ exec swayidle -w \
     after-resume $swaylock \
     lock $swaylock \
     timeout 300 $swaylock \
-    timeout 600 'systemctl suspend'
+    timeout 600 'systemctl suspend-then-hibernate || systemctl suspend'
 
 # start sway-session.target to ensure graphical-session.target starts
 exec_always exec systemctl --user start --no-block sway-session.target
