@@ -56,11 +56,21 @@
     cmd: swapoff -a
   changed_when: false
 
+- name: Get memory size *2
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      awk '/MemTotal/ {print int($2*2)}' /proc/meminfo \
+      | numfmt --from-unit=1K --to=iec
+  register: memory_size
+  changed_when: false
+
 - name: Create a swap file
   become: true
   community.general.filesize:
     path: "{{ swap_file }}"
-    size: 32G
+    size: "{{ memory_size.stdout }}"
     mode: "0600"
     owner: root
     group: root
@@ -103,7 +113,8 @@
     executable: /bin/bash
     cmd: |
       set -o pipefail # ansible-lint(risky-shell-pipe)
-      filefrag -v {{ swap_file }} | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
+      filefrag -v {{ swap_file }} \
+      | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
   register: sw_physical_offset
   changed_when: false
 
@@ -175,7 +186,7 @@
   ansible.builtin.file:
     path: /etc/systemd/logind.conf.d
     state: directory
-    mode: u=rw,g=r,o=r
+    mode: u=rwx,g=rx,o=rx
 
 - name: Systemd logind.conf.d override
   become: true
@@ -189,7 +200,7 @@
   ansible.builtin.file:
     path: /etc/systemd/sleep.conf.d
     state: directory
-    mode: u=rw,g=r,o=r
+    mode: u=rwx,g=rx,o=rx
 
 - name: Systemd sleep.conf.d override
   become: true

@@ -7,4 +7,10 @@ then
     exit
 fi
 
-wlrctl window focus "$1" || swaymsg exec "$1"
+if [ -z $2 ];
+then
+    wlrctl window focus "$1" || swaymsg exec "$1"
+fi
+
+# If $2 is not empty, use it as a window name
+wlrctl window focus "$2" || swaymsg exec "$1"
