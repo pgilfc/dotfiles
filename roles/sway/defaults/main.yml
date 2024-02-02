@@ -7,3 +7,6 @@ packages:
   - wdisplays
   - wl-clipboard
   - wlrctl
+  - grim
+  - slurp
+  - swappy

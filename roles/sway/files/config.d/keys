@@ -184,7 +184,7 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym $mod+BackSpace exec  $swaylock
 
 # Pint screen shortcuts
-bindsym Print exec gnome-screenshot -i
+bindsym Print exec sway-printscreen
 
 # Open terminal with a hot key (guake like)
 for_window [title="floating-alacritty-half"] floating enable, resize set 100 ppt 50 ppt, move position 0 ppt 0 ppt
