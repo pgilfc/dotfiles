@@ -28,8 +28,10 @@ common_packages:
   - neofetch # Terminal system info
   - pavucontrol # Pulseaudio volume control
   - peco # Terminal fuzzy finder
+  - pipewire-pulse # pipewire pulseaudio bindings
   - playerctl # Terminal media controler
   - powertop # Energy optimizer
+  - pulseaudio-utils # tools for audio control
   - ranger # Terminal directory manager (vimlike)
   - ripgrep # Regex dir finder
   - rclone # rsync for cloud storage
