@@ -5,13 +5,13 @@
             "buttons": {
                 "0": {
                     "0": {
-                        "command": "sway-goto-window firefox",
+                        "command": "env PATH=/usr/bin:.local/bin:.nix-profile/bin sway-goto-window firefox",
                         "text": "",
                         "icon": "/usr/share/icons/streamdeck/Firefox.svg"
                     },
                     "1": {
                         "icon": "/usr/share/icons/streamdeck/google-chrome.svg",
-                        "command": "sway-goto-window google-chrome"
+                        "command": "env PATH=/usr/bin:.local/bin:.nix-profile/bin sway-goto-window google-chrome Google-chrome"
                     },
                     "2": {
                         "icon": "/usr/share/icons/streamdeck/Slack.svg",
@@ -32,10 +32,13 @@
                         "text": "",
                         "command": "pavucontrol"
                     },
-                    "6": {},
+                    "6": {
+                        "command": "pwd"
+                    },
                     "7": {
-                        "command": "sway-lock",
-                        "icon": "/usr/share/icons/streamdeck/fingerprint.svg"
+                        "command": "env .local/bin/sway-lock",
+                        "icon": "/usr/share/icons/streamdeck/fingerprint.svg",
+                        "text_vertical_align": "middle-top"
                     },
                     "8": {},
                     "9": {},
@@ -57,7 +60,7 @@
                     "22": {},
                     "23": {},
                     "24": {
-                        "command": "gnome-screenshot -i",
+                        "command": "env PATH=.nix-profile/bin .local/bin/sway-printscreen",
                         "icon": "/usr/share/icons/streamdeck/screenshot.svg"
                     },
                     "25": {},
@@ -73,7 +76,7 @@
                         "command": ""
                     },
                     "31": {
-                        "command": "sway-goto-window wdisplays",
+                        "command": "env PATH=/usr/bin:.local/bin:.nix-profile/bin sway-goto-window wdisplays",
                         "icon": "/usr/share/icons/streamdeck/gsd-xrandr.svg"
                     }
                 },
@@ -386,7 +389,7 @@
             },
             "display_timeout": 0,
             "brightness": 99,
-            "brightness_dimmed": 0,
+            "brightness_dimmed": 1,
             "page": 0
         }
     }
