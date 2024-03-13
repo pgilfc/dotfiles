@@ -180,6 +180,9 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
+# Laptop screen config
+bindsym XF86Display output eDP-1 enable
+
 # Lock screen shortcut
 bindsym $mod+BackSpace exec  $swaylock
 
