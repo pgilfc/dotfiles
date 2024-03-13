@@ -8,7 +8,6 @@ set -U -x VISUAL nvim
 fish_add_path "$HOME/.local/bin"
 fish_add_path "$HOME/Applications"
 fish_add_path "$HOME/.nix-profile/bin"
-fish_add_path "$HOME/bin" # docker rootless
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
