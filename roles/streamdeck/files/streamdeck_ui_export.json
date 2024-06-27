@@ -33,67 +33,146 @@
                         "command": "pavucontrol"
                     },
                     "6": {
-                        "command": "pwd"
+                        "command": "env PATH=/usr/bin:.local/bin:.nix-profile/bin sway-goto-window wdisplays",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/display.svg"
                     },
                     "7": {
                         "command": "env .local/bin/sway-lock",
                         "icon": "/usr/share/icons/streamdeck/fingerprint.svg",
                         "text_vertical_align": "middle-top"
                     },
-                    "8": {},
-                    "9": {},
-                    "10": {
-                        "command": "",
-                        "icon": ""
+                    "8": {
+                        "command": "env PATH=/usr/bin:.local/bin:.nix-profile/bin sway-goto-window insomnia",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/insomnia-logo.svg"
                     },
-                    "11": {},
-                    "12": {},
+                    "9": {
+                        "command": "env PATH=/usr/bin:.local/bin:.nix-profile/bin sway-goto-window dbeaver DBeaver",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/database.svg"
+                    },
+                    "10": {
+                        "command": "gnome-calculator",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/calculator.svg"
+                    },
+                    "11": {
+                        "text": "dotfiles",
+                        "command": "sh -c \"code ~/dotfiles\"",
+                        "text_vertical_align": "middle-bottom",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/dotfiles.svg"
+                    },
+                    "12": {
+                        "text": "",
+                        "command": "",
+                        "text_vertical_align": "middle"
+                    },
                     "13": {},
                     "14": {},
-                    "15": {},
+                    "15": {
+                        "command": "env PATH=.nix-profile/bin .local/bin/sway-printscreen",
+                        "icon": "/usr/share/icons/streamdeck/screenshot.svg"
+                    },
                     "16": {},
                     "17": {},
                     "18": {},
                     "19": {},
-                    "20": {},
+                    "20": {
+                        "icon": ""
+                    },
                     "21": {},
                     "22": {},
                     "23": {},
-                    "24": {
-                        "command": "env PATH=.nix-profile/bin .local/bin/sway-printscreen",
-                        "icon": "/usr/share/icons/streamdeck/screenshot.svg"
-                    },
+                    "24": {},
                     "25": {},
                     "26": {},
                     "27": {},
                     "28": {},
-                    "29": {
-                        "icon": "",
-                        "command": ""
-                    },
-                    "30": {
-                        "icon": "",
-                        "command": ""
-                    },
+                    "29": {},
+                    "30": {},
                     "31": {
-                        "command": "env PATH=/usr/bin:.local/bin:.nix-profile/bin sway-goto-window wdisplays",
-                        "icon": "/usr/share/icons/streamdeck/gsd-xrandr.svg"
+                        "text": "",
+                        "switch_page": 2,
+                        "text_vertical_align": "middle",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F642.svg"
                     }
                 },
                 "1": {
-                    "0": {},
-                    "1": {},
-                    "2": {},
-                    "3": {},
-                    "4": {},
-                    "5": {},
-                    "6": {},
-                    "7": {},
-                    "8": {},
-                    "9": {},
-                    "10": {},
-                    "11": {},
-                    "12": {},
+                    "0": {
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F923.svg",
+                        "command": "",
+                        "text": "",
+                        "text_vertical_align": "middle",
+                        "write": "\ud83e\udd23"
+                    },
+                    "1": {
+                        "text": "",
+                        "write": "\ud83d\ude01",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F600.svg"
+                    },
+                    "2": {
+                        "text": "",
+                        "write": "\ud83d\ude4f",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F932.svg"
+                    },
+                    "3": {
+                        "text": "",
+                        "write": "\ud83d\udcaa",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F4AA.svg"
+                    },
+                    "4": {
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F937-200D-2642-FE0F.svg",
+                        "command": "",
+                        "text": "",
+                        "write": "\ud83e\udd37",
+                        "text_vertical_align": "middle"
+                    },
+                    "5": {
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F44C.svg",
+                        "command": "",
+                        "text": "",
+                        "write": "\ud83d\udc4c",
+                        "text_vertical_align": "middle"
+                    },
+                    "6": {
+                        "text": "",
+                        "write": "\ud83d\ude05",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F605.svg"
+                    },
+                    "7": {
+                        "text": "",
+                        "text_vertical_align": "middle",
+                        "write": "\ud83d\udc4d",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F44D.svg"
+                    },
+                    "8": {
+                        "text": "",
+                        "write": "\ud83d\udc4e",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F44E.svg"
+                    },
+                    "9": {
+                        "write": "\ud83e\udd14",
+                        "text": "",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F914.svg"
+                    },
+                    "10": {
+                        "text": "",
+                        "write": "\u2764\ufe0f",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/2764.svg"
+                    },
+                    "11": {
+                        "text": "",
+                        "write": "\ud83c\udf89",
+                        "text_vertical_align": "middle",
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F389.svg"
+                    },
+                    "12": {
+                        "icon": ""
+                    },
                     "13": {},
                     "14": {},
                     "15": {},
@@ -109,10 +188,17 @@
                     "25": {},
                     "26": {},
                     "27": {},
-                    "28": {},
+                    "28": {
+                        "icon": ""
+                    },
                     "29": {},
                     "30": {},
-                    "31": {}
+                    "31": {
+                        "text": "",
+                        "text_vertical_align": "middle",
+                        "switch_page": 1,
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/back_arrow.svg"
+                    }
                 },
                 "2": {
                     "0": {},
