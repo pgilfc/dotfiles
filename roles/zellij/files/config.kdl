@@ -132,7 +132,7 @@ keybinds clear-defaults=true {
         bind "Enter" "Esc" { SwitchToMode "Normal"; }
     }
     shared_except "tmux" "locked" {
-            bind "Ctrl b" { SwitchToMode "Tmux"; } // can't be Ctrl Space (https://github.com/zellij-org/zellij/issues/357)
+            bind "Ctrl Space" { SwitchToMode "Tmux"; }
     }
 }
 
