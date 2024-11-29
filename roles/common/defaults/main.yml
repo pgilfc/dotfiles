@@ -24,6 +24,7 @@ common_packages:
   - make # make utility automation
   - mc # Terminal file manager
   - mosh # Mobile shell (like ssh)
+  - ncat # Netcat alternative
   - ncdu # Disk usage analyzer
   - neofetch # Terminal system info
   - pavucontrol # Pulseaudio volume control
