@@ -1,6 +1,6 @@
-- name: Installs needed apt packages
+- name: Installs needed packages
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.dnf:
     name: "{{ packages }}"
     state: present
 

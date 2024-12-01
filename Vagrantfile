@@ -4,8 +4,8 @@
 ENV["VAGRANT_EXPERIMENTAL"] = "disks"
 
 $script = <<-SCRIPT
-  growpart /dev/sda 1
-  resize2fs /dev/sda1
+  growpart /dev/sda 4
+  btrfs filesystem resize max /
 SCRIPT
 
 Vagrant.configure("2") do |config|
@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     # increase disk size
     config.vm.disk :disk, size: "50GB", primary: true
 
-    config.vm.box = "debian/bookworm64"
+    config.vm.box = "fedora/41-cloud-base"
 
     config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine

@@ -5,7 +5,7 @@
     mode: u=rwx
 
 - name: Install cocogitto
-  ansible.builtin.command: "nix-env -iA nixpkgs.cocogitto"
+  ansible.builtin.command: "nix profile install nixpkgs#cocogitto"
   changed_when: false
   environment:
     PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"

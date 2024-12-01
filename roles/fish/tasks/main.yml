@@ -1,6 +1,6 @@
 - name: Installs fish
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.dnf:
     name: fish
     state: present
 

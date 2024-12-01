@@ -1,6 +1,6 @@
-- name: Installs system packages with apt
+- name: Installs system packages
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.dnf:
     name: "{{ system_packages }}"
     state: present
 
@@ -12,18 +12,18 @@
 
 - name: Install sway
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.dnf:
     name: sway
     state: present
 
 - name: Install swaylock to lock on lid close
   become: true
-  ansible.builtin.command: nix-env -iA nixpkgs.swaylock
+  ansible.builtin.command: nix profile install nixpkgs#swaylock
   changed_when: false
 
 - name: Install swayidle to command idle actions
   become: true
-  ansible.builtin.command: nix-env -iA nixpkgs.swayidle
+  ansible.builtin.command: nix profile install nixpkgs#swayidle
   changed_when: false
 
 - name: Create a sway config directory if it does not exist

@@ -1,5 +1,5 @@
 - name: Install veracrypt GUI
-  ansible.builtin.command: nix-env -iA nixpkgs.veracrypt
+  ansible.builtin.command: nix profile install --impure nixpkgs#veracrypt
   environment:
     NIXPKGS_ALLOW_UNFREE: "1"
   changed_when: false

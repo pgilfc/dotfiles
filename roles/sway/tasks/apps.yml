@@ -1,6 +1,6 @@
 - name: Install apps
   loop: "{{ packages }}"
-  ansible.builtin.command: "nix-env -iA nixpkgs.{{ item }}"
+  ansible.builtin.command: "nix profile install nixpkgs#{{ item }}"
   changed_when: false
 
 - name: Create a kanshi config folder

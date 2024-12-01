@@ -1,3 +1,0 @@
-[Unit]
-Description=i3 session
-BindsTo=graphical-session.target

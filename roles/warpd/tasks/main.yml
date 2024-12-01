@@ -1,3 +1,3 @@
 - name: Install warpd
-  ansible.builtin.command: nix-env -iA nixpkgs.warpd
+  ansible.builtin.command: nix profile install nixpkgs#warpd
   changed_when: false

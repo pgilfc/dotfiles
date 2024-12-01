@@ -171,7 +171,8 @@
                         "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F389.svg"
                     },
                     "12": {
-                        "icon": ""
+                        "icon": "/home/gil/dotfiles/roles/streamdeck/files/icons/emojis/1F609.svg",
+                        "write": "\ud83d\ude09"
                     },
                     "13": {},
                     "14": {},
@@ -476,7 +477,7 @@
             "display_timeout": 0,
             "brightness": 99,
             "brightness_dimmed": 1,
-            "page": 0
+            "page": 1
         }
     }
 }

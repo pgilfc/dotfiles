@@ -1,6 +1,8 @@
 system_packages:
   - brightnessctl
-  - xdg-desktop-portal-wlr # xdg-desktop-portal backend for wlroots (https://github.com/emersion/xdg-desktop-portal-wlr/wiki/%22It-doesn't-work%22-Troubleshooting-Checklist)
+  # xdg-desktop-portal backend for wlroots
+  # (https://github.com/emersion/xdg-desktop-portal-wlr/wiki/%22It-doesn't-work%22-Troubleshooting-Checklist)
+  - xdg-desktop-portal-wlr
   - sway-notification-center
 
 packages:
@@ -11,3 +13,4 @@ packages:
   - grim
   - slurp
   - swappy
+  - wtype

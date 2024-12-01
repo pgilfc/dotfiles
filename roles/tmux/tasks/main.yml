@@ -1,12 +1,12 @@
 - name: Installs tmux
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.dnf:
     name: tmux
     state: present
 
 - name: Ensure xclip is installed
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.dnf:
     name: xclip
     state: present
 
