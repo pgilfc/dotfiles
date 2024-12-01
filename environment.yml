@@ -22,9 +22,6 @@
     PATH: "{{ ansible_env.PATH }}"
   roles:
     - role: alacritty
-    - role: i3
-    - role: i3blocks
-    - role: i3status
     - role: rofi
     - role: streamdeck
     - role: sway

@@ -1,5 +1,5 @@
 - name: Install neovim
-  ansible.builtin.command: nix-env -iA nixpkgs.neovim-unwrapped
+  ansible.builtin.command: nix profile install nixpkgs#neovim-unwrapped
   environment:
     PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
   changed_when: false

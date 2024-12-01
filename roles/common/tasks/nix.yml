@@ -11,6 +11,6 @@
     executable: /bin/bash
     cmd: |
       set -o pipefail # ansible-lint(risky-shell-pipe)
-      curl -L https://nixos.org/nix/install | sh -s -- --daemon
+      curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
   when: nix_installed.rc != 0
   changed_when: false

@@ -1,6 +1,7 @@
 - name: Set up dependencies
   hosts: all
   roles:
+    - role: atuin
     - role: bin
     - role: common
     - role: fish

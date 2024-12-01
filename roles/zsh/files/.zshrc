@@ -98,3 +98,7 @@ source ~/.zprofile
 zstyle ':completion:*' menu select
 fpath+=~/.zfunc
 
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"

@@ -1,5 +1,5 @@
 - name: Install rofi
-  ansible.builtin.command: nix-env -iA nixpkgs.rofi-wayland
+  ansible.builtin.command: nix profile install nixpkgs#rofi-wayland
   changed_when: false
 
 - name: Create a rofi config directory if it does not exist

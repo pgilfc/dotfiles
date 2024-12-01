@@ -1,12 +1,10 @@
 common_packages:
-  - aptitude # apt terminal gui
   - arandr # Visual frontend for xrandr
   - autorandr # Automatically select a display configuration based on connected devices
   - bat # cat alternative
   - brightnessctl # Command line brightness control
   - btop # htop alternative
   - clamav # closest thing to an antivirus on linux
-  - clamav-daemon # daemon for ^
   - copyq # Clipboard manager
   - curl # Client URL
   - direnv # Auto load env (if .envrc or .env exist)
@@ -19,16 +17,13 @@ common_packages:
   - gitk # git tree visualizer
   - htop # System monitor
   - jq # Command-line JSON processor
-  - jqp # jq playground
   - keychain # Keychain manager
   - make # make utility automation
   - mc # Terminal file manager
   - mosh # Mobile shell (like ssh)
   - ncat # Netcat alternative
   - ncdu # Disk usage analyzer
-  - neofetch # Terminal system info
   - pavucontrol # Pulseaudio volume control
-  - peco # Terminal fuzzy finder
   - pipewire-pulse # pipewire pulseaudio bindings
   - playerctl # Terminal media controler
   - powertop # Energy optimizer

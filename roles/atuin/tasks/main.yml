@@ -1,0 +1,7 @@
+- name: Install atuin
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+  changed_when: false

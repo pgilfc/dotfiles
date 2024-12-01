@@ -1,1 +1,0 @@
-config_directory: "{{ user_home }}/.config/i3blocks"

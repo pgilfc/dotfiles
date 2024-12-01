@@ -1,7 +1,7 @@
 - name: Install starship
   ansible.builtin.shell:
     executable: /bin/bash
-    cmd: nix-env -iA nixpkgs.starship
+    cmd: nix profile install nixpkgs#starship
   changed_when: false
   environment:
     PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"

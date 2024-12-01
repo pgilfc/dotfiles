@@ -40,9 +40,9 @@
     cmd: |
       set -o pipefail # ansible-lint(risky-shell-pipe)
       echo '{{ root_filesystem.stdout }}' \
-      | awk '{print $2}' `# get the second column which contains the uuid` \
+      | awk '{for(i=1;i<=NF;i++){if ($i ~ /^UUID=/){print $i}}}' `# get the column which contains the uuid` \
       | sed 's/^UUID=\"\([0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}\)\"$/\1/' `# get just the uuid` \
-      | grep '^[0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}$' `# validate previous command`
+      | grep '^[0-9a-fA-F]\{8\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{12\}$' `# validate previous command`
   register: root_partition_uuid
   changed_when: false
 
@@ -62,18 +62,25 @@
     cmd: |
       set -o pipefail # ansible-lint(risky-shell-pipe)
       awk '/MemTotal/ {print int($2*2)}' /proc/meminfo \
-      | numfmt --from-unit=1K --to=iec
+      | numfmt --from-unit=1K --to=iec --format=%.0f \
+      | tr '[:upper:]' '[:lower:]'
   register: memory_size
   changed_when: false
 
+- name: Remove swap file if exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ swap_file }}"
+    state: absent
+
 - name: Create a swap file
   become: true
-  community.general.filesize:
-    path: "{{ swap_file }}"
-    size: "{{ memory_size.stdout }}"
-    mode: "0600"
-    owner: root
-    group: root
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      btrfs filesystem mkswapfile --size "{{ memory_size.stdout }}" --uuid clear {{ swap_file }}
+  changed_when: false
 
 - name: Set up a linux swap area
   become: true
@@ -141,7 +148,7 @@
 
 - name: Update grub
   become: true
-  ansible.builtin.command: update-grub
+  ansible.builtin.command: grub2-mkconfig -o /boot/grub2/grub.cfg
   changed_when: false
 
 # # -----------------------------------------------------------------------
