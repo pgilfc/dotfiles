@@ -21,3 +21,9 @@
   ansible.builtin.dnf:
     name: tree-sitter-cli
     state: present
+
+- name: Install Vundle
+  ansible.builtin.git:
+    repo: https://github.com/VundleVim/Vundle.vim.git
+    dest: "{{ user_home }}/.vim/bundle/Vundle.vim"
+    version: master
