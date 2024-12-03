@@ -1,7 +1,8 @@
-- name: Ensure waybar is installed
+- name: Install waybar
   become: true
-  ansible.builtin.command: nix profile install nixpkgs#waybar
-  changed_when: false
+  ansible.builtin.dnf:
+    name: waybar
+    state: present
 
 - name: Create a waybar config directory if it does not exist
   ansible.builtin.file:

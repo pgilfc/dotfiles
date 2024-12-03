@@ -1,8 +1,8 @@
 - name: Install neovim
-  ansible.builtin.command: nix profile install nixpkgs#neovim-unwrapped
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
-  changed_when: false
+  become: true
+  ansible.builtin.dnf:
+    name: neovim python3-neovim
+    state: present
 
 - name: Symlink .vimrc
   ansible.builtin.file:
@@ -13,13 +13,11 @@
 - name: Symlink nvim
   ansible.builtin.file:
     src: "{{ role_path }}/files/nvim"
-    dest: "{{ user_home }}/.config/lazyvim"
+    dest: "{{ user_home }}/.config/nvim"
     state: link
 
-- name: Tree-sitter CLI Install
-  ansible.builtin.command: "{{ rust_path }}/cargo install tree-sitter-cli"
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ rust_path }}"
-    CARGO_HOME: "{{ cargo_home }}"
-    RUSTUP_HOME: "{{ rustup_home }}"
-  changed_when: false
+- name: Install tree-sitter-cli
+  become: true
+  ansible.builtin.dnf:
+    name: tree-sitter-cli
+    state: present

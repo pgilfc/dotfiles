@@ -4,8 +4,6 @@ system_packages:
   # (https://github.com/emersion/xdg-desktop-portal-wlr/wiki/%22It-doesn't-work%22-Troubleshooting-Checklist)
   - xdg-desktop-portal-wlr
   - sway-notification-center
-
-packages:
   - kanshi
   - wdisplays
   - wl-clipboard

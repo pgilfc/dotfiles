@@ -16,15 +16,17 @@
     name: sway
     state: present
 
-- name: Install swaylock to lock on lid close
+- name: Install swaylock
   become: true
-  ansible.builtin.command: nix profile install nixpkgs#swaylock
-  changed_when: false
+  ansible.builtin.dnf:
+    name: swaylock
+    state: present
 
-- name: Install swayidle to command idle actions
+- name: Install swayidle
   become: true
-  ansible.builtin.command: nix profile install nixpkgs#swayidle
-  changed_when: false
+  ansible.builtin.dnf:
+    name: swayidle
+    state: present
 
 - name: Create a sway config directory if it does not exist
   ansible.builtin.file:

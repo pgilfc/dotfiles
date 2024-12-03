@@ -1,6 +1,8 @@
-- name: Install alacritty
-  ansible.builtin.command: nix profile install nixpkgs#alacritty
-  changed_when: false
+- name: Install Alacritty
+  become: true
+  ansible.builtin.dnf:
+    name: alacritty
+    state: present
 
 - name: Creates alacritty conf directory if not exists
   ansible.builtin.file:
