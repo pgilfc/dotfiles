@@ -3,5 +3,5 @@
 if zellij list-sessions -ns | grep -Eq "^(full)$"; then
     zellij attach full
 else
-    zellij --session full --layout ~/.config/zellij/layout-full.kdl
+    zellij --session full -n ~/.config/zellij/layout-full.kdl
 fi

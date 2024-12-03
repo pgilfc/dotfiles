@@ -3,5 +3,5 @@
 if zellij list-sessions -ns | grep -Eq "^(half)$"; then
     zellij attach half
 else
-    zellij --session half --layout ~/.config/zellij/layout-half.kdl
+    zellij --session half -n ~/.config/zellij/layout-half.kdl
 fi
