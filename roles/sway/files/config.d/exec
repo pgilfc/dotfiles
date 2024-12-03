@@ -5,6 +5,9 @@ exec nm-applet
 # kanshi for auto desktop layout
 exec kanshi
 
+# waybar
+exec waybar
+
 # lock script
 # lock before sleep
 exec swayidle -w \
