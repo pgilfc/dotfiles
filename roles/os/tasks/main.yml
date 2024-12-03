@@ -1,37 +1,38 @@
-- name: Get root filesystem
+- name: Remove zram
+  become: true
+  ansible.builtin.dnf:
+    name: zram-generator-defaults
+    state: absent
+
+- name: Ensures /etc/dracut.conf.d dir exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/dracut.conf.d
+    state: directory
+    mode: u=rwx,g=rx,o=rx
+
+- name: Systemd dracut.conf.d override
+  become: true
+  ansible.builtin.copy:
+    content: |
+      add_dracutmodules+=" resume "
+    dest: /etc/dracut.conf.d/resume.conf
+    mode: u=rw,g=r,o=r
+
+- name: Update dracut
+  become: true
+  ansible.builtin.command: dracut -f
+  changed_when: false
+
+- name: Get root filesystem Name
   become: true
   ansible.builtin.shell:
     executable: /bin/bash
     cmd: |
       set -o pipefail # ansible-lint(risky-shell-pipe)
-      blkid `# get block ids` \
-      | grep $(df | grep '/$' | awk '{print $1}') `# find root filesystem`
+      dmsetup info \
+      | awk 'NR==1{print $2}'
   register: root_filesystem
-  changed_when: false
-
-- name: Get root filesystem path
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      echo {{ root_filesystem.stdout }} \
-      | awk '{print $1}'                    `# get the first column which contains the path` \
-      | grep '^\/.*\:$'                     `# validate previous command` \
-      | sed 's/^\(\/.*\)\:$/\1/'            `# get the path without :` \
-      | grep '^\/.*[^\:]$'                  `# validate previous command`
-  register: root_filesystem_path
-  changed_when: false
-
-- name: Get root partition name
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      echo {{ root_filesystem_path.stdout }} \
-      | grep '^\/\(.*\/\)*\([^\/]\+\)$'         `# validate root_filesystem_path` \
-      | sed 's/^\/\(.*\/\)*\([^\/]\+\)$/\2/'    `# get just the name` \
-      | grep '^[^\/]*$'                         `# validate previous command`
-  register: root_partition_name
   changed_when: false
 
 - name: Get root partition UUID
@@ -39,7 +40,8 @@
     executable: /bin/bash
     cmd: |
       set -o pipefail # ansible-lint(risky-shell-pipe)
-      echo '{{ root_filesystem.stdout }}' \
+      blkid \
+      | grep '{{ root_filesystem.stdout }}' \
       | awk '{for(i=1;i<=NF;i++){if ($i ~ /^UUID=/){print $i}}}' `# get the column which contains the uuid` \
       | sed 's/^UUID=\"\([0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}\)\"$/\1/' `# get just the uuid` \
       | grep '^[0-9a-fA-F]\{8\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{12\}$' `# validate previous command`
@@ -77,16 +79,9 @@
   become: true
   ansible.builtin.shell:
     executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      btrfs filesystem mkswapfile --size "{{ memory_size.stdout }}" --uuid clear {{ swap_file }}
+    cmd: btrfs filesystem mkswapfile --size "{{ memory_size.stdout }}" {{ swap_file }}
   changed_when: false
 
-- name: Set up a linux swap area
-  become: true
-  ansible.builtin.command:
-    cmd: "mkswap {{ swap_file }}"
-  changed_when: false
 
 - name: Turn on swap
   become: true
@@ -118,10 +113,7 @@
   become: true
   ansible.builtin.shell:
     executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      filefrag -v {{ swap_file }} \
-      | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
+    cmd: btrfs inspect-internal map-swapfile -r {{ swap_file }}
   register: sw_physical_offset
   changed_when: false
 
@@ -141,8 +133,8 @@
   become: true
   ansible.builtin.lineinfile:
     path: /etc/default/grub
-    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*"$'
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash mem_sleep_default=disk cryptdevice=UUID={{ root_partition_uuid.stdout }}:{{ root_partition_name.stdout }} root={{ root_filesystem_path.stdout }} resume={{ root_filesystem_path.stdout }} resume_offset={{ sw_physical_offset.stdout }}"' # yamllint disable-line rule:line-length
+    regexp: '^GRUB_CMDLINE_LINUX=".*"$'
+    line: 'GRUB_CMDLINE_LINUX="rd.luks.uuid={{ root_filesystem.stdout }} resume=UUID={{ root_partition_uuid.stdout }} resume_offset={{ sw_physical_offset.stdout }} rhgb quiet"' # yamllint disable-line rule:line-length
     backrefs: true
     state: present
 

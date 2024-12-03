@@ -38,6 +38,7 @@ common_packages:
   - tlp # Energy optimizer
   - trash-cli # Command line trash utility
   - tree # Directory tree
+  - vim # VIM
   - vlc # Media player
   - xdg-utils # Desktop integration utilities
   - xdotool # x do tool
