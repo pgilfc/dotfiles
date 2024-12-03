@@ -1,7 +1,7 @@
 - name: Install neovim
   become: true
   ansible.builtin.dnf:
-    name: neovim python3-neovim
+    name: neovim, python3-neovim
     state: present
 
 - name: Symlink .vimrc
