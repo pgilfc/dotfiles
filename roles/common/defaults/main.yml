@@ -35,7 +35,6 @@ common_packages:
   - shellcheck # shell script static analysis tool
   - syncthing # Sync folders between computers
   - tldr # like man but just examples
-  - tlp # Energy optimizer
   - trash-cli # Command line trash utility
   - tree # Directory tree
   - vim # VIM
