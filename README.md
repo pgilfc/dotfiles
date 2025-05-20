@@ -7,7 +7,7 @@
  - Run cmd/init2.sh
 
 ## Configs for
- - Debian
+ - Fedora
 
 ## Extras
  - Do use ansible-lint after editing anything
