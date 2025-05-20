@@ -1,0 +1,47 @@
+- name: Install swayidle
+  become: true
+  ansible.builtin.dnf:
+    name: swayidle
+    state: present
+    
+- name: Install swaylock
+  become: true
+  ansible.builtin.dnf:
+    name: swaylock
+    state: present
+
+- name: Create a swayidle config directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/swayidle"
+    state: directory
+    mode: u=rwx
+    
+- name: Create a swaylock config directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/swaylock"
+    state: directory
+    mode: u=rwx
+
+- name: Symlink swayidle config file
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/swayidle"
+    dest: "{{ user_home }}/.config/swayidle/config"
+    state: link
+
+- name: Symlink swaylock config file
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/swaylock"
+    dest: "{{ user_home }}/.config/swaylock/config"
+    state: link
+
+- name: Ensure .config/systemd/user exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/systemd/user"
+    state: directory
+    mode: u=rwx
+
+- name: Symlink swayidle.service
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/swayidle.service"
+    dest: "{{ user_home }}/.config/systemd/user/swayidle.service"
+    state: link

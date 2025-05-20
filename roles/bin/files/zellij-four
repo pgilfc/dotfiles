@@ -1,0 +1,7 @@
+#! /bin/sh
+
+if zellij list-sessions -ns | grep -Eq "^(four)$"; then
+    zellij attach four
+else
+    zellij --session four -n ~/.config/zellij/layout-four.kdl
+fi

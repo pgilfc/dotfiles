@@ -41,6 +41,7 @@ common_packages:
   - vlc # Media player
   - xdg-utils # Desktop integration utilities
   - xdotool # x do tool
+  - wev # imput analyzer
   - wget # Web get
   - yq # like jq, but for yaml
   - zoxide # Smart cd command

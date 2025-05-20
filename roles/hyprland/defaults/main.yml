@@ -1,0 +1,14 @@
+system_packages:
+  - aquamarine
+  - hyprland
+  - xdg-desktop-portal-hyprland
+  - hyprlock
+  - hypridle
+  - hyprpaper
+  - brightnessctl
+  - wl-clipboard
+  - wlrctl
+  - grim
+  - slurp
+  - swappy
+  - wtype

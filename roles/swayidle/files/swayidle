@@ -1,0 +1,5 @@
+before-sleep 'loginctl lock-session'
+after-resume 'loginctl lock-session'
+lock 'swaylock -f -F -l -e -c 000000'
+timeout 300 'loginctl lock-session'
+timeout 600 'systemctl suspend-then-hibernate || systemctl suspend'
