@@ -1,0 +1,17 @@
+- name: Installs system packages
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ system_packages }}"
+    state: present
+
+- name: Include brightnessctl
+  ansible.builtin.import_tasks: brightnessctl.yml
+
+- name: Include waybar
+  ansible.builtin.import_tasks: waybar.yml
+
+- name: Symlink Hyperland files
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/hypr"
+    dest: "{{ user_home }}/.config/hypr"
+    state: link

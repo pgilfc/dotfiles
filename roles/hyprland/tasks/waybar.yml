@@ -1,0 +1,11 @@
+- name: Install waybar
+  become: true
+  ansible.builtin.dnf:
+    name: waybar
+    state: present
+
+- name: Symlink waybar files
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/waybar"
+    dest: "{{ user_home }}/.config/hypr-waybar"
+    state: link

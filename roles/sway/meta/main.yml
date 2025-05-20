@@ -1,2 +1,3 @@
 dependencies:
+  - role: swayidle
   - role: warpd
