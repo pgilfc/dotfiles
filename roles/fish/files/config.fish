@@ -25,7 +25,9 @@ end
 ~/.local/bin/mise activate fish | source
 
 # activate keychain environment
-eval (keychain --eval --quiet)
+if status --is-interactive
+	keychain --eval --quiet | source
+end
 
 # starship prompt
 starship init fish | source

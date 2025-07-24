@@ -8,7 +8,6 @@ common_packages:
   - copyq # Clipboard manager
   - curl # Client URL
   - direnv # Auto load env (if .envrc or .env exist)
-  - exa # ls alternative
   - feh # Image viewer and desktop wallpaper
   - fd-find # find alternative
   - fzf # Terminal Fuzzy finder
@@ -24,7 +23,6 @@ common_packages:
   - ncat # Netcat alternative
   - ncdu # Disk usage analyzer
   - pavucontrol # Pulseaudio volume control
-  - pipewire-pulse # pipewire pulseaudio bindings
   - playerctl # Terminal media controler
   - powertop # Energy optimizer
   - pulseaudio-utils # tools for audio control
