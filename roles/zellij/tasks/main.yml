@@ -1,5 +1,5 @@
 - name: Install zellij
-  ansible.builtin.command: nix profile install nixpkgs#zellij
+  ansible.builtin.command: nix profile add nixpkgs#zellij
   environment:
     PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
   changed_when: false

@@ -10,7 +10,10 @@ bindsym $mod+Return exec $term
 bindsym $mod+$shift+q kill
 
 # Start your launcher
-bindsym $mod+d exec $menu
+bindsym $mod+$alt+Space exec $menu
+
+# Start file manager
+bindsym $mod+Tab exec $file
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -110,10 +113,10 @@ bindsym $mod+e layout toggle split
 bindsym $mod+f fullscreen
 
 # Toggle the current focus between tiling and floating mode
-bindsym $mod+$shift+space floating toggle
+bindsym $mod+$shift+f floating toggle
 
 # Swap focus between the tiling area and the floating area
-bindsym $mod+$alt+space focus mode_toggle
+bindsym $mod+$alt+f focus mode_toggle
 
 # Move focus to the parent container
 bindsym $mod+a focus parent
@@ -160,9 +163,9 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Next workspace
-bindsym $mod+Tab workspace next
+bindsym $mod+$alt+l workspace next
 # Previous Workspace
-bindsym $mod+$shift+Tab workspace prev
+bindsym $mod+$alt+h workspace prev
 
 # Use pactl to adjust volume in PulseAudio.
 bindsym --locked XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
@@ -184,20 +187,14 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86Display output eDP-1 enable
 
 # Lock screen shortcut
-bindsym $mod+BackSpace exec  $swaylock
+bindsym $mod+BackSpace exec $swaylock
 
 # Pint screen shortcuts
 bindsym Print exec sway-printscreen
 
 # Open terminal with a hot key (guake like)
-for_window [title="floating-alacritty-half"] floating enable, resize set 100 ppt 50 ppt, move position 0 ppt 0 ppt
 for_window [title="floating-alacritty-full"] floating enable, resize set 100 ppt 100 ppt, move position 0 ppt 0 ppt
-bindsym $alt+space exec toggle-alacritty floating-alacritty-half zellij-half
-bindsym $mod+$alt+Return exec toggle-alacritty floating-alacritty-full zellij-full
-
-# Open rofi with a hot key (mac like)
-bindsym $mod+space exec 'killall rofi || rofi -show combi'
-# Use anyrun if you like
+bindsym --no-repeat $mod+space exec toggle-alacritty floating-alacritty-full zellij-four
 
 # warpd hotkeys
 bindsym $mod+$alt+x exec warpd --hint

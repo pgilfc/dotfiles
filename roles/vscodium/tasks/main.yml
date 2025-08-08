@@ -1,5 +1,5 @@
 - name: Install vscodium
-  ansible.builtin.command: nix profile install nixpkgs#vscodium
+  ansible.builtin.command: nix profile add nixpkgs#vscodium
   changed_when: false
 
 - name: Creates vscodium conf directory if not exists

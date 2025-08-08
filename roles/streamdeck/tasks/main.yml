@@ -4,7 +4,7 @@
   changed_when: false
 
 - name: Install streamdeck_ui
-  ansible.builtin.command: "nix profile install nixpkgs#streamdeck-ui"
+  ansible.builtin.command: "nix profile add nixpkgs#streamdeck-ui"
   changed_when: false
 
 - name: Symlink icons

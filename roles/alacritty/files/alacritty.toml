@@ -6,3 +6,4 @@ family = "MesloLGS NF"
 
 [window]
 opacity = 0.85
+decorations = "none"
