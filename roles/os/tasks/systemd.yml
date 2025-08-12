@@ -1,0 +1,33 @@
+
+- name: Ensures /etc/systemd/logind.conf.d dir exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/systemd/logind.conf.d
+    state: directory
+    mode: u=rwx,g=rx,o=rx
+
+- name: Systemd logind.conf.d override
+  become: true
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/logind.conf"
+    dest: /etc/systemd/logind.conf.d/override.conf
+    mode: u=rw,g=r,o=r
+
+- name: Ensures /etc/systemd/sleep.conf.d dir exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/systemd/sleep.conf.d
+    state: directory
+    mode: u=rwx,g=rx,o=rx
+
+- name: Systemd sleep.conf.d override
+  become: true
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/sleep.conf"
+    dest: /etc/systemd/sleep.conf.d/override.conf
+    mode: u=rw,g=r,o=r
+
+- name: Reload systemd daemons
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true

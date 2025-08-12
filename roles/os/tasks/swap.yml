@@ -1,0 +1,144 @@
+- name: Remove zram
+  become: true
+  ansible.builtin.dnf:
+    name: zram-generator-defaults
+    state: absent
+
+- name: Ensures /etc/dracut.conf.d dir exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/dracut.conf.d
+    state: directory
+    mode: u=rwx,g=rx,o=rx
+
+- name: dracut.conf.d override
+  become: true
+  ansible.builtin.copy:
+    content: |
+      add_dracutmodules+=" resume "
+    dest: /etc/dracut.conf.d/resume.conf
+    mode: u=rw,g=r,o=r
+
+- name: Update dracut
+  become: true
+  ansible.builtin.command: dracut -f
+  changed_when: false
+
+- name: Get root filesystem Name
+  become: true
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      dmsetup info \
+      | awk 'NR==1{print $2}'
+  register: root_filesystem
+  changed_when: false
+
+- name: Get root partition UUID
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      blkid \
+      | grep '{{ root_filesystem.stdout }}' \
+      | awk '{for(i=1;i<=NF;i++){if ($i ~ /^UUID=/){print $i}}}' `# get the column which contains the uuid` \
+      | sed 's/^UUID=\"\([0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}\)\"$/\1/' `# get just the uuid` \
+      | grep '^[0-9a-fA-F]\{8\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{12\}$' `# validate previous command`
+  register: root_partition_uuid
+  changed_when: false
+
+# - name: debug
+#   ansible.builtin.debug:
+#     msg: "{{ root_partition_uuid.stdout }}"
+
+- name: Turn off Swap devices
+  become: true
+  ansible.builtin.command:
+    cmd: swapoff -a
+  changed_when: false
+
+- name: Get memory size *2
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      awk '/MemTotal/ {print int($2*2)}' /proc/meminfo \
+      | numfmt --from-unit=1K --to=iec --format=%.0f \
+      | tr '[:upper:]' '[:lower:]'
+  register: memory_size
+  changed_when: false
+
+- name: Remove swap file if exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ swap_file }}"
+    state: absent
+
+- name: Create a swap file
+  become: true
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: btrfs filesystem mkswapfile --size "{{ memory_size.stdout }}" {{ swap_file }}
+  changed_when: false
+
+
+- name: Turn on swap
+  become: true
+  ansible.builtin.command:
+    cmd: "swapon {{ swap_file }}"
+  changed_when: false
+
+- name: Mount swap
+  become: true
+  ansible.posix.mount:
+    src: "{{ swap_file }}"
+    path: none
+    fstype: swap
+    opts: sw
+    dump: 0
+    passno: 0
+    boot: true
+    backup: true
+    state: present
+
+- name: Turn on Swap devices
+  become: true
+  ansible.builtin.shell: # noqa: command-instead-of-module
+    executable: /bin/bash
+    cmd: mount -a
+  changed_when: false
+
+- name: Get swap device physical offset
+  become: true
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: btrfs inspect-internal map-swapfile -r {{ swap_file }}
+  register: sw_physical_offset
+  changed_when: false
+
+- name: Check if grub.bak exists
+  ansible.builtin.stat:
+    path: /etc/default/grub.bak
+  register: grub_backup
+  failed_when: false
+
+- name: Backup grub
+  become: true
+  ansible.builtin.command: cp /etc/default/grub /etc/default/grub.bak
+  when: not grub_backup.stat.exists
+  changed_when: false
+
+- name: Add to the GRUB_CMDLINE_LINUX_DEFAULT variables
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX=".*"$'
+    line: 'GRUB_CMDLINE_LINUX="rd.luks.uuid={{ root_filesystem.stdout }} resume=UUID={{ root_partition_uuid.stdout }} resume_offset={{ sw_physical_offset.stdout }} rhgb quiet"' # yamllint disable-line rule:line-length
+    backrefs: true
+    state: present
+
+- name: Update grub
+  become: true
+  ansible.builtin.command: grub2-mkconfig -o /boot/grub2/grub.cfg
+  changed_when: false
