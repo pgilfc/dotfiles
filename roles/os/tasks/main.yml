@@ -3,3 +3,6 @@
 
 - name: Run systemd tasks
   ansible.builtin.import_tasks: systemd.yml
+
+- name: Run TPM tasks
+  ansible.builtin.import_tasks: tpm.yml

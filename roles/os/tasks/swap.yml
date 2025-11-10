@@ -13,11 +13,13 @@
 
 - name: dracut.conf.d override
   become: true
-  ansible.builtin.copy:
-    content: |
-      add_dracutmodules+=" resume "
-    dest: /etc/dracut.conf.d/resume.conf
+  ansible.builtin.lineinfile:
+    path: /etc/dracut.conf.d/resume.conf
+    line: "{{ item }}"
     mode: u=rw,g=r,o=r
+    create: yes
+  loop:
+    - add_dracutmodules+=" resume "
 
 - name: Update dracut
   become: true

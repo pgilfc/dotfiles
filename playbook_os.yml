@@ -1,0 +1,4 @@
+- name: Set up operative system
+  hosts: all
+  roles:
+    - role: os
