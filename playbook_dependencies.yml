@@ -8,7 +8,6 @@
     - role: fonts
     - role: git
     - role: mise
-    - role: os
     - role: starship
     - role: tmux
     - role: vim

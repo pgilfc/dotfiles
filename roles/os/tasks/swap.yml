@@ -13,11 +13,13 @@
 
 - name: dracut.conf.d override
   become: true
-  ansible.builtin.copy:
-    content: |
-      add_dracutmodules+=" resume "
-    dest: /etc/dracut.conf.d/resume.conf
+  ansible.builtin.lineinfile:
+    path: /etc/dracut.conf.d/resume.conf
+    line: "{{ item }}"
     mode: u=rw,g=r,o=r
+    create: yes
+  loop:
+    - add_dracutmodules+=" resume "
 
 - name: Update dracut
   become: true
@@ -117,24 +119,28 @@
   register: sw_physical_offset
   changed_when: false
 
-- name: Check if grub.bak exists
-  ansible.builtin.stat:
-    path: /etc/default/grub.bak
-  register: grub_backup
-  failed_when: false
-
 - name: Backup grub
   become: true
-  ansible.builtin.command: cp /etc/default/grub /etc/default/grub.bak
-  when: not grub_backup.stat.exists
-  changed_when: false
+  ansible.builtin.copy:
+    src: /etc/default/grub
+    dest: /etc/default/grub.bak
+    force: false
 
 - name: Add to the GRUB_CMDLINE_LINUX_DEFAULT variables
   become: true
   ansible.builtin.lineinfile:
     path: /etc/default/grub
     regexp: '^GRUB_CMDLINE_LINUX=".*"$'
-    line: 'GRUB_CMDLINE_LINUX="rd.luks.uuid={{ root_filesystem.stdout }} resume=UUID={{ root_partition_uuid.stdout }} resume_offset={{ sw_physical_offset.stdout }} rhgb quiet"' # yamllint disable-line rule:line-length
+    line: 'GRUB_CMDLINE_LINUX="rd.luks.uuid={{ root_filesystem.stdout }} resume=UUID={{ root_partition_uuid.stdout }} resume_offset={{ sw_physical_offset.stdout }} zswap.enabled=1 rhgb quiet"' # yamllint disable-line rule:line-length
+    backrefs: true
+    state: present
+
+- name: Lower GRUB_TIMEOUT value
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_TIMEOUT=.*$'
+    line: 'GRUB_TIMEOUT=1'
     backrefs: true
     state: present
 

@@ -1,0 +1,54 @@
+---
+
+- name: Prompt disk encryption passkey
+  ansible.builtin.pause:
+    prompt: Insert luks passkey
+    echo: no
+  register: luks_passkey
+
+- name: Get root LUKS device name
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      findmnt / -rvno SOURCE | xargs realpath --relative-to /dev | xargs -I{} ls /sys/block/{}/slaves/
+  register: luks_device
+  changed_when: false
+  when: luks_passkey.user_input != ""
+
+- name: Enroll LUKS key to TPM2
+  become: true
+  ansible.builtin.command:
+    cmd: |
+      systemd-cryptenroll /dev/{{ luks_device.stdout }} --wipe-slot=tpm2  --tpm2-device=auto
+  environment:
+    PASSWORD: "{{ luks_passkey.user_input }}"
+  register: tpm_enroll
+  failed_when: tpm_enroll.rc != 0
+  changed_when: tpm_enroll.rc == 0
+  when: luks_device is succeeded and luks_passkey.user_input != ""
+
+- name: Ensures /etc/dracut.conf.d dir exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/dracut.conf.d
+    state: directory
+    mode: u=rwx,g=rx,o=rx
+  when: tpm_enroll is not skipped
+
+- name: dracut.conf.d override
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/dracut.conf.d/tpm2.conf
+    line: "{{ item }}"
+    mode: u=rw,g=r,o=r
+    create: yes
+  loop:
+    - add_dracutmodules+=" tpm2-tss "
+  when: tpm_enroll is not skipped
+
+- name: Update dracut
+  become: true
+  ansible.builtin.command: dracut -f
+  changed_when: false
+  when: tpm_enroll is not skipped
