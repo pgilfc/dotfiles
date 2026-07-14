@@ -1,1 +1,2 @@
-font_directory: "{{ user_home }}/.local/share/fonts/"
+---
+fonts_directory: "{{ user_home }}/.local/share/fonts/"

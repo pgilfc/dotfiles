@@ -1,20 +1,20 @@
+---
 - name: Install zellij
-  ansible.builtin.command: nix profile add nixpkgs#zellij
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
-  changed_when: false
+  ansible.builtin.command:
+    cmd: sg nix-users -c 'nix profile add nixpkgs#zellij'
+    creates: "{{ user_home }}/.nix-profile/bin/zellij"
 
 - name: Ensure .config/zellij exists
   ansible.builtin.file:
     path: "{{ user_home }}/.config/zellij"
     state: directory
-    mode: u=rwx
+    mode: "0755"
 
 - name: Symlink zellij config files
   ansible.builtin.file:
     src: "{{ item }}"
     dest: "{{ user_home }}/.config/zellij/{{ item | basename }}"
     state: link
-    mode: u=rwx
+    force: true
   with_fileglob:
     - "{{ role_path }}/files/*"

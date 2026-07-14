@@ -1,9 +1,0 @@
-- name: Installs needed packages
-  become: true
-  ansible.builtin.dnf:
-    name: "{{ packages }}"
-    state: present
-
-- name: Install node version
-  ansible.builtin.command: "mise use -g node@{{ node_version }}"
-  changed_when: false

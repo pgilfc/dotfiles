@@ -1,8 +1,48 @@
+---
+# grubby, dracut and the grub2 paths in handlers are Fedora-specific;
+# swap.yml uses `btrfs filesystem mkswapfile`, so / must be btrfs
+- name: Assert supported platform
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.distribution == "Fedora"
+      - >-
+        (ansible_facts.mounts
+         | selectattr('mount', 'equalto', '/')
+         | first).fstype == 'btrfs'
+    fail_msg: >-
+      This role only supports Fedora with a btrfs root filesystem
+      (the swapfile is created with 'btrfs filesystem mkswapfile').
+    quiet: true
+
+- name: Discover disk layout
+  ansible.builtin.import_tasks: devices.yml
+  become: true
+  when: os_enable_hibernation | bool or os_enroll_tpm | bool
+
 - name: Run swap tasks
   ansible.builtin.import_tasks: swap.yml
+  become: true
+
+- name: Run hibernation tasks
+  ansible.builtin.import_tasks: hibernate.yml
+  become: true
+  when: os_enable_hibernation | bool
+
+- name: Run GRUB tasks
+  ansible.builtin.import_tasks: grub.yml
+  become: true
 
 - name: Run systemd tasks
   ansible.builtin.import_tasks: systemd.yml
+  become: true
 
 - name: Run TPM tasks
   ansible.builtin.import_tasks: tpm.yml
+  become: true
+  when: os_enroll_tpm | bool
+
+# hibernate/grub/tpm queue dracut and grub handlers; run them now so kernel
+# args and the initramfs are regenerated together instead of at end of play,
+# closing the window where a later failure would leave them out of sync
+- name: Flush handlers so initramfs and kernel args regenerate together
+  ansible.builtin.meta: flush_handlers

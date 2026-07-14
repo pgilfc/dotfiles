@@ -1,7 +1,8 @@
-- name: Install neovim
+---
+- name: Install vim packages
   become: true
   ansible.builtin.dnf:
-    name: neovim, python3-neovim
+    name: "{{ vim_packages }}"
     state: present
 
 - name: Symlink .vimrc
@@ -9,15 +10,11 @@
     src: "{{ role_path }}/files/.vimrc"
     dest: "{{ user_home }}/.vimrc"
     state: link
+    force: true
 
 - name: Symlink nvim
   ansible.builtin.file:
     src: "{{ role_path }}/files/nvim"
     dest: "{{ user_home }}/.config/nvim"
     state: link
-
-- name: Install tree-sitter-cli
-  become: true
-  ansible.builtin.dnf:
-    name: tree-sitter-cli
-    state: present
+    force: true

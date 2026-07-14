@@ -1,1 +1,13 @@
-swap_file: "/swap.img"
+---
+# dedicated nested subvolume so snapshots of / never include the swapfile
+os_swap_subvolume: /swap
+os_swap_file: "{{ os_swap_subvolume }}/swapfile"
+# the hibernation image must fit in swap, so size follows installed RAM
+os_swap_size_mib: "{{ ansible_facts.memtotal_mb * 2 }}"
+# resume kernel args + dracut resume module; disable for swap-only setups
+os_enable_hibernation: true
+os_grub_timeout: 1
+# TPM enrollment prompts for the LUKS passphrase, so it stays opt-in:
+#   ansible-playbook -i hosts playbook_os.yml --ask-become-pass -e os_enroll_tpm=true
+# non-interactive runs also pass -e os_luks_passkey=... to skip the prompt
+os_enroll_tpm: false

@@ -1,0 +1,16 @@
+---
+# shared by hibernate.yml (resume) and tpm.yml (tpm2-tss); callers import
+# this with os_dracut_module set
+- name: Ensure /etc/dracut.conf.d dir exists
+  ansible.builtin.file:
+    path: /etc/dracut.conf.d
+    state: directory
+    mode: u=rwx,g=rx,o=rx
+
+- name: Enable dracut module {{ os_dracut_module }}
+  ansible.builtin.lineinfile:
+    path: /etc/dracut.conf.d/{{ os_dracut_module }}.conf
+    line: 'add_dracutmodules+=" {{ os_dracut_module }} "'
+    mode: u=rw,g=r,o=r
+    create: true
+  notify: Update dracut

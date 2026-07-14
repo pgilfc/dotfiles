@@ -1,34 +1,24 @@
+---
 - name: Installs fish
   become: true
   ansible.builtin.dnf:
     name: fish
     state: present
 
-- name: Set fish as default
+- name: Set fish as the default shell
   become: true
-  ansible.builtin.shell: chsh {{ ansible_user_id }} -s $(which fish)
-  changed_when: false
-
-- name: Check if config.fish exists
-  ansible.builtin.stat:
-    path: "{{ user_home }}/.config/fish/config.fish"
-  register: fish_stat
-  failed_when: false
-
-- name: Backup config.fish
-  ansible.builtin.command: mv {{ user_home }}/.config/fish/config.fish {{ user_home }}/.config/fish/config.fish.bak
-  when: fish_stat.stat.exists
-  changed_when: false
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    shell: /usr/bin/fish
 
 - name: Create a .config/fish directory if it does not exist
   ansible.builtin.file:
     path: "{{ user_home }}/.config/fish"
     state: directory
-    mode: u=rwx
+    mode: "0755"
 
 - name: Symlink config.fish
   ansible.builtin.file:
     src: "{{ role_path }}/files/config.fish"
     dest: "{{ user_home }}/.config/fish/config.fish"
     state: link
-    mode: u=rwx

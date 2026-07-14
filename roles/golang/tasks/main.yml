@@ -1,3 +1,0 @@
-- name: Install golang version
-  ansible.builtin.command: "mise use -g golang@{{ golang_version }}"
-  changed_when: false

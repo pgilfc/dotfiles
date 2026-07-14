@@ -1,0 +1,31 @@
+# Rendered by cmd/vm/vm.sh — placeholders: @LUKS_PASSPHRASE@ @VM_USER@ @VM_PASSWORD@ @SSH_PUBKEY@
+text
+lang en_US.UTF-8
+keyboard us
+timezone Etc/UTC --utc
+network --bootproto=dhcp --activate
+zerombr
+clearpart --all --initlabel
+autopart --type=btrfs --encrypted --passphrase=@LUKS_PASSPHRASE@
+bootloader --append="console=ttyS0,115200n8"
+rootpw --lock
+user --name=@VM_USER@ --password=@VM_PASSWORD@ --plaintext --groups=wheel
+sshkey --username=@VM_USER@ "@SSH_PUBKEY@"
+services --enabled=sshd
+poweroff
+
+%packages
+@^custom-environment
+openssh-server
+rsync
+python3
+python3-dnf
+%end
+
+%post
+# test-VM-only conveniences so the repo's init scripts run unattended over ssh:
+# sudo without tty/password, dnf without confirmation prompts
+echo '%wheel ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/00-wheel-nopasswd
+chmod 440 /etc/sudoers.d/00-wheel-nopasswd
+echo 'assumeyes=True' >> /etc/dnf/dnf.conf
+%end

@@ -1,3 +1,4 @@
+---
 - name: Ensure git is installed
   become: true
   ansible.builtin.dnf:
@@ -5,42 +6,53 @@
     state: present
 
 - name: Check git username
-  community.general.git_config:
+  community.general.git_config_info:
     name: user.name
     scope: global
-  register: git_username
+  register: git_username_config
 
+# non-interactive runs (cmd/vm/vm.sh test) inject -e git_user_name=... instead
 - name: Prompt git username
   ansible.builtin.pause:
     prompt: Insert git user name
-  register: git_username
-  when: git_username.config_value == ""
+  register: git_username_prompt
+  when: git_user_name is undefined and git_username_config.config_value == ""
+
+- name: Collect git username
+  ansible.builtin.set_fact:
+    git_user_name: "{{ git_username_prompt.user_input }}"
+  when: git_user_name is undefined and git_username_prompt is not skipped
 
 - name: Set git username
   community.general.git_config:
     name: user.name
     scope: global
-    value: "{{ git_username.user_input }}"
-  when: git_username is not skipped
+    value: "{{ git_user_name }}"
+  when: git_user_name is defined and git_user_name != ""
 
 - name: Check git email
-  community.general.git_config:
+  community.general.git_config_info:
     name: user.email
     scope: global
-  register: git_email
+  register: git_email_config
 
 - name: Prompt git email
   ansible.builtin.pause:
     prompt: Insert git email
-  register: git_email
-  when: git_email.config_value == ""
+  register: git_email_prompt
+  when: git_user_email is undefined and git_email_config.config_value == ""
+
+- name: Collect git email
+  ansible.builtin.set_fact:
+    git_user_email: "{{ git_email_prompt.user_input }}"
+  when: git_user_email is undefined and git_email_prompt is not skipped
 
 - name: Set git email
   community.general.git_config:
     name: user.email
     scope: global
-    value: "{{ git_email.user_input }}"
-  when: git_email is not skipped
+    value: "{{ git_user_email }}"
+  when: git_user_email is defined and git_user_email != ""
 
 - name: Set vim as the default editor
   community.general.git_config:

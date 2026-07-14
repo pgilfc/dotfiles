@@ -1,0 +1,42 @@
+---
+# derive everything from the device actually mounted at / instead of guessing
+# from dmsetup's arbitrary first entry; read-only, so check mode runs it too
+- name: Get root filesystem device
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      findmnt --noheadings --output SOURCE / \
+      | sed 's/\[.*\]$//' `# strip btrfs subvolume suffix`
+  register: os_root_device
+  changed_when: false
+  check_mode: false
+  # fail fast on empty/multiline output instead of leaking it into grubby args
+  failed_when: >-
+    os_root_device.rc != 0
+    or os_root_device.stdout == ""
+    or (os_root_device.stdout_lines | length) != 1
+
+- name: Get root filesystem UUID
+  ansible.builtin.command:
+    cmd: blkid --match-tag UUID --output value {{ os_root_device.stdout }}
+  register: os_root_fs_uuid
+  changed_when: false
+  check_mode: false
+  # fail fast on empty/multiline output instead of leaking it into grubby args
+  failed_when: >-
+    os_root_fs_uuid.rc != 0
+    or os_root_fs_uuid.stdout == ""
+    or (os_root_fs_uuid.stdout_lines | length) != 1
+
+- name: Get LUKS partition UUID
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail # ansible-lint(risky-shell-pipe)
+      lsblk --inverse --noheadings --pairs --output UUID,FSTYPE {{ os_root_device.stdout }} \
+      | awk -F'"' '$4 == "crypto_LUKS" && !found {print $2; found=1}' `# UUID of the LUKS layer under /`
+  register: os_luks_uuid
+  changed_when: false
+  check_mode: false
+  failed_when: os_luks_uuid.rc != 0 or os_luks_uuid.stdout == ""

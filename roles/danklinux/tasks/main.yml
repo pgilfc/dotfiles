@@ -1,0 +1,139 @@
+---
+# repo id/file match what `dnf copr enable avengemedia/dms` would create, so
+# a manual enable can't produce a duplicate repo. includepkgs limits the
+# COPR to the explicitly declared packages — nothing else it ships can be
+# installed or shadow a Fedora package
+- name: Add the DankMaterialShell COPR repository
+  become: true
+  ansible.builtin.yum_repository:
+    name: "copr:copr.fedorainfracloud.org:avengemedia:dms"
+    file: "_copr:copr.fedorainfracloud.org:avengemedia:dms"
+    description: Copr repo for dms owned by avengemedia
+    baseurl: "https://download.copr.fedorainfracloud.org/results/avengemedia/dms/fedora-$releasever-$basearch/"
+    gpgcheck: true
+    gpgkey: "https://download.copr.fedorainfracloud.org/results/avengemedia/dms/pubkey.gpg"
+    repo_gpgcheck: false
+    skip_if_unavailable: true
+    enabled: true
+    includepkgs: "{{ danklinux_copr_packages }}"
+
+# second COPR from the official Fedora instructions: it carries what
+# dms needs that Fedora proper doesn't ship (quickshell, cpptrace,
+# matugen, danksearch) plus ghostty. same repo id/includepkgs rationale
+- name: Add the Dank Linux dependencies COPR repository
+  become: true
+  ansible.builtin.yum_repository:
+    name: "copr:copr.fedorainfracloud.org:avengemedia:danklinux"
+    file: "_copr:copr.fedorainfracloud.org:avengemedia:danklinux"
+    description: Copr repo for danklinux owned by avengemedia
+    baseurl: "https://download.copr.fedorainfracloud.org/results/avengemedia/danklinux/fedora-$releasever-$basearch/"
+    gpgcheck: true
+    gpgkey: "https://download.copr.fedorainfracloud.org/results/avengemedia/danklinux/pubkey.gpg"
+    repo_gpgcheck: false
+    skip_if_unavailable: true
+    enabled: true
+    includepkgs: "{{ danklinux_deps_copr_packages + danklinux_optional_packages }}"
+
+# pulls quickshell, matugen and danksearch from the danklinux COPR and
+# accountsservice, NetworkManager, cava and qt6-qtmultimedia from Fedora
+- name: Install DankMaterialShell
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ danklinux_copr_packages }}"
+    state: present
+
+# repo id/file match the terra.repo that installing terra-release would
+# create, so the official setup can't produce a duplicate repo. Terra
+# signs its repo metadata, so repo_gpgcheck stays on. includepkgs limits
+# it to the declared packages — nothing else it ships can be installed
+# or shadow a Fedora package
+- name: Add the Terra repository
+  become: true
+  ansible.builtin.yum_repository:
+    name: terra
+    file: terra
+    description: Terra $releasever
+    baseurl: "https://repos.fyralabs.com/terra$releasever"
+    gpgcheck: true
+    gpgkey: "https://repos.fyralabs.com/terra$releasever/key.asc"
+    repo_gpgcheck: true
+    skip_if_unavailable: true
+    enabled: true
+    includepkgs: "{{ danklinux_terra_packages }}"
+
+# niri comes from Fedora proper; mangowm from Terra
+- name: Install compositors supported by DMS
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ danklinux_compositor_packages + danklinux_terra_packages }}"
+    state: present
+
+# the official installer marks these required: X11 app support under
+# niri/mangowm and the GTK desktop portal
+- name: Install DMS support packages
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ danklinux_support_packages }}"
+    state: present
+
+# not pulled in by dms itself (neither requires nor recommends)
+- name: Install optional Dank Linux components
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ danklinux_optional_packages }}"
+    state: present
+
+# ghostty comes from the danklinux COPR above — Fedora proper doesn't
+# package it, and Dank Linux ships its own build as the paired terminal
+- name: Install Ghostty
+  become: true
+  ansible.builtin.dnf:
+    name: ghostty
+    state: present
+
+# starter configs ported from the official installer (dankinstall) with
+# ghostty substituted as the terminal. whole directories are symlinked,
+# so the DMS runtime (matugen) writes theme changes — the dms/ color
+# files and ghostty themes/dankcolors — straight into this repo, where
+# they show up as diffs
+- name: Symlink ghostty, niri and mango config directories
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/{{ item }}"
+    dest: "{{ user_home }}/.config/{{ item }}"
+    state: link
+    force: true
+  loop:
+    - ghostty
+    - niri
+    - mango
+
+- name: Creates environment.d directory if not exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/environment.d"
+    state: directory
+    mode: "0755"
+
+# parity with the official installer, which writes this file: default
+# terminal for the session plus the electron wayland hint
+- name: Symlink DMS environment config
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/90-dms.conf"
+    dest: "{{ user_home }}/.config/environment.d/90-dms.conf"
+    state: link
+    force: true
+
+# dms ships /usr/lib/systemd/user/dms.service; the docs recommend
+# enabling it so the shell autostarts with the compositor session
+- name: Enable the DMS user service
+  ansible.builtin.systemd_service:
+    name: dms
+    scope: user
+    enabled: true
+
+# the danksearch file indexer; starts on next login, matching the
+# installer's service setup
+- name: Enable the danksearch user service
+  ansible.builtin.systemd_service:
+    name: dsearch
+    scope: user
+    enabled: true

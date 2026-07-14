@@ -1,2 +1,3 @@
+---
 alacritty_conf_dir: "{{ user_home }}/.config/alacritty"
 alacritty_conf: "{{ alacritty_conf_dir }}/alacritty.toml"

@@ -1,5 +1,7 @@
+---
 - name: Install veracrypt GUI
-  ansible.builtin.command: nix profile add --impure nixpkgs#veracrypt
+  ansible.builtin.command:
+    cmd: sg nix-users -c 'nix profile add --impure nixpkgs#veracrypt'
+    creates: "{{ user_home }}/.nix-profile/bin/veracrypt"
   environment:
     NIXPKGS_ALLOW_UNFREE: "1"
-  changed_when: false

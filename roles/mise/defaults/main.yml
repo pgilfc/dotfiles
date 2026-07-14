@@ -1,0 +1,17 @@
+---
+# only packages listed here can be installed from the mise COPR;
+# anything else it ships must be explicitly declared to become visible
+mise_copr_packages:
+  - mise
+
+mise_go_version: "latest"
+mise_node_version: "latest"
+mise_python_version: "latest"
+mise_uv_version: "latest"
+mise_rust_version: "stable"
+mise_global_tools:
+  - "go@{{ mise_go_version }}"
+  - "node@{{ mise_node_version }}"
+  - "python@{{ mise_python_version }}"
+  - "uv@{{ mise_uv_version }}"
+  - "rust@{{ mise_rust_version }}"

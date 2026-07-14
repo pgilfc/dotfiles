@@ -1,0 +1,72 @@
+---
+- name: Enable dracut module resume
+  ansible.builtin.import_tasks: dracut-module.yml
+  vars:
+    os_dracut_module: resume
+
+# in check mode on a fresh system the swapfile does not exist yet; skip the
+# offset-dependent tasks instead of failing on them
+- name: Check swap file
+  ansible.builtin.stat:
+    path: "{{ os_swap_file }}"
+    get_checksum: false
+  register: os_hib_swap_file_stat
+
+- name: Get swap device physical offset
+  ansible.builtin.command:
+    cmd: btrfs inspect-internal map-swapfile -r {{ os_swap_file }}
+  register: os_sw_physical_offset
+  changed_when: false
+  check_mode: false
+  when: os_hib_swap_file_stat.stat.exists
+
+- name: Get current kernel args
+  ansible.builtin.command:
+    cmd: grubby --info=DEFAULT
+  register: os_grubby_info
+  changed_when: false
+  check_mode: false
+  when: os_hib_swap_file_stat.stat.exists
+
+- name: Merge resume args into kernel args
+  ansible.builtin.set_fact:
+    os_resume_args:
+      - rd.luks.uuid={{ os_luks_uuid.stdout }}
+      - resume=UUID={{ os_root_fs_uuid.stdout }}
+      - resume_offset={{ os_sw_physical_offset.stdout }}
+    os_current_args: >-
+      {{ (os_grubby_info.stdout_lines
+          | select('match', '^args=')
+          | first
+          | regex_replace('^args="(.*)"$', '\1')
+         ).split() }}
+  when: os_sw_physical_offset is not skipped
+
+# grubby writes the BLS entries directly (no grub2-mkconfig needed) and
+# replaces the value of args that already exist, keeping the rest untouched
+- name: Set resume kernel args
+  ansible.builtin.command:
+    cmd: grubby --update-kernel=ALL --args="{{ os_resume_args | join(' ') }}"
+  changed_when: true
+  when:
+    - os_sw_physical_offset is not skipped
+    - os_resume_args | difference(os_current_args) | length > 0
+
+- name: Check hibernation availability
+  ansible.builtin.command:
+    cmd: >-
+      busctl get-property org.freedesktop.login1 /org/freedesktop/login1
+      org.freedesktop.login1.Manager CanHibernate
+  register: os_can_hibernate
+  changed_when: false
+  check_mode: false
+  failed_when: false
+
+# Secure Boot kernel lockdown is the usual cause; logind then silently falls
+# back to plain suspend
+- name: Warn when hibernation is unavailable
+  ansible.builtin.debug:
+    msg: >-
+      CanHibernate reports '{{ os_can_hibernate.stdout }}' —
+      suspend-then-hibernate will fall back to plain suspend.
+  when: "'yes' not in os_can_hibernate.stdout"

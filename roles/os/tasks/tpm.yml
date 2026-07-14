@@ -1,54 +1,51 @@
 ---
+# os_luks_uuid comes from devices.yml, which main.yml imports first;
+# an existing systemd-tpm2 token means enrollment already happened, so the
+# prompt and the wipe/re-enroll below are skipped to keep the run idempotent
+- name: Check for existing TPM2 LUKS enrollment
+  ansible.builtin.command:
+    cmd: cryptsetup luksDump /dev/disk/by-uuid/{{ os_luks_uuid.stdout }}
+  register: os_luks_dump
+  changed_when: false
+  check_mode: false
 
+# gated behind os_enroll_tpm in main.yml so unattended runs never block here;
+# non-interactive callers (cmd/vm/vm.sh test) inject -e os_luks_passkey=...
+# to skip the prompt
 - name: Prompt disk encryption passkey
   ansible.builtin.pause:
-    prompt: Insert luks passkey
-    echo: no
-  register: luks_passkey
+    prompt: Insert luks passkey (empty skips enrollment)
+    echo: false
+  register: os_luks_passkey_prompt
+  no_log: true # user_input holds the plaintext passphrase
+  when:
+    - "'systemd-tpm2' not in os_luks_dump.stdout"
+    - os_luks_passkey is undefined
 
-- name: Get root LUKS device name
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      findmnt / -rvno SOURCE | xargs realpath --relative-to /dev | xargs -I{} ls /sys/block/{}/slaves/
-  register: luks_device
-  changed_when: false
-  when: luks_passkey.user_input != ""
+- name: Collect passkey
+  ansible.builtin.set_fact:
+    os_luks_passkey: "{{ os_luks_passkey_prompt.user_input }}"
+  no_log: true # the passphrase must not reach the log
+  when:
+    - "'systemd-tpm2' not in os_luks_dump.stdout"
+    - os_luks_passkey is undefined
 
 - name: Enroll LUKS key to TPM2
-  become: true
   ansible.builtin.command:
-    cmd: |
-      systemd-cryptenroll /dev/{{ luks_device.stdout }} --wipe-slot=tpm2  --tpm2-device=auto
+    cmd: >-
+      systemd-cryptenroll /dev/disk/by-uuid/{{ os_luks_uuid.stdout }}
+      --wipe-slot=tpm2 --tpm2-device=auto
   environment:
-    PASSWORD: "{{ luks_passkey.user_input }}"
-  register: tpm_enroll
-  failed_when: tpm_enroll.rc != 0
-  changed_when: tpm_enroll.rc == 0
-  when: luks_device is succeeded and luks_passkey.user_input != ""
+    PASSWORD: "{{ os_luks_passkey }}"
+  no_log: true # the passphrase travels in the environment
+  register: os_tpm_enroll
+  changed_when: true
+  when:
+    - "'systemd-tpm2' not in os_luks_dump.stdout"
+    - os_luks_passkey | default("") != ""
 
-- name: Ensures /etc/dracut.conf.d dir exists
-  become: true
-  ansible.builtin.file:
-    path: /etc/dracut.conf.d
-    state: directory
-    mode: u=rwx,g=rx,o=rx
-  when: tpm_enroll is not skipped
-
-- name: dracut.conf.d override
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/dracut.conf.d/tpm2.conf
-    line: "{{ item }}"
-    mode: u=rw,g=r,o=r
-    create: yes
-  loop:
-    - add_dracutmodules+=" tpm2-tss "
-  when: tpm_enroll is not skipped
-
-- name: Update dracut
-  become: true
-  ansible.builtin.command: dracut -f
-  changed_when: false
-  when: tpm_enroll is not skipped
+- name: Enable dracut module tpm2-tss
+  ansible.builtin.import_tasks: dracut-module.yml
+  vars:
+    os_dracut_module: tpm2-tss
+  when: os_tpm_enroll is not skipped

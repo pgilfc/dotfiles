@@ -1,0 +1,15 @@
+---
+- name: Set up workstation
+  hosts: all
+  roles:
+    - role: bin
+    - role: common
+    - role: fish
+    - role: fonts
+    - role: git
+    - role: mise
+    - role: vim
+    - role: zellij
+    - role: alacritty
+    - role: veracrypt
+    - role: danklinux

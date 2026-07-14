@@ -1,100 +1,71 @@
-- name: Remove zram
-  become: true
-  ansible.builtin.dnf:
-    name: zram-generator-defaults
-    state: absent
+---
+# Fedora's stock zram (priority 100) stays as runtime swap; this only adds a
+# swapfile (default priority -2) for overflow and the hibernation image.
+# systemd skips zram devices when picking a hibernation target.
+- name: Check swap subvolume
+  ansible.builtin.stat:
+    path: "{{ os_swap_subvolume }}"
+    get_checksum: false
+  register: os_swap_subvol_stat
 
-- name: Ensures /etc/dracut.conf.d dir exists
-  become: true
-  ansible.builtin.file:
-    path: /etc/dracut.conf.d
-    state: directory
-    mode: u=rwx,g=rx,o=rx
-
-- name: dracut.conf.d override
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/dracut.conf.d/resume.conf
-    line: "{{ item }}"
-    mode: u=rw,g=r,o=r
-    create: yes
-  loop:
-    - add_dracutmodules+=" resume "
-
-- name: Update dracut
-  become: true
-  ansible.builtin.command: dracut -f
-  changed_when: false
-
-- name: Get root filesystem Name
-  become: true
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      dmsetup info \
-      | awk 'NR==1{print $2}'
-  register: root_filesystem
-  changed_when: false
-
-- name: Get root partition UUID
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      blkid \
-      | grep '{{ root_filesystem.stdout }}' \
-      | awk '{for(i=1;i<=NF;i++){if ($i ~ /^UUID=/){print $i}}}' `# get the column which contains the uuid` \
-      | sed 's/^UUID=\"\([0-9a-fA-F]\{8\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{4\}\b\-[0-9a-fA-F]\{12\}\)\"$/\1/' `# get just the uuid` \
-      | grep '^[0-9a-fA-F]\{8\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{4\}\b-[0-9a-fA-F]\{12\}$' `# validate previous command`
-  register: root_partition_uuid
-  changed_when: false
-
-# - name: debug
-#   ansible.builtin.debug:
-#     msg: "{{ root_partition_uuid.stdout }}"
-
-- name: Turn off Swap devices
-  become: true
+# a dedicated subvolume keeps the swapfile out of snapshots of /
+# (btrfs refuses to snapshot a subvolume holding an active swapfile)
+- name: Create swap subvolume
   ansible.builtin.command:
-    cmd: swapoff -a
-  changed_when: false
+    cmd: btrfs subvolume create {{ os_swap_subvolume }}
+  changed_when: true
+  when: not os_swap_subvol_stat.stat.exists
 
-- name: Get memory size *2
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      awk '/MemTotal/ {print int($2*2)}' /proc/meminfo \
-      | numfmt --from-unit=1K --to=iec --format=%.0f \
-      | tr '[:upper:]' '[:lower:]'
-  register: memory_size
-  changed_when: false
+- name: Check swap file
+  ansible.builtin.stat:
+    path: "{{ os_swap_file }}"
+    get_checksum: false
+  register: os_swap_file_stat
 
-- name: Remove swap file if exists
-  become: true
-  ansible.builtin.file:
-    path: "{{ swap_file }}"
-    state: absent
+# MemTotal wobbles a little across kernel/firmware updates; only a mismatch
+# beyond 1 GiB (RAM change, corrupt file) is worth the swapoff/recreate cycle
+- name: Recreate swap file if missing or wrongly sized
+  when: >-
+    not os_swap_file_stat.stat.exists
+    or ((os_swap_file_stat.stat.size / 1048576) - (os_swap_size_mib | int)) | abs > 1024
+  block:
+    # only the swapfile — zram must stay active
+    - name: Turn off swap file if active
+      ansible.builtin.shell:
+        executable: /bin/bash
+        cmd: |
+          set -e
+          if awk -v f='{{ os_swap_file }}' 'BEGIN {rc=1} $1 == f {rc=0} END {exit rc}' /proc/swaps; then
+            swapoff '{{ os_swap_file }}'
+            echo deactivated
+          fi
+      register: os_swapoff
+      changed_when: os_swapoff.stdout == "deactivated"
 
-- name: Create a swap file
-  become: true
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: btrfs filesystem mkswapfile --size "{{ memory_size.stdout }}" {{ swap_file }}
-  changed_when: false
+    # mkswapfile refuses to overwrite, so drop any leftover from an
+    # interrupted previous run first
+    - name: Remove stale temporary swap file
+      ansible.builtin.file:
+        path: "{{ os_swap_file }}.new"
+        state: absent
 
+    # build the replacement under a temporary name and rename it into place:
+    # an interruption never leaves fstab pointing at a missing swapfile, and
+    # a same-directory rename does not move extents, so the physical offset
+    # hibernate.yml reads from the final path afterwards stays valid
+    - name: Create a swap file
+      ansible.builtin.command:
+        cmd: btrfs filesystem mkswapfile --size {{ os_swap_size_mib }}m {{ os_swap_file }}.new
+      changed_when: true
 
-- name: Turn on swap
-  become: true
-  ansible.builtin.command:
-    cmd: "swapon {{ swap_file }}"
-  changed_when: false
+    - name: Move new swap file into place
+      ansible.builtin.command:
+        cmd: mv {{ os_swap_file }}.new {{ os_swap_file }}
+      changed_when: true
 
 - name: Mount swap
-  become: true
   ansible.posix.mount:
-    src: "{{ swap_file }}"
+    src: "{{ os_swap_file }}"
     path: none
     fstype: swap
     opts: sw
@@ -104,47 +75,17 @@
     backup: true
     state: present
 
-- name: Turn on Swap devices
-  become: true
-  ansible.builtin.shell: # noqa: command-instead-of-module
-    executable: /bin/bash
-    cmd: mount -a
+- name: List active swap devices
+  ansible.builtin.command:
+    cmd: swapon --show=NAME --noheadings
+  register: os_active_swaps
   changed_when: false
+  check_mode: false
 
-- name: Get swap device physical offset
-  become: true
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: btrfs inspect-internal map-swapfile -r {{ swap_file }}
-  register: sw_physical_offset
-  changed_when: false
-
-- name: Backup grub
-  become: true
-  ansible.builtin.copy:
-    src: /etc/default/grub
-    dest: /etc/default/grub.bak
-    force: false
-
-- name: Add to the GRUB_CMDLINE_LINUX_DEFAULT variables
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/default/grub
-    regexp: '^GRUB_CMDLINE_LINUX=".*"$'
-    line: 'GRUB_CMDLINE_LINUX="rd.luks.uuid={{ root_filesystem.stdout }} resume=UUID={{ root_partition_uuid.stdout }} resume_offset={{ sw_physical_offset.stdout }} zswap.enabled=1 rhgb quiet"' # yamllint disable-line rule:line-length
-    backrefs: true
-    state: present
-
-- name: Lower GRUB_TIMEOUT value
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/default/grub
-    regexp: '^GRUB_TIMEOUT=.*$'
-    line: 'GRUB_TIMEOUT=1'
-    backrefs: true
-    state: present
-
-- name: Update grub
-  become: true
-  ansible.builtin.command: grub2-mkconfig -o /boot/grub2/grub.cfg
-  changed_when: false
+# activates fstab swaps not yet active; only runs when the swapfile is not
+# already active, so activation is reported as a real change
+- name: Turn on swap
+  ansible.builtin.command:
+    cmd: swapon -a
+  changed_when: true
+  when: os_swap_file not in os_active_swaps.stdout_lines
