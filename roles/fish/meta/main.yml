@@ -1,6 +1,5 @@
+---
 dependencies:
-  - role: atuin
   - role: common
   - role: fonts
   - role: mise
-  - role: starship

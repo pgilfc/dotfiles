@@ -1,1 +1,2 @@
+---
 git_hooks: "{{ user_home }}/.git_hooks"

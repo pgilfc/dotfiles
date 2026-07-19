@@ -1,3 +1,4 @@
+---
 - name: Install Alacritty
   become: true
   ansible.builtin.dnf:
@@ -8,21 +9,11 @@
   ansible.builtin.file:
     path: "{{ alacritty_conf_dir }}"
     state: directory
-    mode: u=rwx
-
-- name: Check if alacritty config exists
-  ansible.builtin.stat:
-    path: "{{ alacritty_conf }}"
-  register: has_alacritty_yml
-  failed_when: false
-
-- name: Backup alacritty config
-  ansible.builtin.command: mv {{ alacritty_conf }} {{ alacritty_conf }}.bak
-  when: has_alacritty_yml.stat.exists
-  changed_when: false
+    mode: "0755"
 
 - name: Symlink alacritty config
   ansible.builtin.file:
     src: "{{ role_path }}/files/alacritty.toml"
     dest: "{{ alacritty_conf }}"
     state: link
+    force: true

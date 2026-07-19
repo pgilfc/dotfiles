@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-ansible-playbook -i hosts playbook_dependencies.yml --ask-become-pass
+ansible-playbook -i hosts playbook_workstation.yml --ask-become-pass

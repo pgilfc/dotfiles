@@ -1,33 +1,27 @@
-
-- name: Ensures /etc/systemd/logind.conf.d dir exists
-  become: true
+---
+- name: Ensure /etc/systemd/logind.conf.d dir exists
   ansible.builtin.file:
     path: /etc/systemd/logind.conf.d
     state: directory
     mode: u=rwx,g=rx,o=rx
 
+# logind only re-reads logind.conf on restart; daemon-reload is not enough
 - name: Systemd logind.conf.d override
-  become: true
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/logind.conf"
+    src: logind.conf
     dest: /etc/systemd/logind.conf.d/override.conf
     mode: u=rw,g=r,o=r
+  notify: Restart systemd-logind
 
-- name: Ensures /etc/systemd/sleep.conf.d dir exists
-  become: true
+- name: Ensure /etc/systemd/sleep.conf.d dir exists
   ansible.builtin.file:
     path: /etc/systemd/sleep.conf.d
     state: directory
     mode: u=rwx,g=rx,o=rx
 
+# sleep.conf is read on demand at sleep time; nothing to reload
 - name: Systemd sleep.conf.d override
-  become: true
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/sleep.conf"
+    src: sleep.conf
     dest: /etc/systemd/sleep.conf.d/override.conf
     mode: u=rw,g=r,o=r
-
-- name: Reload systemd daemons
-  become: true
-  ansible.builtin.systemd:
-    daemon_reload: true

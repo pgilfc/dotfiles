@@ -1,4 +1,3 @@
-
 # vi mode with default key bindings on normal mode
 fish_hybrid_key_bindings
 
@@ -22,12 +21,9 @@ if status is-interactive
 end
 
 # activate mise environment
-~/.local/bin/mise activate fish | source
+mise activate fish | source
 
 # activate keychain environment
 if status --is-interactive
-	keychain --eval --quiet | source
+    keychain --eval --quiet | source
 end
-
-# starship prompt
-starship init fish | source

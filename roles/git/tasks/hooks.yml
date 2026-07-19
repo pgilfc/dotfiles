@@ -1,18 +1,18 @@
+---
 - name: Creates .git_hooks directory if not exists
   ansible.builtin.file:
     path: "{{ git_hooks }}"
     state: directory
-    mode: u=rwx
+    mode: "0700"
 
 - name: Install cocogitto
-  ansible.builtin.command: "nix profile add nixpkgs#cocogitto"
-  changed_when: false
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
+  ansible.builtin.command:
+    cmd: sg nix-users -c 'nix profile add nixpkgs#cocogitto'
+    creates: "{{ user_home }}/.nix-profile/bin/cog"
 
 - name: Add conventional commit hook
   ansible.builtin.file:
-    dest: "{{ git_hooks }}/commit-msg"
+    path: "{{ git_hooks }}/commit-msg"
     src: "{{ role_path }}/files/commit-msg"
     state: link
 

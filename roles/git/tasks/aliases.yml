@@ -1,3 +1,4 @@
+---
 - name: Add alias logtree for pretty log tree
   community.general.git_config:
     name: alias.logtree

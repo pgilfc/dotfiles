@@ -1,31 +1,44 @@
+---
+# repo id/file match what `dnf copr enable jdxcode/mise` would create, so
+# a manual enable can't produce a duplicate repo. includepkgs limits the
+# COPR to the explicitly declared packages — nothing else it ships can be
+# installed or shadow a Fedora package
+- name: Add the mise COPR repository
+  become: true
+  ansible.builtin.yum_repository:
+    name: "copr:copr.fedorainfracloud.org:jdxcode:mise"
+    file: "_copr:copr.fedorainfracloud.org:jdxcode:mise"
+    description: Copr repo for mise owned by jdxcode
+    baseurl: "https://download.copr.fedorainfracloud.org/results/jdxcode/mise/fedora-$releasever-$basearch/"
+    gpgcheck: true
+    gpgkey: "https://download.copr.fedorainfracloud.org/results/jdxcode/mise/pubkey.gpg"
+    repo_gpgcheck: false
+    skip_if_unavailable: true
+    enabled: true
+    includepkgs: "{{ mise_copr_packages }}"
+
 - name: Install mise
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      curl https://mise.jdx.dev/install.sh | sh
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ mise_copr_packages }}"
+    state: present
+
+# node links against libatomic, which a minimal Fedora install lacks
+- name: Install runtime libraries needed by mise-managed tools
+  become: true
+  ansible.builtin.dnf:
+    name: libatomic
+    state: present
+
+- name: List tools already pinned in the global mise config
+  ansible.builtin.command:
+    cmd: mise ls --global --json
+  register: mise_ls_global
   changed_when: false
 
-- name: Install node
-  ansible.builtin.import_role:
-    name: node
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.local/bin"
-
-- name: Install python
-  ansible.builtin.import_role:
-    name: python
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.local/bin"
-
-- name: Install rust
-  ansible.builtin.import_role:
-    name: rust
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.local/bin"
-
-- name: Install golang
-  ansible.builtin.import_role:
-    name: golang
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.local/bin"
+- name: Install global tool versions with mise
+  ansible.builtin.command:
+    cmd: "mise use --global {{ item }}"
+  loop: "{{ mise_global_tools }}"
+  when: (item.split('@') | first) not in (mise_ls_global.stdout | from_json)
+  changed_when: true

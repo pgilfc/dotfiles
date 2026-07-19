@@ -1,16 +1,35 @@
-- name: Check if nix is installed
-  ansible.builtin.command: nix-env --version
-  register: nix_installed
-  failed_when: false
-  changed_when: false
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/nix/var/nix/profiles/default/bin"
-
+---
 - name: Install nix
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail # ansible-lint(risky-shell-pipe)
-      curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
-  when: nix_installed.rc != 0
-  changed_when: false
+  ansible.builtin.dnf:
+    name:
+      - nix
+      - nix-daemon
+    state: present
+
+- name: Enable the nix daemon
+  ansible.builtin.systemd_service:
+    name: nix-daemon
+    enabled: true
+    state: started
+
+# The multi-user nix daemon socket may be group-restricted; group membership
+# only takes effect after relogin, so other roles use `sg nix-users -c`.
+- name: Ensure nix-users group exists
+  ansible.builtin.group:
+    name: nix-users
+    system: true
+
+- name: Add user to nix-users group
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    groups: nix-users
+    append: true
+
+- name: Enable flakes
+  ansible.builtin.lineinfile:
+    path: /etc/nix/nix.conf
+    regexp: '^experimental-features\s*='
+    line: "experimental-features = nix-command flakes"
+    create: true
+    mode: "0644"
+    state: present

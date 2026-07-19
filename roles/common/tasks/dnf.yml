@@ -1,0 +1,41 @@
+---
+- name: Update the package cache
+  ansible.builtin.dnf:
+    update_cache: true
+
+- name: Upgrade existing packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_only: true
+
+- name: Install common packages
+  ansible.builtin.dnf:
+    name: "{{ common_packages }}"
+    state: present
+    update_cache: true
+
+- name: Remove unneeded packages
+  ansible.builtin.dnf:
+    autoremove: true
+
+- name: Set the default LANG
+  ansible.builtin.lineinfile:
+    path: /etc/locale.conf
+    regexp: "^LANG="
+    line: "LANG=C.UTF-8"
+    state: present
+
+- name: Set the default LANGUAGE
+  ansible.builtin.lineinfile:
+    path: /etc/locale.conf
+    regexp: "^LANGUAGE="
+    line: "LANGUAGE=C.UTF-8"
+    state: present
+
+- name: Set the default LC_ALL
+  ansible.builtin.lineinfile:
+    path: /etc/locale.conf
+    regexp: "^LC_ALL="
+    line: "LC_ALL=C.UTF-8"
+    state: present

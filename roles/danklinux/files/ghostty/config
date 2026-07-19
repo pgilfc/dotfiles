@@ -1,0 +1,15 @@
+# Ghostty configuration — ported from roles/alacritty/files/alacritty.toml
+# Reference: https://ghostty.org/docs/config/reference
+
+font-family = MesloLGS NF
+font-size = 12
+
+background-opacity = 0.85
+window-decoration = none
+
+# Shift+Enter sends ESC + CR, same as the alacritty Shift+Return binding
+keybind = shift+enter=text:\x1b\r
+
+# DMS-generated Material colors; the theme file lives in themes/dankcolors
+# and is rewritten by matugen when the wallpaper/theme changes
+theme = dankcolors

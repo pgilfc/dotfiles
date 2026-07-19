@@ -1,0 +1,46 @@
+---
+# only packages listed here can be installed from the dms COPR;
+# anything else it ships must be explicitly declared to become visible.
+# dms hard-requires dms-cli and dgop, both built in the same COPR
+danklinux_copr_packages:
+  - dms
+  - dms-cli
+  - dgop
+
+# only packages listed here can be installed from the danklinux COPR
+# (packages Fedora proper doesn't ship): dms hard-requires quickshell,
+# quickshell links libcpptrace.so.1 (cpptrace), matugen and danksearch
+# are dms recommends used by the default configuration, and ghostty is
+# the terminal Dank Linux pairs with the shell
+danklinux_deps_copr_packages:
+  - quickshell
+  - cpptrace
+  - matugen
+  - danksearch
+  - ghostty
+
+# compositors DMS pairs with per the official docs
+danklinux_compositor_packages:
+  - niri
+
+# Fedora packages the official installer treats as required:
+# xwayland-satellite runs X11 apps under niri/mangowm and
+# xdg-desktop-portal-gtk provides the desktop portal the shell expects
+danklinux_support_packages:
+  - xwayland-satellite
+  - xdg-desktop-portal-gtk
+
+# optional Dank Linux components, also from the danklinux COPR; the
+# greeter only takes effect once greetd is configured to use it
+danklinux_optional_packages:
+  - dankcalendar-git
+  - dms-greeter
+
+# only packages listed here can be installed from the Terra repository;
+# mangowm (formerly mangowc) is the one DMS-supported compositor that
+# neither Fedora proper nor the AvengeMedia COPRs ship; it links
+# libscenefx, which only Terra packages (everything else it needs
+# resolves from Fedora proper)
+danklinux_terra_packages:
+  - mangowm
+  - scenefx

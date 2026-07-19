@@ -1,5 +1,0 @@
-packages:
-  - dirmngr
-  - gpg
-  - curl
-  - gawk

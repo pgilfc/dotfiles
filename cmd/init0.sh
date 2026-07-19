@@ -6,4 +6,4 @@ then
 	sudo dnf install ansible
 fi
 
-ansible-galaxy collection install community.general
+ansible-galaxy collection install -r requirements.yml

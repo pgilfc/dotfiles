@@ -1,0 +1,5 @@
+---
+vim_packages:
+  - neovim
+  - python3-neovim
+  - tree-sitter-cli

@@ -1,0 +1,21 @@
+---
+# --regenerate-all: the common role's full-system upgrade can install a newer
+# kernel in the same run; regenerating only the running kernel's initramfs
+# would leave the resume/tpm2-tss dracut config out of the kernel booting next
+- name: Update dracut
+  become: true
+  ansible.builtin.command:
+    cmd: dracut --force --regenerate-all
+  changed_when: true
+
+- name: Update grub
+  become: true
+  ansible.builtin.command:
+    cmd: grub2-mkconfig -o /boot/grub2/grub.cfg
+  changed_when: true
+
+- name: Restart systemd-logind
+  become: true
+  ansible.builtin.systemd_service:
+    name: systemd-logind.service
+    state: restarted

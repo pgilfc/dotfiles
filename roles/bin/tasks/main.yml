@@ -1,18 +1,20 @@
+---
 - name: Create ~/.local/bin/
   ansible.builtin.file:
     state: directory
     path: "{{ user_home }}/.local/bin"
-    mode: u=rwx
+    mode: "0755"
 
 - name: Find all files to symlink
   ansible.builtin.find:
     paths: "{{ role_path }}/files"
-  register: find_bins
+  register: bin_files
 
 - name: Symlink bins
   ansible.builtin.file:
     src: "{{ item.path }}"
     dest: "{{ user_home }}/.local/bin/{{ item.path | basename }}"
     state: link
-    mode: u=rwx
-  with_items: "{{ find_bins.files }}"
+  loop: "{{ bin_files.files }}"
+  loop_control:
+    label: "{{ item.path }}"
