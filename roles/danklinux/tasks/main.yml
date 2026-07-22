@@ -96,7 +96,7 @@
 # so the DMS runtime (matugen) writes theme changes — the dms/ color
 # files and ghostty themes/dankcolors — straight into this repo, where
 # they show up as diffs
-- name: Symlink ghostty, niri and mango config directories
+- name: Symlink ghostty, niri, mango and DankMaterialShell config directories
   ansible.builtin.file:
     src: "{{ role_path }}/files/{{ item }}"
     dest: "{{ user_home }}/.config/{{ item }}"
@@ -106,6 +106,7 @@
     - ghostty
     - niri
     - mango
+    - DankMaterialShell
 
 - name: Creates environment.d directory if not exists
   ansible.builtin.file:
