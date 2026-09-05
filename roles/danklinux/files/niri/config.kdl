@@ -63,7 +63,7 @@ input {
     trackpoint {
         // off
         // natural-scroll
-        // accel-speed 0.2
+        accel-speed -0.7
         // accel-profile "flat"
         // scroll-method "on-button-down"
         // scroll-button 273
@@ -72,7 +72,7 @@ input {
     }
 
     // Uncomment this to make the mouse warp to the center of newly focused windows.
-    warp-mouse-to-focus
+    //warp-mouse-to-focus
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
@@ -199,6 +199,10 @@ animations {
 // Work around WezTerm's initial configure bug
 // by setting an empty default-column-width.
 window-rule {
+    // Set open-maximized to true for all windows default.
+    open-maximized true
+}
+window-rule {
     // This regular expression is intentionally made as specific as possible,
     // since this is the default config, and we want no false positives.
     // You can get away with just app-id="wezterm" if you want.
@@ -238,6 +242,7 @@ window-rule {
     match app-id="com.mitchellh.ghostty"
     match app-id="kitty"
     draw-border-with-background false
+    open-maximized false
 }
 window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
@@ -260,10 +265,6 @@ window-rule {
     // 100% of the screen wide.
     default-column-width { proportion 1.0; }
 }
-// Set open-maximized to true for all windows.
-window-rule {
-    open-maximized true
-}
 debug {
     honor-xdg-activation-with-invalid-serial
 }
@@ -271,10 +272,10 @@ debug {
 // Override to disable super+tab
 recent-windows {
     binds {
-        Alt+Tab         { next-window scope="output"; }
-        Alt+Shift+Tab   { previous-window scope="output"; }
-        Alt+grave       { next-window filter="app-id"; }
-        Alt+Shift+grave { previous-window filter="app-id"; }
+        Mod+Tab         { next-window scope="all"; }
+        Mod+Shift+Tab   { previous-window scope="all"; }
+        Mod+Alt+Tab       { next-window scope="all" filter="app-id"; }
+        Mod+Alt+Shift+Tab { previous-window scope="all" filter="app-id"; }
     }
 }
 
