@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+# Lay out a repo for worktree-based work. Named git-* so it also works as a
+# subcommand: `git workspace <repo>`.
+#
+#   <name>/
+#     .bare/       the git dir, shared by repo/ and every worktree
+#     repo/        main working tree, for day-to-day work
+#     worktrees/   git worktrees live here
+#
+# git works from <name>/ as well as from inside repo/, so `git worktree add
+# worktrees/foo foo` can be run from the workspace root.
+#
+set -euo pipefail
+
+usage() {
+	cat <<-EOF
+		usage: ${0##*/} [-n NAME] <repo>
+
+		  <repo>     anything git can clone; passed to git as given
+		  -n NAME    name of the directory to create (default: repo name)
+	EOF
+}
+
+die() {
+	printf '%s: %s\n' "${0##*/}" "$*" >&2
+	exit 1
+}
+
+name=
+
+while [[ $# -gt 0 ]]; do
+	case $1 in
+	-n | --name)
+		[[ $# -ge 2 ]] || die "$1 needs an argument"
+		name=$2
+		shift
+		;;
+	-h | --help)
+		usage
+		exit 0
+		;;
+	-*) die "unknown option: $1" ;;
+	*) break ;;
+	esac
+	shift
+done
+
+[[ $# -eq 1 ]] || {
+	usage >&2
+	exit 1
+}
+
+url=$1
+
+# git guesses this itself when cloning, but the name is needed up front to lay
+# out the directory, so it has to be worked out here. -n overrides it.
+if [[ -z $name ]]; then
+	name=${url%/}
+	name=${name%/.git} # a path to the git dir itself: /path/to/repo/.git
+	name=${name%.git}
+	name=${name##*/}
+	name=${name##*:}
+fi
+
+[[ -n $name ]] || die "could not work out a directory name for '$url'"
+if [[ -e $name ]]; then
+	die "'$name' already exists"
+fi
+
+# Don't leave a half-built tree behind if a clone fails.
+created=
+cleanup() {
+	local rc=$?
+	[[ $rc -eq 0 || -z $created ]] || rm -rf -- "$created"
+}
+trap cleanup EXIT
+
+mkdir "$name"
+created=$PWD/$name
+
+# One clone, one object store: repo/'s git dir is hoisted out so worktrees
+# added from it share objects and refs. Deliberately not named .git — git's
+# repo discovery would then treat <name>/ itself as a working tree, and a
+# stray `git add -A` up there would commit repo/ and worktrees/ as content.
+#
+# A plain (non-bare) clone also gets this right for free: it writes the
+# standard fetch refspec, so refs/remotes/origin/* exists and `worktree add
+# <path> <branch>` branches off origin/<branch> with an upstream set. A bare
+# clone has no refspec and copies every remote branch to refs/heads/*, which
+# leaves worktree branches with no upstream and no ahead/behind in status.
+git clone --separate-git-dir="$PWD/$name/.bare" "$url" "$name/repo"
+
+# clone records an absolute gitdir; a relative one survives moving <name>/.
+printf 'gitdir: ../.bare\n' >"$name/repo/.git"
+
+# Make git usable from <name>/ too, so `git worktree add` works from the
+# workspace root and not just inside repo/. core.worktree is what keeps this
+# safe: without it git would infer <name>/ as the working tree, report every
+# tracked file as deleted, and see repo/ and worktrees/ as untracked content.
+# Both paths stay relative so the workspace survives being moved.
+printf 'gitdir: ./.bare\n' >"$name/.git"
+git -C "$name/.bare" config core.worktree ../repo
+
+mkdir "$name/worktrees"
+
+created=
+
+printf '\n%s/\n' "$name"
+printf '  .bare/      git dir for %s\n' "$url"
+printf '  repo/       main working tree\n'
+printf '  worktrees/  git worktrees\n'
