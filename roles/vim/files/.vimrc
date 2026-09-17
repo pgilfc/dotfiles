@@ -10,11 +10,6 @@ let mapleader = "\<Space>"
 noremap <leader>n :bn<CR>
 noremap <leader>b :bp<CR>
 
-" Deactivate key arrows
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
 
 "Switch buffers without saving
 set hidden
