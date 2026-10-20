@@ -16,6 +16,21 @@
   changed_when: true
   when: not os_swap_subvol_stat.stat.exists
 
+# sefcontext needs the policycoreutils python bindings on the target
+- name: Install SELinux management tools
+  ansible.builtin.dnf:
+    name: policycoreutils-python-utils
+    state: present
+
+# a new btrfs subvolume and everything created in it are unlabeled_t, and
+# the policy has no default context for this path; SELinux then denies
+# systemd-logind access to the swapfile and Hibernate fails "Access denied"
+- name: Label swap subvolume for SELinux
+  community.general.sefcontext:
+    target: "{{ os_swap_subvolume }}(/.*)?"
+    setype: swapfile_t
+    state: present
+
 - name: Check swap file
   ansible.builtin.stat:
     path: "{{ os_swap_file }}"
@@ -62,6 +77,14 @@
       ansible.builtin.command:
         cmd: mv {{ os_swap_file }}.new {{ os_swap_file }}
       changed_when: true
+
+# runs after the swapfile exists so a file made by an earlier run, before
+# the fcontext rule, is relabeled too; -v prints only actual relabels
+- name: Apply SELinux labels to swap subvolume
+  ansible.builtin.command:
+    cmd: restorecon -RFv {{ os_swap_subvolume }}
+  register: os_swap_restorecon
+  changed_when: os_swap_restorecon.stdout | length > 0
 
 - name: Mount swap
   ansible.posix.mount:
